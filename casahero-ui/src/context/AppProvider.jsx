@@ -1,20 +1,22 @@
-import React, {useCallback, useState} from "react"
-import AppContext from "./AppContext"
+import React, { useCallback, useState } from 'react';
+import AppContext from './AppContext';
 
-const AppProvider = ({children})=>{
-    const [userContext,setUserContext] = useState(null);
+const AppProvider = ({ children }) => {
+  const [userContext, setUserContext] = useState(null);
 
-    const updateUserContext=(data)=>{
-        setUserContext({...data})
-    }
+  const updateUserContext = (data) => {
+    setUserContext({ ...data });
+  };
 
-    return (
-        <AppContext.Provider value={{
-            updateUserContext,
-            userContext
-        }}>
-            {children}
-        </AppContext.Provider>
-    )
-}
+  return (
+    <AppContext.Provider
+      value={{
+        updateUserContext,
+        userContext,
+      }}
+    >
+      {children}
+    </AppContext.Provider>
+  );
+};
 export default AppProvider;

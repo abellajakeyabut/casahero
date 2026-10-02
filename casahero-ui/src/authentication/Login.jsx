@@ -19,9 +19,7 @@ const Login = () => {
     const updatePassword = (data) => {
         updateLoginDetails({ ...loginDetails, pwd: data })
     }
-    const updateRole = (data) => {
-        updateLoginDetails({ ...loginDetails, role: data })
-    }
+  
     return (
         <div className="login-wrapper">
             <TopBanner></TopBanner>
