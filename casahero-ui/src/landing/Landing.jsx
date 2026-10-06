@@ -3,16 +3,19 @@ import AppContext from '../context/AppContext';
 import { useContext } from 'react';
 import '../landing/Landing.css'; // CSS file with styles
 import { useNavigate } from 'react-router-dom';
+import AuthContext from '../authentication/AuthContext';
+
 const Landing = () => {
   const { user, updateUserContext } = useContext(AppContext);
+  const { updateLoginDetails } = useContext(AuthContext);
   const navi = useNavigate();
   const landlord = (role) => {
-    updateUserContext({ ...user, role });
-    navi('/dashboard');
+    updateLoginDetails({ ...user, role: role });
+    navi('/login');
   };
   const tenant = (role) => {
-    updateUserContext({ ...user, role });
-    navi('/tenant-dashboard');
+    updateLoginDetails({ ...user, role: role });
+    navi('/login');
   };
   return (
     <>
