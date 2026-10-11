@@ -8,6 +8,9 @@ const useAuth = () => {
   //return !!user;
   const { loginDetails } = useContext(AuthContext);
 
+  if (loginDetails == undefined) {
+    return false;
+  }
   return loginDetails.loggedIn;
 };
 

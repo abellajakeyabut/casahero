@@ -10,6 +10,7 @@ import Dashboard from './dashboard/Dashboard';
 import AuthProvider from './authentication/AuthProvider';
 import Landing from './landing/Landing';
 import UnderConstruction from './underconstruction/underconstruction';
+import SafeRoute from './SafeRoute';
 const App = () => {
   const { userContext, updateUserContext } = useContext(AppContext);
 
@@ -24,7 +25,17 @@ const App = () => {
             </AuthProvider>
           }
         ></Route>
-        <Route path="/dashboard" element={<Dashboard />}></Route>
+        <Route
+          path="/dashboard"
+          element={
+            <AuthProvider>
+              <SafeRoute>
+                <Dashboard></Dashboard>
+              </SafeRoute>
+            </AuthProvider>
+          }
+        ></Route>
+
         <Route
           path="/"
           element={
