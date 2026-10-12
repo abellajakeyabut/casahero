@@ -1,17 +1,19 @@
 import { Navigate } from 'react-router-dom';
 import { useContext } from 'react';
 import AuthContext from './authentication/AuthContext';
+import AppContext from './context/AppContext';
 
 // Example authentication check (replace with your real auth logic)
 const useAuth = () => {
   //const user = localStorage.getItem("user"); // or context/state
   //return !!user;
-  const { loginDetails } = useContext(AuthContext);
+   const { userContext } = useContext(AppContext);
+  //const { loginDetails } = useContext(AuthContext);
 
-  if (loginDetails == undefined) {
+  if (userContext == undefined) {
     return false;
   }
-  return loginDetails.loggedIn;
+  return userContext.loggedIn;
 };
 
 // ProtectedRoute component

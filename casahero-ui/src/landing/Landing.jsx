@@ -9,14 +9,11 @@ const Landing = () => {
   const { user, updateUserContext } = useContext(AppContext);
   const { updateLoginDetails } = useContext(AuthContext);
   const navi = useNavigate();
-  const landlord = (role) => {
-    updateLoginDetails({ ...user, role: role });
+  const roleSelect = (role) => {
+    updateUserContext({ ...user, role: role });
     navi('/login');
   };
-  const tenant = (role) => {
-    updateLoginDetails({ ...user, role: role });
-    navi('/login');
-  };
+
   return (
     <>
       <TopBanner />
@@ -30,7 +27,7 @@ const Landing = () => {
 
             <div className="flex flex-col md:flex-row justify-center items-stretch gap-8">
               {/* Landlord Card */}
-              <button onClick={() => landlord('landlord')}>
+              <button onClick={() => roleSelect('landlord')}>
                 <div className="text-5xl mb-4">🏠</div>
                 <h2 className="text-2xl font-semibold mb-2">I’m a Landlord</h2>
                 <p className="mb-2">
@@ -45,7 +42,7 @@ const Landing = () => {
               <div className="block md:hidden w-64 h-px bg-gray-300 mx-auto"></div>
 
               {/* Tenant Card */}
-              <button onClick={() => tenant('tenant')}>
+              <button onClick={() => roleSelect('tenant')}>
                 <div className="text-5xl mb-4">👤</div>
                 <h2 className="text-2xl font-semibold mb-2">I’m a Tenant</h2>
                 <p className="mb-2">

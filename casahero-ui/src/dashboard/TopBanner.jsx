@@ -1,6 +1,6 @@
 import './Dashboard.css'; // CSS file with styles
 import { useNavigate } from 'react-router-dom';
-const TopBanner = () => {
+const TopBanner = ({ userContext }) => {
   const navi = useNavigate();
 
   return (
@@ -15,6 +15,12 @@ const TopBanner = () => {
       </div>
 
       <div className="auth-links">
+        {userContext && userContext.loggedIn ? (
+          <span>Welcome, {userContext.username}</span>
+        ) : (
+          <span>Welcome, Guest ! </span>
+        )}
+
         <button>Register</button>
         <button
           onClick={() => {

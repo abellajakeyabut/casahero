@@ -1,0 +1,344 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 850" width="100%" height="100%">
+  <defs>
+    <!-- Drop Shadows -->
+    <filter id="shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="4" dy="10" stdDeviation="12" flood-color="#0f2b48" flood-opacity="0.25" />
+    </filter>
+    <filter id="shadow-sm" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="2" dy="5" stdDeviation="5" flood-color="#0f2b48" flood-opacity="0.18" />
+    </filter>
+
+    <!-- Clip Paths for Postcards -->
+    <clipPath id="card1-clip"><rect x="0" y="0" width="360" height="240" rx="12" /></clipPath>
+    <clipPath id="card2-clip"><rect x="0" y="0" width="340" height="230" rx="12" /></clipPath>
+    <clipPath id="card3-clip"><rect x="0" y="0" width="370" height="250" rx="12" /></clipPath>
+    <clipPath id="card4-clip"><rect x="0" y="0" width="330" height="220" rx="12" /></clipPath>
+    <clipPath id="card5-clip"><rect x="0" y="0" width="350" height="240" rx="12" /></clipPath>
+    <clipPath id="card6-clip"><rect x="0" y="0" width="340" height="230" rx="12" /></clipPath>
+    <clipPath id="card7-clip"><rect x="0" y="0" width="360" height="240" rx="12" /></clipPath>
+
+    <!-- Airmail Border Pattern -->
+    <pattern id="airmail" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+      <rect width="20" height="20" fill="#e74c3c" />
+      <rect x="20" width="20" height="20" fill="#3498db" />
+      <rect y="20" width="20" height="20" fill="#3498db" />
+      <rect x="20" y="20" width="20" height="20" fill="#e74c3c" />
+    </pattern>
+
+    <!-- Stamp Edge Mask -->
+    <mask id="stamp-mask">
+      <rect width="90" height="110" fill="white" />
+      <circle cx="0" cy="15" r="4" fill="black" /><circle cx="0" cy="35" r="4" fill="black" /><circle cx="0" cy="55" r="4" fill="black" /><circle cx="0" cy="75" r="4" fill="black" /><circle cx="0" cy="95" r="4" fill="black" />
+      <circle cx="90" cy="15" r="4" fill="black" /><circle cx="90" cy="35" r="4" fill="black" /><circle cx="90" cy="55" r="4" fill="black" /><circle cx="90" cy="75" r="4" fill="black" /><circle cx="90" cy="95" r="4" fill="black" />
+      <circle cx="15" cy="0" r="4" fill="black" /><circle cx="35" cy="0" r="4" fill="black" /><circle cx="55" cy="0" r="4" fill="black" /><circle cx="75" cy="0" r="4" fill="black" />
+      <circle cx="15" cy="110" r="4" fill="black" /><circle cx="35" cy="110" r="4" fill="black" /><circle cx="55" cy="110" r="4" fill="black" /><circle cx="75" cy="110" r="4" fill="black" />
+    </mask>
+
+    <!-- Marina Bay Sunset Gradient -->
+    <linearGradient id="sunset-sg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#311b92" />
+      <stop offset="30%" stop-color="#c2185b" />
+      <stop offset="60%" stop-color="#ff5722" />
+      <stop offset="85%" stop-color="#ffb300" />
+      <stop offset="100%" stop-color="#ffee58" />
+    </linearGradient>
+
+    <!-- Sky Gradient for MRT/City -->
+    <linearGradient id="sky-sg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0288d1" />
+      <stop offset="100%" stop-color="#b3e5fc" />
+    </linearGradient>
+
+    <!-- Fonts -->
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&amp;family=Pacifico&amp;family=Permanent+Marker&amp;family=Outfit:wght@600;800&amp;display=swap');
+      .bold-txt { font-family: 'Fredoka One', 'Arial Black', sans-serif; }
+      .script-txt { font-family: 'Pacifico', cursive; }
+      .marker-txt { font-family: 'Permanent Marker', cursive; }
+      .sans-txt { font-family: 'Outfit', sans-serif; }
+    </style>
+  </defs>
+
+  <!-- Table Background -->
+  <rect width="1200" height="850" fill="#f4ebd9" />
+  
+  <!-- Wooden/Textured Grid Pattern & Stains -->
+  <g opacity="0.15">
+    <path d="M 0,0 L 1200,850 M 300,0 L 1200,600 M 0,300 L 800,850 M 0,600 L 350,850 M 600,0 L 1200,400" stroke="#8b5a2b" stroke-width="2" />
+    <circle cx="180" cy="720" r="45" fill="none" stroke="#d35400" stroke-width="16" opacity="0.2" />
+    <circle cx="190" cy="710" r="40" fill="none" stroke="#d35400" stroke-width="6" opacity="0.15" />
+    <circle cx="950" cy="180" r="50" fill="none" stroke="#d35400" stroke-width="12" opacity="0.15" />
+  </g>
+
+  <!-- ==================== POSTCARD 1: MARINA BAY SANDS & SKYLINE (TOP LEFT) ==================== -->
+  <g transform="translate(60, 50) rotate(-6)" filter="url(#shadow)">
+    <rect width="360" height="240" rx="12" fill="#fff9e6" stroke="#4a3728" stroke-width="4" />
+    <g clip-path="url(#card1-clip)">
+      <rect x="0" y="0" width="360" height="160" fill="url(#sunset-sg)" />
+      <circle cx="180" cy="120" r="45" fill="#ffe082" opacity="0.8" />
+      
+      <!-- Marina Bay Sands Silhouette (3 towers + rooftop ship) -->
+      <g fill="#1a1a2e">
+        <rect x="120" y="60" width="14" height="100" />
+        <rect x="142" y="65" width="14" height="95" />
+        <rect x="164" y="60" width="14" height="100" />
+        <!-- Rooftop Sands SkyPark Ship -->
+        <path d="M 110,58 Q 150,50 200,58 L 195,66 Q 150,60 115,66 Z" />
+      </g>
+      <!-- ArtScience Museum (Lotus flower shape) -->
+      <path d="M 85,120 Q 95,100 105,120 Q 95,140 85,120 Z" fill="#cfd8dc" stroke="#1a1a2e" stroke-width="1.5" />
+
+      <!-- Water / Bay -->
+      <rect x="0" y="150" width="360" height="90" fill="#01579b" />
+      <ellipse cx="150" cy="165" rx="60" ry="3" fill="#ffb300" opacity="0.6" />
+
+      <!-- Text Overlay -->
+      <rect x="15" y="175" width="330" height="50" rx="8" fill="#fff" opacity="0.9" />
+      <text x="180" y="210" class="bold-txt" font-size="26" fill="#0277bd" text-anchor="middle" letter-spacing="1">SINGAPORE</text>
+    </g>
+  </g>
+
+  <!-- ==================== POSTCARD 2: MERLION PARK (TOP CENTER) ==================== -->
+  <g transform="translate(450, 40) rotate(3)" filter="url(#shadow)">
+    <rect width="340" height="230" rx="12" fill="#f4efe6" stroke="#4a3728" stroke-width="4" />
+    <g clip-path="url(#card2-clip)">
+      <rect x="0" y="0" width="340" height="230" fill="#fdfbf7" />
+      <rect x="0" y="0" width="340" height="150" fill="url(#sky-sg)" />
+      
+      <!-- Merlion Statue Silhouette / Cartoon -->
+      <g transform="translate(130, 60)">
+        <!-- Lion Head / Fish Body -->
+        <path d="M 40,70 C 30,50 35,30 55,25 C 75,20 85,40 80,60 C 80,80 50,90 40,70 Z" fill="#b0bec5" stroke="#37474f" stroke-width="2" />
+        <!-- Fish tail base -->
+        <path d="M 38,68 C 20,70 10,60 5,75 C 15,85 30,80 40,70 Z" fill="#90a4ae" stroke="#37474f" stroke-width="2" />
+        <!-- Water stream shooting out -->
+        <path d="M 50,45 Q 20,40 -10,70" stroke="#fff" stroke-width="5" stroke-linecap="round" fill="none" />
+      </g>
+
+      <rect x="0" y="180" width="340" height="50" fill="#78909c" />
+      <text x="20" y="38" class="script-txt" font-size="26" fill="#b71c1c">The Merlion</text>
+      <text x="22" y="52" class="sans-txt" font-weight="800" font-size="9" fill="#37474f" letter-spacing="1.5">MARINA BAY WATERFRONT</text>
+    </g>
+  </g>
+
+  <!-- ==================== POSTCARD 5: GARDENS BY THE BAY / SUPERCOOK (TOP RIGHT) ==================== -->
+  <g transform="translate(820, 70) rotate(8)" filter="url(#shadow)">
+    <rect width="340" height="230" rx="12" fill="#fff" stroke="#4a3728" stroke-width="4" />
+    <g clip-path="url(#card6-clip)">
+      <!-- Evening Sky -->
+      <rect x="0" y="0" width="340" height="150" fill="#1a237e" />
+      <circle cx="270" cy="50" r="25" fill="#ffeb3b" opacity="0.8" />
+
+      <!-- Supertree Grove Silhouettes -->
+      <g fill="#2e7d32" stroke="#1b5e20" stroke-width="2">
+        <!-- Tree 1 -->
+        <path d="M 100,160 L 110,80 L 80,50 Q 110,30 140,50 L 120,80 L 130,160 Z" />
+        <!-- Tree 2 -->
+        <path d="M 200,160 L 207,90 L 180,65 Q 205,45 230,65 L 213,90 L 220,160 Z" fill="#388e3c" />
+      </g>
+      <!-- OCBC Skyway glowing bridge -->
+      <path d="M 95,95 Q 160,110 205,100" stroke="#ff5722" stroke-width="3" fill="none" />
+
+      <rect x="0" y="150" width="340" height="80" fill="#004d40" />
+      
+      <text x="170" y="40" class="bold-txt" font-size="18" fill="#ffab40" text-anchor="middle">GARDENS BY THE BAY</text>
+      <text x="170" y="56" class="script-txt" font-size="13" fill="#80cbc4" text-anchor="middle">Supertrees &amp; Floral Fantasy</text>
+    </g>
+  </g>
+
+  <!-- ==================== POSTCARD 6: CHINATOWN SINGAPORE (MIDDLE LEFT) ==================== -->
+  <g transform="translate(30, 310) rotate(-4)" filter="url(#shadow)">
+    <rect width="350" height="240" rx="12" fill="#fff" stroke="#4a3728" stroke-width="4" />
+    <g clip-path="url(#card5-clip)">
+      <rect x="0" y="0" width="350" height="180" fill="#ffebee" />
+      
+      <!-- Shophouses & Red Lanterns -->
+      <g transform="translate(50, 30)">
+        <!-- Shophouse background -->
+        <rect x="20" y="40" width="80" height="110" fill="#e57373" stroke="#b71c1c" stroke-width="2" />
+        <rect x="110" y="30" width="90" height="120" fill="#ffb74d" stroke="#e65100" stroke-width="2" />
+        <!-- Windows -->
+        <rect x="35" y="60" width="20" height="30" rx="10" fill="#fff" />
+        <rect x="65" y="60" width="20" height="30" rx="10" fill="#fff" />
+        <rect x="130" y="50" width="22" height="30" rx="11" fill="#fff" />
+        <rect x="160" y="50" width="22" height="30" rx="11" fill="#fff" />
+        
+        <!-- Red Lantern strings hanging across -->
+        <path d="M -20,20 Q 100,50 250,20" stroke="#3e2723" stroke-width="1.5" fill="none" />
+        <!-- Lanterns -->
+        <circle cx="50" cy="33" r="10" fill="#d32f2f" />
+        <circle cx="110" cy="40" r="10" fill="#d32f2f" />
+        <circle cx="170" cy="33" r="10" fill="#d32f2f" />
+      </g>
+
+      <rect x="0" y="170" width="350" height="70" fill="#c62828" />
+      <text x="175" y="205" class="bold-txt" font-size="22" fill="#fff" text-anchor="middle">CHINATOWN</text>
+      <text x="175" y="220" class="sans-txt" font-weight="800" font-size="10" fill="#ffccbc" text-anchor="middle" letter-spacing="2">HERITAGE &amp; CULTURE</text>
+    </g>
+  </g>
+
+  <!-- ==================== POSTCARD 3: HAWAii / SENTOSA BEACH (CENTER RIGHT) ==================== -->
+  <g transform="translate(420, 290) rotate(2)" filter="url(#shadow)">
+    <rect width="370" height="250" rx="12" fill="#fff" stroke="#4a3728" stroke-width="4" />
+    <g clip-path="url(#card3-clip)">
+      <rect x="0" y="0" width="370" height="160" fill="#4fc3f7" />
+      <circle cx="300" cy="50" r="30" fill="#fffde7" />
+
+      <!-- Beach / Sand -->
+      <rect x="0" y="140" width="370" height="110" fill="#ffe082" />
+
+      <!-- Coconut Palm Silhouette -->
+      <path d="M 60,250 Q 80,160 30,90 Q 50,90 75,250 Z" fill="#5d4037" />
+      <path d="M 30,90 Q -10,70 -30,85 Q 10,85 30,90 Z M 30,90 Q 20,40 40,30 Q 35,75 30,90 Z M 30,90 Q 75,60 90,80 Q 50,85 30,90 Z" fill="#2e7d32" />
+
+      <!-- Beach ball / Umbrella -->
+      <circle cx="250" cy="170" r="20" fill="#e53935" />
+      <path d="M 235,170 Q 250,150 265,170 Q 250,190 235,170 Z" fill="#fff" />
+
+      <text x="35" y="60" class="marker-txt" font-size="30" fill="#f57c00" transform="rotate(-3)">Sunny</text>
+      <text x="35" y="92" class="bold-txt" font-size="34" fill="#01579b">SENTOSA ISLAND</text>
+      <text x="37" y="115" class="sans-txt" font-weight="800" font-size="12" fill="#e65100" letter-spacing="3">TROPICAL RESORT ESCAPE</text>
+    </g>
+  </g>
+
+  <!-- ==================== POSTCARD 7: HAWKER CENTRE FOOD CULTURE (TOP FAR RIGHT) ==================== -->
+  <g transform="translate(830, 320) rotate(-6)" filter="url(#shadow)">
+    <rect width="340" height="230" rx="12" fill="#fff" stroke="#4a3728" stroke-width="4" />
+    <g clip-path="url(#card6-clip)">
+      <rect x="0" y="0" width="340" height="230" fill="#fff3e0" />
+      <circle cx="170" cy="115" r="90" fill="#ffe0b2" />
+
+      <!-- Cartoon Bowl of Laksa / Noodles -->
+      <g transform="translate(115, 60)">
+        <!-- Bowl -->
+        <path d="M 15,40 L 30,95 Q 55,105 80,95 L 95,40 Z" fill="#f4511e" stroke="#bf360c" stroke-width="2.5" />
+        <ellipse cx="55" cy="40" rx="40" ry="10" fill="#ffb74d" stroke="#bf360c" stroke-width="2" />
+        <!-- Soup / Noodles inside -->
+        <ellipse cx="55" cy="41" rx="35" ry="8" fill="#d7ccc8" />
+        <path d="M 30,41 Q 45,35 60,45 Q 70,35 80,41" stroke="#fff" stroke-width="3" fill="none" />
+        <!-- Chopsticks -->
+        <line x1="20" y1="10" x2="80" y2="55" stroke="#3e2723" stroke-width="3" stroke-linecap="round" />
+        <line x1="30" y1="8" x2="88" y2="50" stroke="#3e2723" stroke-width="3" stroke-linecap="round" />
+      </g>
+
+      <rect x="40" y="170" width="260" height="40" rx="8" fill="#e65100" />
+      <text x="170" y="196" class="bold-txt" font-size="18" fill="#fff" text-anchor="middle">HAWKER DELICACIES</text>
+    </g>
+  </g>
+
+  <!-- ==================== POSTCARD 4: VINTAGE BACK OF POSTCARD (BOTTOM LEFT) ==================== -->
+  <g transform="translate(80, 560) rotate(5)" filter="url(#shadow)">
+    <rect width="330" height="220" rx="12" fill="#f7f2e7" stroke="#4a3728" stroke-width="4" />
+    <g clip-path="url(#card4-clip)">
+      <rect x="0" y="0" width="330" height="220" fill="none" stroke="url(#airmail)" stroke-width="12" />
+      <rect x="10" y="10" width="310" height="200" fill="#f7f2e7" />
+      <line x1="165" y1="25" x2="165" y2="195" stroke="#bcaaa4" stroke-width="2" stroke-dasharray="6 4" />
+
+      <!-- Stamp (Singapore Vanda Miss Joaquim Orchid) -->
+      <g transform="translate(230, 20)" filter="url(#shadow-sm)">
+        <rect width="75" height="90" fill="#f5f5f5" x="5" y="7.5" />
+        <g mask="url(#stamp-mask)">
+          <rect width="90" height="110" fill="#e1f5fe" />
+          <rect x="8" y="8" width="69" height="89" fill="#b3e5fc" />
+          <!-- Orchid flower graphic -->
+          <circle cx="42" cy="45" r="20" fill="#ab47bc" />
+          <path d="M 42,20 Q 50,35 42,60 Q 34,35 42,20 Z" fill="#ce93d8" />
+          <text x="42" y="82" class="bold-txt" font-size="6" fill="#4a148c" text-anchor="middle">SINGAPORE</text>
+          <text x="62" y="20" class="bold-txt" font-size="8" fill="#d32f2f">$1.00</text>
+        </g>
+      </g>
+
+      <!-- Postmark -->
+      <g transform="translate(210, 40)" opacity="0.75">
+        <circle cx="25" cy="25" r="22" fill="none" stroke="#01579b" stroke-width="2" stroke-dasharray="12 3" />
+        <text x="25" y="18" class="sans-txt" font-size="5" font-weight="800" fill="#01579b" text-anchor="middle">SINGAPORE GENERAL</text>
+        <text x="25" y="27" class="sans-txt" font-size="6" font-weight="800" fill="#d32f2f" text-anchor="middle">11 OCT 2026</text>
+      </g>
+
+      <!-- Message -->
+      <g transform="translate(22, 35)" fill="#0d47a1">
+        <text x="20" y="20" class="script-txt" font-size="14">Hello from SG!</text>
+        <text x="20" y="40" class="script-txt" font-size="11">Marina Bay is stunning.</text>
+        <text x="20" y="55" class="script-txt" font-size="11">Amazing food &amp; lights</text>
+        <text x="20" y="70" class="script-txt" font-size="11">everywhere you look.</text>
+        <text x="20" y="115" class="script-txt" font-size="12" fill="#d32f2f">Wish you were here!</text>
+      </g>
+
+      <!-- Address Lines -->
+      <g transform="translate(180, 125)" stroke="#a1887f" stroke-width="1.5">
+        <line x1="0" y1="15" x2="120" y2="15" />
+        <line x1="0" y1="32" x2="120" y2="32" />
+        <line x1="0" y1="49" x2="120" y2="49" />
+      </g>
+    </g>
+  </g>
+
+  <!-- ==================== POSTCARD 8: ORCHARD ROAD SHOPPING (BOTTOM CENTER) ==================== -->
+  <g transform="translate(440, 560) rotate(-3)" filter="url(#shadow)">
+    <rect width="360" height="240" rx="12" fill="#fff" stroke="#4a3728" stroke-width="4" />
+    <g clip-path="url(#card7-clip)">
+      <rect x="0" y="0" width="360" height="150" fill="#80deea" />
+      
+      <!-- Modern Mall Frontage -->
+      <rect x="60" y="60" width="240" height="90" fill="#cfd8dc" stroke="#37474f" stroke-width="2" />
+      <rect x="80" y="80" width="60" height="70" fill="#263238" />
+      <rect x="150" y="80" width="60" height="70" fill="#263238" />
+      <rect x="220" y="80" width="60" height="70" fill="#263238" />
+
+      <!-- Street / Pavement -->
+      <rect x="0" y="140" width="360" height="100" fill="#78909c" />
+
+      <text x="30" y="40" class="bold-txt" font-size="24" fill="#0d47a1">ORCHARD ROAD</text>
+      <text x="32" y="55" class="script-txt" font-size="14" fill="#01579b">Shopping Capital of Asia</text>
+    </g>
+  </g>
+
+  <!-- ==================== POSTCARD 9: ORCHID FLOWER BOTANIC GARDENS (BOTTOM RIGHT) ==================== -->
+  <g transform="translate(820, 570) rotate(4)" filter="url(#shadow)">
+    <rect width="340" height="230" rx="12" fill="#fff" stroke="#4a3728" stroke-width="4" />
+    <g clip-path="url(#card6-clip)">
+      <rect x="0" y="0" width="340" height="230" fill="#fce4ec" />
+      <circle cx="170" cy="115" r="95" fill="#f8bbd0" />
+
+      <!-- Giant Cartoon Orchid Blossom -->
+      <g transform="translate(120, 50)">
+        <!-- Petals -->
+        <ellipse cx="50" cy="30" rx="20" ry="35" fill="#e91e63" transform="rotate(-30 50 30)" />
+        <ellipse cx="50" cy="30" rx="20" ry="35" fill="#e91e63" transform="rotate(30 50 30)" />
+        <ellipse cx="50" cy="50" rx="25" ry="20" fill="#ad1457" />
+        <circle cx="50" cy="40" r="10" fill="#ffeb3b" />
+      </g>
+
+      <text x="170" y="185" class="bold-txt" font-size="22" fill="#880e4f" text-anchor="middle">BOTANIC GARDENS</text>
+      <text x="170" y="202" class="marker-txt" font-size="13" fill="#c2185b" text-anchor="middle">UNESCO World Heritage Site</text>
+    </g>
+  </g>
+
+  <!-- ==================== EXTRAS / SOUVENIRS ON TABLE ==================== -->
+  
+  <!-- Loose Singapore Stamp -->
+  <g transform="translate(400, 240) rotate(25)" filter="url(#shadow-sm)">
+    <rect width="50" height="60" fill="#fff" x="-2" y="-2" />
+    <rect width="46" height="56" fill="#e1f5fe" />
+    <circle cx="23" cy="25" r="8" fill="#ab47bc" />
+    <text x="23" y="48" class="bold-txt" font-size="6" fill="#4a148c" text-anchor="middle">SG ORCHID</text>
+  </g>
+
+  <!-- Travel Pin Badge (SG Lion Head Symbol) -->
+  <g transform="translate(780, 260) rotate(-10)" filter="url(#shadow-sm)">
+    <circle cx="25" cy="25" r="24" fill="#d32f2f" stroke="#fff" stroke-width="2" />
+    <text x="25" y="32" class="bold-txt" font-size="16" fill="#fff" text-anchor="middle">SG</text>
+  </g>
+
+  <!-- Polaroid Photo -->
+  <g transform="translate(380, 500) rotate(-15)" filter="url(#shadow-sm)">
+    <rect width="80" height="95" fill="#fff" rx="2" filter="url(#shadow-sm)" />
+    <rect x="6" y="6" width="68" height="62" fill="#ffcc80" />
+    <text x="40" y="82" class="marker-txt" font-size="9" fill="#37474f" text-anchor="middle">Chilli Crab!</text>
+  </g>
+
+  <!-- Shell / Souvenir Table Accessory -->
+  <g transform="translate(790, 520) rotate(40)" filter="url(#shadow-sm)">
+    <path d="M 10,30 Q 25,0 40,30 Q 25,35 10,30 Z" fill="#ffe0b2" stroke="#e65100" stroke-width="1.5" />
+  </g>
+</svg>

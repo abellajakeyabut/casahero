@@ -5,14 +5,14 @@
   left: 0;
   width: 100%;
   background-color: #006d5b;
-  padding: 8px 16px;              /* slimmer vertical padding */
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  padding: 8px 16px; /* slimmer vertical padding */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   z-index: 1000;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;                /* allow wrapping on small screens */
+  flex-wrap: wrap; /* allow wrapping on small screens */
 }
 
 /* Dashboard container */
@@ -30,14 +30,14 @@
   font-weight: 700;
   color: #fff;
   padding: 0;
-   cursor: pointer; /* changes cursor to a hand icon */
+  cursor: pointer; /* changes cursor to a hand icon */
   transition: transform 0.2s ease;
 }
 
 /* Search container */
 .search-container {
-  margin: 100px auto 20px;        /* space below banner */
-  width: 90%;                     /* responsive width */
+  margin: 100px auto 20px; /* space below banner */
+  width: 90%; /* responsive width */
   max-width: 900px;
   background: #fff;
   border-radius: 10px;
@@ -52,7 +52,7 @@
 /* Search form */
 .search-form {
   display: flex;
-  flex-wrap: wrap;                /* wrap on smaller screens */
+  flex-wrap: wrap; /* wrap on smaller screens */
   gap: 8px;
   width: 100%;
   justify-content: center;
@@ -62,7 +62,7 @@
 
 .search-input,
 .search-select {
-  flex: 1;                        /* grow to fill space */
+  flex: 1; /* grow to fill space */
   min-width: 150px;
   padding: 10px 14px;
   border-radius: 6px;
@@ -86,7 +86,7 @@
   margin-top: 16px;
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;                /* wrap on mobile */
+  flex-wrap: wrap; /* wrap on mobile */
   gap: 8px;
 }
 
@@ -111,7 +111,7 @@
   background-color: #fff;
   color: #006d5b;
   font-weight: 600;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   border: 1px solid #006d5b;
 }
 
@@ -136,9 +136,13 @@
   padding: 8px 16px;
   cursor: pointer;
 }
-
+.auth-links span {
+  color: #fff;
+  font-style: bold;
+}
 /* Global reset */
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;

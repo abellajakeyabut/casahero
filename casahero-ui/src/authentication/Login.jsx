@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import AppContext from '../context/AppContext';
 import './Login.css'; // CSS file with styles
 import RolePick from './RolePick';
@@ -8,29 +8,32 @@ import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const { updateUserContext, userContext } = useContext(AppContext);
-  const { updateLoginDetails, login, loginDetails } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
   const navi = useNavigate();
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
     let isLoggedIn = login();
-    updateLoginDetails({ ...loginDetails, loggedIn: isLoggedIn });
+    updateUserContext({ ...userContext, loggedIn: isLoggedIn });
     if (isLoggedIn) {
       navi('/dashboard');
     }
   };
   const updateUserName = (data) => {
-    updateLoginDetails({ ...loginDetails, uid: data });
+    updateUserContext({ ...userContext, username: data });
   };
   const updatePassword = (data) => {
-    updateLoginDetails({ ...loginDetails, pwd: data });
+    updateUserContext({ ...userContext, pwd: data });
   };
-
+  useEffect(() => {
+    userContext == undefined &&
+      updateUserContext({ role: 'tenant', loggedIn: false });
+  }, [userContext]);
   return (
     <div className={'login-wrapper'}>
-      <TopBanner></TopBanner>
+      <TopBanner userContext={userContext}></TopBanner>
       <div className="login-header">
-        <h1>casahero - {loginDetails.role}</h1>
+        <h1>casahero - {userContext?.role}</h1>
       </div>
 
       <form onSubmit={handleSubmit}>
@@ -54,7 +57,7 @@ const Login = () => {
         <button
           type="submit"
           className={
-            loginDetails.role == 'landlord'
+            userContext?.role == 'landlord'
               ? 'login-button-landlord'
               : 'login-button'
           }

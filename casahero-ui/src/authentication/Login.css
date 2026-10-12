@@ -16,7 +16,7 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: url('../assets/casahero-ui-login-svg.svg') repeat center center;
+  background: url('../assets/singapore.svg') repeat center center;
   backdrop-filter: blur(1px); /* controls blur intensity */
 }
 
