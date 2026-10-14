@@ -13,15 +13,19 @@ const TopBanner = ({ userContext }) => {
       >
         <h1>casahero</h1>
       </div>
-
       <div className="auth-links">
         {userContext && userContext.loggedIn ? (
           <span>Welcome, {userContext.username}</span>
         ) : (
           <span>Welcome, Guest ! </span>
         )}
-
-        <button>Register</button>
+        <button
+          onClick={() => {
+            navi('/signup');
+          }}
+        >
+          Register
+        </button>
         <button
           onClick={() => {
             navi('/login');

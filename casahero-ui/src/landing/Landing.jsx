@@ -40,7 +40,6 @@ const Landing = () => {
                 <div className="w-px h-full bg-gray-300"></div>
               </div>
               <div className="block md:hidden w-64 h-px bg-gray-300 mx-auto"></div>
-
               {/* Tenant Card */}
               <button onClick={() => roleSelect('tenant')}>
                 <div className="text-5xl mb-4">👤</div>

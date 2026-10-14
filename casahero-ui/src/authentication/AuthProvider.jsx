@@ -5,9 +5,6 @@ import AppContext from '../context/AppContext';
 const AuthProvider = ({ children }) => {
   const { updateUserContext, userContext } = useContext(AppContext);
 
-  const [tenant, setTenant] = useState(false);
-  const [loginDetails, setLoginDetails] = useState({ role: 'tenant' });
-
   const login = (uname, pwd) => {
     updateUserContext({
       ...userContext,
@@ -17,15 +14,11 @@ const AuthProvider = ({ children }) => {
 
     return true;
   };
-  const updateLoginDetails = (data) => {
-    updateUserContext({ ...data });
-  };
+
   return (
     <AuthContext.Provider
       value={{
-        updateLoginDetails,
         login,
-        loginDetails,
       }}
     >
       {children}

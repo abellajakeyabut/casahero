@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import AppContext from '../context/AppContext';
 import './Login.css'; // CSS file with styles
 import RolePick from './RolePick';
