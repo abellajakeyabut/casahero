@@ -11,6 +11,10 @@ app.post('/casahero-api/signup', (req, res) => {
   // Handle signup logic here
   res.send({ outcome: 'Signup successful!', success: true });
 });
+app.post('/casahero-api/login', (req, res) => {
+  // Handle signup logic here
+  res.send({ outcome: 'login successful!', success: true });
+});
 app.use(express.static(path.join(__dirname, 'dist')));
 
 app.get('/{*splat}', (req, res) => {

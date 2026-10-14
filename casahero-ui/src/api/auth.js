@@ -4,3 +4,7 @@ export const signup = async (data) => {
   const response = await api.post('/signup', data);
   return response.data;
 };
+export const login = async (data) => {
+  const response = await api.post('/login', data);
+  return response.data;
+};

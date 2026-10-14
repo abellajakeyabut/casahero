@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import AuthContext from './AuthContext';
 import AppContext from '../context/AppContext';
-
+import { login } from '../api/auth';
 const AuthProvider = ({ children }) => {
   const { updateUserContext, userContext } = useContext(AppContext);
 

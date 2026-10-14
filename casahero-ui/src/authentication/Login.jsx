@@ -11,11 +11,12 @@ const Login = () => {
   const { login } = useContext(AuthContext);
   const navi = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    let isLoggedIn = login();
-    updateUserContext({ ...userContext, loggedIn: isLoggedIn });
+    let isLoggedIn = await login({ username: userContext.username, password: userContext.pwd });
+    
     if (isLoggedIn) {
+      updateUserContext({ ...userContext, loggedIn: isLoggedIn });
       navi('/dashboard');
     }
   };
