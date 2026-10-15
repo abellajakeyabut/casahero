@@ -5,7 +5,7 @@ const AppProvider = ({ children }) => {
   const [userContext, setUserContext] = useState(null);
 
   const updateUserContext = (data) => {
-    setUserContext({ ...data });
+    setUserContext(data);
   };
 
   return (

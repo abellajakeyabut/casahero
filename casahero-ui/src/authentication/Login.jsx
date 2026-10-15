@@ -8,13 +8,16 @@ import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const { updateUserContext, userContext } = useContext(AppContext);
-  const { login } = useContext(AuthContext);
+  const { authenticate } = useContext(AuthContext);
   const navi = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let isLoggedIn = await login({ username: userContext.username, password: userContext.pwd });
-    
+    let isLoggedIn = await authenticate({
+      username: userContext.username,
+      password: userContext.pwd,
+    });
+
     if (isLoggedIn) {
       updateUserContext({ ...userContext, loggedIn: isLoggedIn });
       navi('/dashboard');

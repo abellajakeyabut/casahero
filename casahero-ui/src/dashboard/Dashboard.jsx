@@ -6,9 +6,8 @@ import AppContext from '../context/AppContext';
 
 import './Dashboard.css'; // CSS file with styles
 
-const TopSearchBanner = ({ onSearch }) => {
+const Dashboard = () => {
   const { userContext } = useContext(AppContext);
-
   return (
     <div className="dashboard-container">
       <TopBanner userContext={userContext} />
@@ -17,4 +16,4 @@ const TopSearchBanner = ({ onSearch }) => {
   );
 };
 
-export default TopSearchBanner;
+export default Dashboard;

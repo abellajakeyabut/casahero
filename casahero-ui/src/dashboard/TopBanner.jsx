@@ -6,6 +6,7 @@ const TopBanner = ({ userContext }) => {
   return (
     <div className="top-banner">
       <div
+        id="title"
         className="banner-title"
         onClick={() => {
           navi('/');
@@ -13,13 +14,14 @@ const TopBanner = ({ userContext }) => {
       >
         <h1>casahero</h1>
       </div>
-      <div className="auth-links">
+      <div id="auth-links" className="auth-links">
         {userContext && userContext.loggedIn ? (
-          <span>Welcome, {userContext.username}</span>
+          <span>Welcome, {userContext?.username}</span>
         ) : (
           <span>Welcome, Guest ! </span>
         )}
         <button
+          id="register-button"
           onClick={() => {
             navi('/signup');
           }}
@@ -27,6 +29,7 @@ const TopBanner = ({ userContext }) => {
           Register
         </button>
         <button
+          id="login-button"
           onClick={() => {
             navi('/login');
           }}

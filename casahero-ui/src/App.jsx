@@ -1,4 +1,3 @@
-
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './authentication/Login';
 import Dashboard from './dashboard/Dashboard';
@@ -23,9 +22,7 @@ const App = () => {
           path="/dashboard"
           element={
             <AuthProvider>
-              <SafeRoute>
-                <Dashboard></Dashboard>
-              </SafeRoute>
+              <Dashboard></Dashboard>
             </AuthProvider>
           }
         ></Route>
