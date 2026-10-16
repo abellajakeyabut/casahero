@@ -1,8 +1,20 @@
+import { useContext } from 'react';
 import './Dashboard.css'; // CSS file with styles
 import { useNavigate } from 'react-router-dom';
-const TopBanner = ({ userContext }) => {
+import {logout} from '../api/auth'
+import AppContext from '../context/AppContext';
+const TopBanner = () => {
   const navi = useNavigate();
+  const { updateUserContext, userContext } = useContext(AppContext);
 
+  const signout=async()=>{
+    let response = await logout({...userContext});
+    if(response.success == true){
+      updateUserContext({username:"",password:"",loggedIn:false})
+      navi('/login')
+    }
+    return;
+  }
   return (
     <div className="top-banner">
       <div
@@ -20,22 +32,30 @@ const TopBanner = ({ userContext }) => {
         ) : (
           <span>Welcome, Guest ! </span>
         )}
-        <button
-          id="register-button"
-          onClick={() => {
-            navi('/signup');
-          }}
-        >
-          Register
-        </button>
-        <button
-          id="login-button"
-          onClick={() => {
-            navi('/login');
-          }}
-        >
-          Login
-        </button>
+        {
+          userContext?.loggedIn != true && <button
+            id="register-button"
+            onClick={() => {
+              navi('/signup');
+            }}
+          >
+            Register
+          </button>
+
+        }
+        {
+          userContext?.loggedIn != true && <button
+            id="login-button"
+            onClick={() => {
+              navi('/login');
+            }}
+          >
+            Login
+          </button>
+        }
+        {
+          userContext?.loggedIn && <button id="logout-button"  onClick={signout}>Log out</button>
+        }
       </div>
     </div>
   );

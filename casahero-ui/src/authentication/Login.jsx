@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect,useState } from 'react';
 import AppContext from '../context/AppContext';
 import './Login.css'; // CSS file with styles
 import RolePick from './RolePick';
@@ -9,30 +9,31 @@ import { useNavigate } from 'react-router-dom';
 const Login = () => {
   const { updateUserContext, userContext } = useContext(AppContext);
   const { authenticate } = useContext(AuthContext);
+  const [loginDetails, setLoginDetails] = useState({ username: '', password: '' });
   const navi = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    updateUserContext({ role: 'tenant', loggedIn: false,username: '', password: '' });
     let isLoggedIn = await authenticate({
       username: userContext.username,
-      password: userContext.pwd,
+      password: userContext.password,
     });
 
     if (isLoggedIn) {
-      updateUserContext({ ...userContext, loggedIn: isLoggedIn });
+      updateUserContext({ ...userContext, loggedIn: isLoggedIn ,...loginDetails });
       navi('/dashboard');
     }
   };
   const updateUserName = (data) => {
-    updateUserContext({ ...userContext, username: data });
+    setLoginDetails({ ...loginDetails, username: data });
   };
   const updatePassword = (data) => {
-    updateUserContext({ ...userContext, pwd: data });
+    setLoginDetails({ ...loginDetails, password: data });
   };
   useEffect(() => {
-    userContext == undefined &&
-      updateUserContext({ role: 'tenant', loggedIn: false });
-  }, [userContext]);
+    updateUserContext({ role: 'tenant', loggedIn: false,username: '', password: '' });
+  }, userContext);
   return (
     <div className={'login-wrapper'}>
       <TopBanner userContext={userContext}></TopBanner>

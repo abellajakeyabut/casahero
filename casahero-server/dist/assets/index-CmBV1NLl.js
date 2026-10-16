@@ -13628,233 +13628,6 @@ var RolePick = () => {
 //#region src/authentication/AuthContext.jsx
 var AuthContext = (0, import_react.createContext)();
 //#endregion
-//#region src/dashboard/TopBanner.jsx
-var TopBanner = ({ userContext }) => {
-	const navi = useNavigate();
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: "top-banner",
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-			id: "title",
-			className: "banner-title",
-			onClick: () => {
-				navi("/");
-			},
-			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", { children: "casahero" })
-		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			id: "auth-links",
-			className: "auth-links",
-			children: [
-				userContext && userContext.loggedIn ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: ["Welcome, ", userContext?.username] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Welcome, Guest ! " }),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-					id: "register-button",
-					onClick: () => {
-						navi("/signup");
-					},
-					children: "Register"
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-					id: "login-button",
-					onClick: () => {
-						navi("/login");
-					},
-					children: "Login"
-				})
-			]
-		})]
-	});
-};
-//#endregion
-//#region src/authentication/Login.jsx
-var Login = () => {
-	const { updateUserContext, userContext } = (0, import_react.useContext)(AppContext);
-	const { authenticate } = (0, import_react.useContext)(AuthContext);
-	const navi = useNavigate();
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-		let isLoggedIn = await authenticate({
-			username: userContext.username,
-			password: userContext.pwd
-		});
-		if (isLoggedIn) {
-			alert(JSON.stringify(userContext));
-			updateUserContext({
-				...userContext,
-				loggedIn: isLoggedIn
-			});
-			navi("/dashboard");
-		}
-	};
-	const updateUserName = (data) => {
-		updateUserContext({
-			...userContext,
-			username: data
-		});
-	};
-	const updatePassword = (data) => {
-		updateUserContext({
-			...userContext,
-			pwd: data
-		});
-	};
-	(0, import_react.useEffect)(() => {
-		userContext == void 0 && updateUserContext({
-			role: "tenant",
-			loggedIn: false
-		});
-	}, [userContext]);
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: "login-wrapper",
-		children: [
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TopBanner, { userContext }),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				className: "login-header",
-				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", { children: ["casahero - ", userContext?.role] })
-			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
-				onSubmit: handleSubmit,
-				children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-						type: "text",
-						placeholder: "Username",
-						className: "login-input",
-						onChange: (e) => {
-							updateUserName(e.target.value);
-						}
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-						type: "password",
-						placeholder: "Password",
-						className: "login-input",
-						onChange: (e) => {
-							updatePassword(e.target.value);
-						}
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-						type: "submit",
-						className: userContext?.role == "landlord" ? "login-button-landlord" : "login-button",
-						children: "Log In"
-					})
-				]
-			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "login-footer",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RolePick, {}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
-					href: "#",
-					children: "Forgot Password?"
-				})]
-			})
-		]
-	});
-};
-//#endregion
-//#region src/dashboard/searchbar/SearchBar.jsx
-var SearchBar = () => {
-	const [propertyType, setPropertyType] = (0, import_react.useState)("");
-	const [query, setQuery] = (0, import_react.useState)("");
-	const handleSubmit = (e) => {
-		e.preventDefault();
-		onSearch(query);
-	};
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: "search-container",
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "property-type",
-			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-						id: "propertyType",
-						type: "radio",
-						name: "propertyType",
-						value: "Residential",
-						checked: propertyType === "Residential",
-						onChange: (e) => setPropertyType(e.target.value)
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "icon",
-						children: "🏠"
-					}),
-					" Residential"
-				] }),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-						id: "propertyType-commercial",
-						type: "radio",
-						name: "propertyType",
-						value: "Commercial",
-						checked: propertyType === "Commercial",
-						onChange: (e) => setPropertyType(e.target.value)
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "icon",
-						children: "🏢"
-					}),
-					" Commercial"
-				] }),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-						id: "propertyType-staycation",
-						type: "radio",
-						name: "propertyType",
-						value: "Staycation",
-						checked: propertyType === "Staycation",
-						onChange: (e) => setPropertyType(e.target.value)
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "icon",
-						children: "🌴"
-					}),
-					" Staycation"
-				] })
-			]
-		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
-			className: "search-form",
-			onSubmit: handleSubmit,
-			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-					type: "text",
-					id: "region",
-					placeholder: "Select Region...",
-					value: query,
-					onChange: (e) => setQuery(e.target.value),
-					className: "search-input"
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-					type: "text",
-					id: "city",
-					placeholder: "Select City...",
-					value: query,
-					onChange: (e) => setQuery(e.target.value),
-					className: "search-input"
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-					type: "text",
-					id: "search",
-					placeholder: "Search listings...",
-					value: query,
-					onChange: (e) => setQuery(e.target.value),
-					className: "search-input"
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-					type: "submit",
-					id: "search-button",
-					className: "search-button",
-					children: "Search"
-				})
-			]
-		}) })]
-	}) });
-};
-//#endregion
-//#region src/dashboard/Dashboard.jsx
-var Dashboard = () => {
-	const { userContext } = (0, import_react.useContext)(AppContext);
-	alert("userContext: " + JSON.stringify(userContext));
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: "dashboard-container",
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TopBanner, { userContext }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SearchBar, {})]
-	});
-};
-//#endregion
 //#region node_modules/axios/lib/helpers/bind.js
 /**
 * Create a bound version of a function with a specified `this` context
@@ -17657,16 +17430,270 @@ var signup = async (data) => {
 var login = async (data) => {
 	return (await api.post("/login", data)).data;
 };
+var logout = async (data) => {
+	return (await api.post("/logout", data)).data;
+};
+//#endregion
+//#region src/dashboard/TopBanner.jsx
+var TopBanner = () => {
+	const navi = useNavigate();
+	const { updateUserContext, userContext } = (0, import_react.useContext)(AppContext);
+	const signout = async () => {
+		if ((await logout({ ...userContext })).success == true) {
+			updateUserContext({
+				username: "",
+				password: "",
+				loggedIn: false
+			});
+			navi("/login");
+		}
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "top-banner",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			id: "title",
+			className: "banner-title",
+			onClick: () => {
+				navi("/");
+			},
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", { children: "casahero" })
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			id: "auth-links",
+			className: "auth-links",
+			children: [
+				userContext && userContext.loggedIn ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: ["Welcome, ", userContext?.username] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Welcome, Guest ! " }),
+				userContext?.loggedIn != true && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					id: "register-button",
+					onClick: () => {
+						navi("/signup");
+					},
+					children: "Register"
+				}),
+				userContext?.loggedIn != true && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					id: "login-button",
+					onClick: () => {
+						navi("/login");
+					},
+					children: "Login"
+				}),
+				userContext?.loggedIn && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					id: "logout-button",
+					onClick: signout,
+					children: "Log out"
+				})
+			]
+		})]
+	});
+};
+//#endregion
+//#region src/authentication/Login.jsx
+var Login = () => {
+	const { updateUserContext, userContext } = (0, import_react.useContext)(AppContext);
+	const { authenticate } = (0, import_react.useContext)(AuthContext);
+	const [loginDetails, setLoginDetails] = (0, import_react.useState)({
+		username: "",
+		password: ""
+	});
+	const navi = useNavigate();
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		updateUserContext({
+			role: "tenant",
+			loggedIn: false,
+			username: "",
+			password: ""
+		});
+		let isLoggedIn = await authenticate({
+			username: userContext.username,
+			password: userContext.password
+		});
+		if (isLoggedIn) {
+			updateUserContext({
+				...userContext,
+				loggedIn: isLoggedIn,
+				...loginDetails
+			});
+			navi("/dashboard");
+		}
+	};
+	const updateUserName = (data) => {
+		setLoginDetails({
+			...loginDetails,
+			username: data
+		});
+	};
+	const updatePassword = (data) => {
+		setLoginDetails({
+			...loginDetails,
+			password: data
+		});
+	};
+	(0, import_react.useEffect)(() => {
+		updateUserContext({
+			role: "tenant",
+			loggedIn: false,
+			username: "",
+			password: ""
+		});
+	}, userContext);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "login-wrapper",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TopBanner, { userContext }),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "login-header",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", { children: ["casahero - ", userContext?.role] })
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
+				onSubmit: handleSubmit,
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+						type: "text",
+						placeholder: "Username",
+						className: "login-input",
+						onChange: (e) => {
+							updateUserName(e.target.value);
+						}
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+						type: "password",
+						placeholder: "Password",
+						className: "login-input",
+						onChange: (e) => {
+							updatePassword(e.target.value);
+						}
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						type: "submit",
+						className: userContext?.role == "landlord" ? "login-button-landlord" : "login-button",
+						children: "Log In"
+					})
+				]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "login-footer",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RolePick, {}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+					href: "#",
+					children: "Forgot Password?"
+				})]
+			})
+		]
+	});
+};
+//#endregion
+//#region src/dashboard/searchbar/SearchBar.jsx
+var SearchBar = () => {
+	const [propertyType, setPropertyType] = (0, import_react.useState)("");
+	const [query, setQuery] = (0, import_react.useState)("");
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		onSearch(query);
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "search-container",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "property-type",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+						id: "propertyType",
+						type: "radio",
+						name: "propertyType",
+						value: "Residential",
+						checked: propertyType === "Residential",
+						onChange: (e) => setPropertyType(e.target.value)
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "icon",
+						children: "🏠"
+					}),
+					" Residential"
+				] }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+						id: "propertyType-commercial",
+						type: "radio",
+						name: "propertyType",
+						value: "Commercial",
+						checked: propertyType === "Commercial",
+						onChange: (e) => setPropertyType(e.target.value)
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "icon",
+						children: "🏢"
+					}),
+					" Commercial"
+				] }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+						id: "propertyType-staycation",
+						type: "radio",
+						name: "propertyType",
+						value: "Staycation",
+						checked: propertyType === "Staycation",
+						onChange: (e) => setPropertyType(e.target.value)
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "icon",
+						children: "🌴"
+					}),
+					" Staycation"
+				] })
+			]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
+			className: "search-form",
+			onSubmit: handleSubmit,
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+					type: "text",
+					id: "region",
+					placeholder: "Select Region...",
+					value: query,
+					onChange: (e) => setQuery(e.target.value),
+					className: "search-input"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+					type: "text",
+					id: "city",
+					placeholder: "Select City...",
+					value: query,
+					onChange: (e) => setQuery(e.target.value),
+					className: "search-input"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+					type: "text",
+					id: "search",
+					placeholder: "Search listings...",
+					value: query,
+					onChange: (e) => setQuery(e.target.value),
+					className: "search-input"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					type: "submit",
+					id: "search-button",
+					className: "search-button",
+					children: "Search"
+				})
+			]
+		}) })]
+	}) });
+};
+//#endregion
+//#region src/dashboard/Dashboard.jsx
+var Dashboard = () => {
+	const { userContext } = (0, import_react.useContext)(AppContext);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "dashboard-container",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TopBanner, { userContext }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SearchBar, {})]
+	});
+};
 //#endregion
 //#region src/authentication/AuthProvider.jsx
 var AuthProvider = ({ children }) => {
 	const { updateUserContext, userContext } = (0, import_react.useContext)(AppContext);
 	const authenticate = async (payload) => {
 		let response = await login(payload);
-		if (!response || !response.success) {
-			alert("Login failed: " + (response?.message || "Unknown error"));
-			return false;
-		}
+		if (!response || !response.success) return false;
 		updateUserContext({
 			...userContext,
 			loggedIn: true,
