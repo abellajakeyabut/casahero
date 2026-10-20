@@ -1,8 +1,8 @@
 import { useContext } from 'react';
 import './Dashboard.css'; // CSS file with styles
 import { useNavigate } from 'react-router-dom';
-import {logout} from '../api/auth'
-import AppContext from '../context/AppContext';
+import {logout} from '../../api/auth'
+import AppContext from '../../context/AppContext';
 const TopBanner = () => {
   const navi = useNavigate();
   const { updateUserContext, userContext } = useContext(AppContext);

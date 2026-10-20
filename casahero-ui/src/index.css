@@ -1,0 +1,28 @@
+/* App color theme. AppProvider sets <html data-role="landlord"> when a landlord is logged in. */
+:root {
+  --theme: #006d5b; /* primary green */
+  --theme-dark: #005a4b;
+  --theme-light: #0a8a74;
+  --theme-text: #006d5b; /* theme color used for text on white */
+  --theme-muted: #3f7d71;
+  --theme-soft: #e6f2ef;
+  --theme-softer: #f0f7f5;
+  --theme-tint: #f7faf9;
+  --theme-tile: #eef5f3;
+  --theme-rgb: 0, 109, 91;
+  --theme-shadow-rgb: 0, 61, 51;
+}
+
+:root[data-role='landlord'] {
+  --theme: #f86bad; /* secondary pink */
+  --theme-dark: #d94a8f;
+  --theme-light: #ff8cc2;
+  --theme-text: #c2337a; /* darker pink so text stays readable on white */
+  --theme-muted: #b5547f;
+  --theme-soft: #fde6f1;
+  --theme-softer: #fef1f7;
+  --theme-tint: #fdf7fa;
+  --theme-tile: #fcedf4;
+  --theme-rgb: 248, 107, 173;
+  --theme-shadow-rgb: 110, 25, 65;
+}

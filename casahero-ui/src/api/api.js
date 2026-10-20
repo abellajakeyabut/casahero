@@ -1,7 +1,8 @@
 import axios from 'axios';
+const BASE_URL = import.meta.env.VITE_API_URL ?? '/casahero-api';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3000/casahero-api', // your backend URL
+  baseURL: BASE_URL, // your backend URL
   timeout: 10000, // optional: request timeout
   headers: { 'Content-Type': 'application/json' },
 });

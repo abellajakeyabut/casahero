@@ -1,42 +1,61 @@
-import { useContext, useEffect,useState } from 'react';
-import AppContext from '../context/AppContext';
+import { useContext, useEffect, useState } from 'react';
+import AppContext from '../../context/AppContext';
 import './Login.css'; // CSS file with styles
 import RolePick from './RolePick';
 import AuthContext from './AuthContext';
 import TopBanner from '../dashboard/TopBanner';
 import { useNavigate } from 'react-router-dom';
+import Spinner from '../../shared/Spinner';
+import SocialButtons from '../../shared/SocialButtons';
 
 const Login = () => {
   const { updateUserContext, userContext } = useContext(AppContext);
+  const [show, setShow] = useState(false);
+  const [error, setError] = useState('');
+
   const { authenticate } = useContext(AuthContext);
-  const [loginDetails, setLoginDetails] = useState({ username: '', password: '' });
+  const [loginDetails, setLoginDetails] = useState({
+    username: '',
+    password: '',
+  });
   const navi = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    updateUserContext({ role: 'tenant', loggedIn: false,username: '', password: '' });
-    let isLoggedIn = await authenticate({
-      username: userContext.username,
-      password: userContext.password,
-    });
-
-    if (isLoggedIn) {
-      updateUserContext({ ...userContext, loggedIn: isLoggedIn ,...loginDetails });
-      navi('/dashboard');
+    setError('');
+    setShow(true);
+    try {
+      // authenticate updates the user context (keeping the role) on success
+      const isLoggedIn = await authenticate(loginDetails);
+      if (isLoggedIn) {
+        navi('/dashboard');
+      } else {
+        setError('Invalid username or password.');
+      }
+    } catch {
+      setError('Could not reach the server. Please try again.');
+    } finally {
+      setShow(false);
     }
   };
-  const updateUserName = (data) => {
-    setLoginDetails({ ...loginDetails, username: data });
+  const updateEmail = (data) => {
+    setLoginDetails({ ...loginDetails, email: data });
   };
   const updatePassword = (data) => {
     setLoginDetails({ ...loginDetails, password: data });
   };
+  // reset to logged out once on mount, keeping a role picked earlier (e.g. on the landing page)
   useEffect(() => {
-    updateUserContext({ role: 'tenant', loggedIn: false,username: '', password: '' });
-  }, userContext);
+    updateUserContext((prev) => ({
+      role: prev?.role ?? 'tenant',
+      loggedIn: false,
+      username: '',
+    }));
+  }, [updateUserContext]);
   return (
     <div className={'login-wrapper'}>
-      <TopBanner userContext={userContext}></TopBanner>
+      <Spinner show={show} message="Logging in.." />
+      <TopBanner></TopBanner>
       <div className="login-header">
         <h1>casahero - {userContext?.role}</h1>
       </div>
@@ -44,10 +63,10 @@ const Login = () => {
       <form onSubmit={handleSubmit}>
         <input
           type="text"
-          placeholder="Username"
+          placeholder="Email"
           className="login-input"
           onChange={(e) => {
-            updateUserName(e.target.value);
+            updateEmail(e.target.value);
           }}
         />
         <input
@@ -69,7 +88,13 @@ const Login = () => {
         >
           Log In
         </button>
+        {error && (
+          <p className="login-error" role="alert">
+            {error}
+          </p>
+        )}
       </form>
+      <SocialButtons disabled={show} />
 
       <div className="login-footer">
         <RolePick></RolePick>
