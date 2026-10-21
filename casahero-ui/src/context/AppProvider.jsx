@@ -11,7 +11,7 @@ const AppProvider = ({ children }) => {
   }, []);
 
   // switch the color theme (see index.css) while a landlord is logged in
-  const isLandlord = userContext?.loggedIn && userContext?.role === 'landlord';
+  const isLandlord = userContext?.loggedIn && userContext?.default_role === 'landlord';
   useEffect(() => {
     document.documentElement.dataset.role = isLandlord ? 'landlord' : 'tenant';
   }, [isLandlord]);

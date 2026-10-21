@@ -37,7 +37,7 @@ const Landing = () => {
 
   // remember the picked role (Login keeps it) and move on
   const roleSelect = (role, path) => {
-    updateUserContext((prev) => ({ ...prev, role }));
+    updateUserContext((prev) => ({ ...prev, default_role: role }));
     navi(path);
   };
 
@@ -47,7 +47,10 @@ const Landing = () => {
       <main className="landing">
         <header className="landing-hero">
           <h1>Welcome to Casahero</h1>
-          <p>Smarter rentals for landlords &amp; tenants. How will you use Casahero?</p>
+          <p>
+            Smarter rentals for landlords &amp; tenants. How will you use
+            Casahero?
+          </p>
         </header>
 
         <div className="landing-roles">

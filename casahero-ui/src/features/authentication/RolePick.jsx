@@ -14,8 +14,8 @@ const RolePick = () => {
             padding: '12px',
             textAlign: 'center',
             cursor: 'pointer',
-            background: userContext?.role === 'tenant' ? '#006d5b' : '#f0f0f0',
-            color: userContext?.role === 'tenant' ? '#fff' : '#333',
+            background: userContext?.default_role === 'tenant' ? '#006d5b' : '#f0f0f0',
+            color: userContext?.default_role === 'tenant' ? '#fff' : '#333',
             borderRadius: '6px 0 0 6px',
           }}
         >
@@ -23,9 +23,9 @@ const RolePick = () => {
             type="radio"
             name="role"
             value="tenant"
-            checked={userContext?.role === 'tenant'}
+            checked={userContext?.default_role === 'tenant'}
             onChange={() =>
-              updateUserContext({ ...userContext, role: 'tenant' })
+              updateUserContext({ ...userContext, default_role: 'tenant' })
             }
             style={{ display: 'none' }}
           />
@@ -38,8 +38,8 @@ const RolePick = () => {
             textAlign: 'center',
             cursor: 'pointer',
             background:
-              userContext?.role === 'landlord' ? '#006d5b' : '#f0f0f0',
-            color: userContext?.role === 'landlord' ? '#fff' : '#333',
+              userContext?.default_role === 'landlord' ? '#006d5b' : '#f0f0f0',
+            color: userContext?.default_role === 'landlord' ? '#fff' : '#333',
             borderRadius: '0 6px 6px 0',
           }}
         >
@@ -48,12 +48,12 @@ const RolePick = () => {
             className="login-button-landlord"
             name="role"
             value="landlord"
-            checked={userContext?.role === 'landlord'}
+            checked={userContext?.default_role === 'landlord'}
             onChange={() =>
-              updateUserContext({ ...userContext, role: 'landlord' })
+              updateUserContext({ ...userContext, default_role: 'landlord' })
             }
             style={
-              userContext?.role == 'tenant'
+              userContext?.default_role == 'tenant'
                 ? { display: 'none', backgroundColor: '#006d5b' }
                 : { display: 'none', backgroundColor: '#f86bad' }
             }

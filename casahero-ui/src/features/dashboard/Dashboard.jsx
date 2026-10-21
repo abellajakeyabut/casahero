@@ -9,7 +9,7 @@ import './Dashboard.css'; // CSS file with styles
 
 const Dashboard = () => {
   const { userContext } = useContext(AppContext);
-  const role = userContext?.role;
+  const role = userContext?.default_role;
   const menu = getMenu(role);
   const [activeKey, setActiveKey] = useState(menu[0].key);
 

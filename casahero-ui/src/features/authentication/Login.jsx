@@ -7,11 +7,13 @@ import TopBanner from '../dashboard/TopBanner';
 import { useNavigate } from 'react-router-dom';
 import Spinner from '../../shared/Spinner';
 import SocialButtons from '../../shared/SocialButtons';
+import { useQueryClient } from '@tanstack/react-query';
 
 const Login = () => {
   const { updateUserContext, userContext } = useContext(AppContext);
   const [show, setShow] = useState(false);
   const [error, setError] = useState('');
+  const queryClient = useQueryClient();
 
   const { authenticate } = useContext(AuthContext);
   const [loginDetails, setLoginDetails] = useState({
@@ -46,8 +48,10 @@ const Login = () => {
   };
   // reset to logged out once on mount, keeping a role picked earlier (e.g. on the landing page)
   useEffect(() => {
+    localStorage.removeItem('userContext');
+    queryClient.clear();
     updateUserContext((prev) => ({
-      role: prev?.role ?? 'tenant',
+      default_role: prev?.default_role ?? 'tenant',
       loggedIn: false,
       username: '',
     }));
@@ -57,7 +61,7 @@ const Login = () => {
       <Spinner show={show} message="Logging in.." />
       <TopBanner></TopBanner>
       <div className="login-header">
-        <h1>casahero - {userContext?.role}</h1>
+        <h1>casahero</h1>
       </div>
 
       <form onSubmit={handleSubmit}>
@@ -81,7 +85,7 @@ const Login = () => {
         <button
           type="submit"
           className={
-            userContext?.role == 'landlord'
+            userContext?.default_role == 'landlord'
               ? 'login-button-landlord'
               : 'login-button'
           }
@@ -97,7 +101,6 @@ const Login = () => {
       <SocialButtons disabled={show} />
 
       <div className="login-footer">
-        <RolePick></RolePick>
         <a href="#">Forgot Password?</a>
       </div>
     </div>

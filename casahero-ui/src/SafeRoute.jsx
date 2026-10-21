@@ -1,24 +1,21 @@
 import { Navigate } from 'react-router-dom';
-import { useContext } from 'react';
-import AuthContext from './features/authentication/AuthContext';
+import { useMe } from '../src/features/authentication/useMe';
+import Spinner from '../src/shared/Spinner';
+import { useContext, useEffect } from 'react';
 import AppContext from './context/AppContext';
-
-// Example authentication check (replace with your real auth logic)
-const useAuth = () => {
-  //const user = localStorage.getItem("user"); // or context/state
-  //return !!user;
-  const { userContext } = useContext(AppContext);
-  //const { loginDetails } = useContext(AuthContext);
-
-  if (userContext == undefined) {
-    return false;
-  }
-  return userContext.loggedIn;
-};
 
 // ProtectedRoute component
 const SafeRoute = ({ children }) => {
-  return useAuth() ? children : <Navigate to="/login" replace />;
+  const { updateUserContext } = useContext(AppContext);
+  const { data, isLoading, isError } = useMe();
+  useEffect(() => {
+    if (data) updateUserContext(data);
+  }, [data]);
+  
+  if (isLoading) return <Spinner />;
+  if (isError || !data) return <Navigate to="/login" replace />;
+
+  return children;
 };
 
 export default SafeRoute;

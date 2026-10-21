@@ -22,6 +22,13 @@ const fakeUser = ({ email, role = 'tenant', provider = 'email' }) => ({
 });
 
 export const handlers = [
+  http.get('*/casahero-api/me', () => {
+    let userContext = localStorage.getItem('userContext');
+    if (userContext) {
+      return HttpResponse.json(JSON.parse(userContext));
+    }
+    return HttpResponse.json({ error: 'Invalid Login' }, { status: 401 });
+  }),
   // '*' matches any origin, so this works whether VITE_API_URL is absolute or relative
   http.get('*/casahero-api/test', () => {
     return HttpResponse.json({ id: 1, message: 'hello bandit' });
@@ -58,7 +65,11 @@ export const handlers = [
     const user =
       findUserByEmail(login) ??
       fakeUser({ email: login.includes('@') ? login : `${login}@example.com` });
-    return HttpResponse.json({ outcome: 'login successful!', success: true, user });
+    return HttpResponse.json({
+      outcome: 'login successful!',
+      success: true,
+      user,
+    });
   }),
   http.post('*/casahero-api/auth/:provider', async ({ params, request }) => {
     const { provider } = params;
@@ -72,13 +83,19 @@ export const handlers = [
     await delay(1000);
     const user =
       usersFor(role).find((u) => u.auth_provider === provider) ??
-      fakeUser({ email: `${provider}.user@example.com`, role, provider });
+      fakeUser({
+        email: `${provider}.user@example.com`,
+        role,
+        provider,
+        full_name: 'fake user',
+      });
     return HttpResponse.json({
       outcome: `${provider} login successful!`,
       success: true,
-      user,
+      ...user,
     });
   }),
+
   http.post('*/casahero-api/logout', async () => {
     await delay(3000);
     return HttpResponse.json({ outcome: 'logout successful!', success: true });

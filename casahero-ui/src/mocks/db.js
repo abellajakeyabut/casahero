@@ -1,7 +1,7 @@
 export const landlords = [
   {
     id: 'll-001',
-    email: 'tan.weiming@example.com',
+    email: 'jake@gmail.com',
     full_name: 'Tan Wei Ming',
     phone: '+65 9123 4567',
     avatar_url: null,
@@ -11,7 +11,7 @@ export const landlords = [
   },
   {
     id: 'll-002',
-    email: 'priya.nair@example.com',
+    email: 'lucas@gmail.com',
     full_name: 'Priya Nair',
     phone: '+65 9876 5432',
     avatar_url: null,
@@ -24,7 +24,7 @@ export const landlords = [
 export const tenants = [
   {
     id: 'tn-001',
-    email: 'jason.lim@example.com',
+    email: 'jason.lim@gmail.com',
     full_name: 'Jason Lim',
     phone: '+65 8111 2222',
     avatar_url: null,
