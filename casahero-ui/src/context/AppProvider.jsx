@@ -1,20 +1,30 @@
-import React, {useCallback, useState} from "react"
-import AppContext from "./AppContext"
+import { useCallback, useEffect, useState } from 'react';
+import AppContext from './AppContext';
 
-const AppProvider = ({children})=>{
-    const [userContext,setUserContext] = useState(null);
+const AppProvider = ({ children }) => {
+  const [userContext, setUserContext] = useState(null);
 
-    const updateUserContext=(data)=>{
-        setUserContext({...data})
-    }
+  // accepts a new value or an updater function (prev => next), like setState.
+  // useCallback keeps it stable so it is safe to list as an effect dependency.
+  const updateUserContext = useCallback((data) => {
+    setUserContext(data);
+  }, []);
 
-    return (
-        <AppContext.Provider value={{
-            updateUserContext,
-            userContext
-        }}>
-            {children}
-        </AppContext.Provider>
-    )
-}
+  // switch the color theme (see index.css) while a landlord is logged in
+  const isLandlord = userContext?.loggedIn && userContext?.default_role === 'landlord';
+  useEffect(() => {
+    document.documentElement.dataset.role = isLandlord ? 'landlord' : 'tenant';
+  }, [isLandlord]);
+
+  return (
+    <AppContext.Provider
+      value={{
+        updateUserContext,
+        userContext,
+      }}
+    >
+      {children}
+    </AppContext.Provider>
+  );
+};
 export default AppProvider;

@@ -1,0 +1,43 @@
+/* Dimmed backdrop */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000; /* above the top banner */
+}
+
+.modal-box {
+  width: 90%;
+  max-width: 360px;
+  background: #fff;
+  border-radius: 10px;
+  border: solid 1px black;
+  padding: 32px 28px;
+  text-align: center;
+  box-shadow: 0 24px 12px rgba(0, 0, 0, 0.1);
+}
+
+.modal-box h2 {
+  color: #006d5b;
+  margin: 0 0 24px;
+}
+
+.modal-button {
+  width: 100%;
+  padding: 14px;
+  background: #006d5b;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.modal-button:hover {
+  background: #004c3f;
+}

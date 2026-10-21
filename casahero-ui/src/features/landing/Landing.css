@@ -1,0 +1,142 @@
+/* Landing page */
+.landing {
+  margin: 0 auto;
+  padding: 110px 16px 48px; /* space below the fixed banner */
+  max-width: 960px;
+  box-sizing: border-box;
+}
+
+.landing-hero {
+  text-align: center;
+  margin-bottom: 36px;
+}
+.landing-hero h1 {
+  color: #006d5b;
+  font-size: 2.4rem;
+  margin: 0 0 8px;
+}
+.landing-hero p {
+  color: #4b5563;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.landing-roles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+/* Each card carries its own role color: landlord pink, tenant green (matches index.css) */
+.role-card--landlord {
+  --role: #f86bad;
+  --role-dark: #c2337a;
+  --role-soft: #fef1f7;
+}
+.role-card--tenant {
+  --role: #006d5b;
+  --role-dark: #005a4b;
+  --role-soft: #f0f7f5;
+}
+
+.role-card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-top: 6px solid var(--role);
+  border-radius: 12px;
+  padding: 28px 24px 24px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.role-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+}
+
+.role-card-icon {
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+  font-size: 2rem;
+  border-radius: 50%;
+  background: var(--role-soft);
+  margin-bottom: 16px;
+}
+.role-card h2 {
+  margin: 0 0 6px;
+  font-size: 1.5rem;
+  color: var(--role-dark);
+}
+.role-card-tagline {
+  margin: 0 0 16px;
+  color: #4b5563;
+}
+
+.role-card-perks {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px;
+  flex: 1; /* pushes the buttons to the bottom so both cards line up */
+}
+.role-card-perks li {
+  position: relative;
+  padding-left: 26px;
+  margin-bottom: 8px;
+  color: #1f2937;
+}
+.role-card-perks li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--role-dark);
+  font-weight: 700;
+}
+
+.role-card-cta {
+  width: 100%;
+  padding: 14px 16px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--role-dark);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+.role-card-cta:hover {
+  filter: brightness(1.1);
+}
+
+.role-card-secondary {
+  margin-top: 10px;
+  padding: 8px;
+  background: none;
+  border: none;
+  color: var(--role-dark);
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.role-card-cta:focus-visible,
+.role-card-secondary:focus-visible {
+  outline: 3px solid var(--role);
+  outline-offset: 2px;
+}
+
+@media (max-width: 700px) {
+  .landing {
+    padding-top: 130px; /* banner wraps on small screens */
+  }
+  .landing-hero h1 {
+    font-size: 1.9rem;
+  }
+  .landing-roles {
+    grid-template-columns: 1fr;
+  }
+}
