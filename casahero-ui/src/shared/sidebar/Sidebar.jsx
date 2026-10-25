@@ -1,24 +1,9 @@
-import { useEffect } from 'react';
 import { getMenu } from './menus';
 import SidebarIcon from './SidebarIcon';
 import './Sidebar.css';
 
 const Sidebar = ({ role, activeKey, onSelect }) => {
   const menu = getMenu(role);
-
-  // keep the sidebar just below the fixed top banner, whatever its height
-  useEffect(() => {
-    const banner = document.querySelector('.top-banner');
-    if (!banner) return;
-    const observer = new ResizeObserver(() => {
-      document.documentElement.style.setProperty(
-        '--banner-height',
-        `${banner.offsetHeight}px`
-      );
-    });
-    observer.observe(banner);
-    return () => observer.disconnect();
-  }, []);
 
   return (
     <nav className="sidebar" aria-label={`${role ?? 'tenant'} menu`}>

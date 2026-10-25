@@ -1,0 +1,109 @@
+/* Search bar: property type pills + region/city/beds/baths form.
+   Listings.jsx also reuses .search-container for its placeholder panels. */
+/* Search container */
+.search-container {
+  margin: 100px auto 20px; /* space below banner */
+  width: 90%; /* responsive width */
+  max-width: 900px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  padding: 32px 24px;
+  border: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Search form */
+.search-form {
+  display: flex;
+  flex-wrap: wrap; /* wrap on smaller screens */
+  gap: 8px;
+  width: 100%;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.search-input {
+  flex: 1; /* grow to fill space */
+  min-width: 150px;
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--theme);
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.search-button {
+  background-color: #fff;
+  color: var(--theme-text);
+  font-weight: 600;
+  border: 1px solid var(--theme);
+  border-radius: 6px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
+}
+
+.search-button:hover {
+  background-color: var(--theme);
+  color: #fff;
+}
+
+.search-button:active {
+  transform: scale(0.96);
+}
+
+.search-button:focus-visible {
+  outline: 2px solid var(--theme);
+  outline-offset: 2px;
+}
+
+/* Property type buttons */
+.property-type {
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap; /* wrap on mobile */
+  gap: 8px;
+}
+
+.property-type label {
+  background-color: #f0f0f0;
+  color: #333;
+  padding: 10px 18px;
+  border-radius: 24px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.property-type input {
+  display: none; /* hide default radio circle */
+}
+
+/* Selected property type */
+.property-type label.active {
+  background-color: var(--theme);
+  color: #fff;
+}
+
+.property-type .icon {
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  .search-container {
+    width: 95%;
+    padding: 24px 16px;
+  }
+
+  .property-type {
+    gap: 6px;
+  }
+}

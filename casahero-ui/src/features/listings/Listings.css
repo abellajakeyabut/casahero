@@ -1,0 +1,24 @@
+/* Listings page (Listings.jsx): banner on top, sidebar on the left, content beside it.
+   Sidebar sizes come from sidebar/Sidebar.css. */
+.listings-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+/* Content next to the sidebar */
+.listings-main {
+  margin-left: calc(var(--sidebar-width) + var(--sidebar-gap) * 2);
+  width: calc(100% - var(--sidebar-width) - var(--sidebar-gap) * 2);
+  box-sizing: border-box;
+}
+
+/* On small screens the sidebar becomes a bottom tab bar */
+@media (max-width: 768px) {
+  .listings-main {
+    margin-left: 0;
+    width: 100%;
+    padding-bottom: 88px; /* room for the floating bottom tab bar */
+  }
+}

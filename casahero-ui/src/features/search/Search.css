@@ -1,0 +1,253 @@
+/* Search results page: fixed banner, sticky collapsible search panel, card grid */
+:root {
+  --banner-height: 64px; /* TopBanner overwrites this with its measured height */
+}
+
+/* Login.css/Signup.css make <body> a centering flex box (Vite loads all CSS globally),
+   which shrinks this page to a narrow column; backdrop-filter also stops the banner staying fixed */
+body:has(.search-page) {
+  display: block;
+  background: var(--theme-tint);
+  backdrop-filter: none;
+}
+
+.search-page {
+  width: 100%;
+  padding-top: var(--banner-height);
+  min-height: 100vh;
+  background-color: var(--theme-tint);
+}
+
+/* Signed in: make room for the fixed sidebar (sizes from Sidebar.css) */
+.search-page-content.with-sidebar {
+  margin-left: calc(var(--sidebar-width) + var(--sidebar-gap) * 2);
+}
+
+/* Collapsible search panel, stuck just below the banner */
+.search-panel {
+  position: sticky;
+  top: var(--banner-height);
+  z-index: 900; /* below the banner (1000) */
+  background-color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.search-panel-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 24px;
+  font-weight: 600;
+  color: var(--theme-text);
+}
+
+.search-panel-summary button,
+.search-message button,
+.listing-card-actions button {
+  background-color: #fff;
+  color: var(--theme-text);
+  font-weight: 600;
+  border: 1px solid var(--theme);
+  border-radius: 6px;
+  padding: 8px 14px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.search-panel-summary button:hover,
+.search-message button:hover,
+.listing-card-actions button:hover:not(:disabled) {
+  background-color: var(--theme);
+  color: #fff;
+}
+
+/* 0fr -> 1fr animates open/closed without knowing the bar's height */
+.search-panel-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.25s ease;
+}
+
+.search-panel-body.expanded {
+  grid-template-rows: 1fr;
+}
+
+.search-panel-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* scroll inside the panel if the bar is taller than the screen (phones) */
+.search-panel-body.expanded .search-panel-inner {
+  max-height: calc(100vh - var(--banner-height) - 60px);
+  overflow-y: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .search-panel-body {
+    transition: none;
+  }
+}
+
+/* reuse the SearchBar card, minus the landing-page spacing */
+.search-panel .search-container {
+  margin: 0 auto;
+  box-shadow: none;
+  padding: 8px 16px 16px;
+}
+
+/* Results */
+.search-page-main {
+  padding: 16px 24px 32px;
+  box-sizing: border-box;
+}
+
+.results-bar {
+  margin: 4px 0 16px;
+  color: #555;
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  transition: opacity 0.2s ease;
+}
+
+/* previous results stay visible, dimmed, while a new search loads */
+.results-grid-updating {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.search-message {
+  margin: 48px auto;
+  text-align: center;
+  color: #555;
+}
+
+/* Card */
+.listing-card {
+  background-color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(var(--theme-shadow-rgb), 0.12);
+  display: flex;
+  flex-direction: column;
+}
+
+.listing-card-photo {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background-color: var(--theme-tile);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.listing-card-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.listing-card-placeholder {
+  font-size: 56px;
+}
+
+.listing-card-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: var(--theme);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+.listing-card-body {
+  padding: 12px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.listing-card-body p,
+.listing-card-body h3 {
+  margin: 0;
+}
+
+.listing-card-rent {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--theme-text);
+}
+
+.listing-card-rent span {
+  font-size: 14px;
+  font-weight: 400;
+  color: #555;
+}
+
+.listing-card-name {
+  font-size: 16px;
+}
+
+.listing-card-meta {
+  font-size: 14px;
+  color: #555;
+}
+
+.listing-card-specs {
+  display: flex;
+  gap: 14px;
+  font-size: 14px;
+}
+
+.listing-card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.listing-card-actions button {
+  flex: 1;
+}
+
+.listing-card-actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Loading placeholder in the card's shape */
+.listing-card-skeleton {
+  min-height: 340px;
+  background: linear-gradient(90deg, #eee 25%, #f6f6f6 50%, #eee 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.2s linear infinite;
+}
+
+@keyframes skeleton-shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+@media (max-width: 768px) {
+  .search-panel-summary {
+    font-size: 14px;
+    padding: 10px 16px;
+  }
+
+  .search-page-main {
+    padding: 16px;
+  }
+
+  /* the sidebar becomes a floating bottom tab bar */
+  .search-page-content.with-sidebar {
+    margin-left: 0;
+    padding-bottom: 88px;
+  }
+}

@@ -26,3 +26,11 @@
   --theme-rgb: 248, 107, 173;
   --theme-shadow-rgb: 110, 25, 65;
 }
+
+/* Global reset */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}

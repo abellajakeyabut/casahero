@@ -1,6 +1,6 @@
 // Line icons for the sidebar. They use currentColor, so they follow the item's text color.
 const shapes = {
-  dashboard: (
+  listings: (
     <>
       <rect x="3.5" y="3.5" width="7" height="9" rx="1.5" />
       <rect x="13.5" y="3.5" width="7" height="5" rx="1.5" />
@@ -45,6 +45,12 @@ const shapes = {
       <path d="M3.5 10.5L12 3.5L20.5 10.5" />
       <path d="M5.5 9V19A1.5 1.5 0 0 0 7 20.5H17A1.5 1.5 0 0 0 18.5 19V9" />
       <path d="M10 20.5V14.5H14V20.5" />
+    </>
+  ),
+  search: (
+    <>
+      <circle cx="10.5" cy="10.5" r="6.5" />
+      <path d="M15.5 15.5L20.5 20.5" />
     </>
   ),
   documents: (

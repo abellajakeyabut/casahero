@@ -12,8 +12,11 @@ async function enableMocking() {
   return worker.start({ onUnhandledRequest: 'bypass' })
 }
 
-enableMocking().then(() => {
-  createRoot(document.getElementById('root')).render(
+// render even if mocking fails to start, otherwise the page stays blank until a refresh
+enableMocking()
+  .catch((err) => console.error('[MSW] failed to start, API calls will hit the real server', err))
+  .then(() => {
+    createRoot(document.getElementById('root')).render(
     <StrictMode>
       <AppProvider>
         <App />

@@ -1,5 +1,5 @@
 import { http, HttpResponse, delay } from 'msw';
-import { landlords, tenants, leases } from './db';
+import { landlords, tenants, leases, properties, units ,regions,cities,propertyTypes} from './db';
 
 const PROVIDERS = ['google', 'facebook'];
 
@@ -100,4 +100,48 @@ export const handlers = [
     await delay(3000);
     return HttpResponse.json({ outcome: 'logout successful!', success: true });
   }),
+  http.post('*/casahero-api/listings', async ({ request }) => {
+    await delay(3000);
+
+    let body = {}
+    try{
+      body = await request.json();
+    }catch{
+  
+    }
+    const { city = '', region = '', type = '', bed, bath } = body ?? {}
+    // bed/bath are minimums; a property only matches if one of its units does
+    const unitMatches = (unit) =>
+      (bed == null || unit.bedrooms == bed) && (bath == null || unit.bathrooms == bath)
+    let props = properties.map((data) => { return { ...data, units: units.filter((unit) => unit.property_id == data.id && unitMatches(unit)) } })
+
+    if(city) props = props.filter((p)=>p.city==city)
+    if(region) props = props.filter((p)=>p.region==region)
+    // the SearchBar sends HDB/Condo/Landed as `type`; that lives in property_type
+    if(type) props = props.filter((p)=>p.property_type==type)
+    // p.units is an array (already narrowed by unitMatches), so drop properties with no matching unit
+    if(bed != null || bath != null) props = props.filter((p)=>p.units.length > 0)
+
+    return HttpResponse.json(props);
+  }),
+  http.post('*/casahero-api/regions',async()=>{
+    await delay(2000);
+    let reg = regions;
+    return HttpResponse.json(reg);
+  }),
+  http.get('*/casahero-api/cities',async({request})=>{
+    await delay(2000);
+    const url = new URL(request.url);
+    const region = url.searchParams.get('region') ?? 'North-East';
+    const  cityP = cities.filter((data) => data.region==region)
+   
+    return HttpResponse.json(cityP);
+  }),
+  http.get('*/casahero-api/types',async()=>{
+    await delay(2000);
+   
+    const  lsitOfTypes = propertyTypes; 
+   
+    return HttpResponse.json(lsitOfTypes);
+  })
 ];

@@ -1,4 +1,4 @@
-import TopBanner from '../dashboard/TopBanner';
+import TopBanner from '../../shared/TopBanner';
 import './Signup.css'; // CSS file with styles
 import { signup } from '../../api/auth';
 import { useState } from 'react';

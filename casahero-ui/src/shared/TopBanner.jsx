@@ -1,16 +1,28 @@
-import { useContext, useState } from 'react';
-import './Dashboard.css'; // CSS file with styles
+import { useContext, useEffect, useRef, useState } from 'react';
+import './TopBanner.css';
 import { useNavigate } from 'react-router-dom';
-import { logout } from '../../api/auth';
-import AppContext from '../../context/AppContext';
+import { logout } from '../api/auth';
+import AppContext from '../context/AppContext';
 import { useQueryClient } from '@tanstack/react-query';
-import Spinner from '../../shared/Spinner';
+import Spinner from './Spinner';
+
 
 const TopBanner = () => {
   const navi = useNavigate();
   const { updateUserContext, userContext } = useContext(AppContext);
   const queryClient = useQueryClient();
   const [loggingOut, setLoggingOut] = useState(false);
+  const bannerRef = useRef(null);
+
+  // publish the banner's height as --banner-height so pages and the sidebar sit below the fixed banner
+  useEffect(() => {
+    const banner = bannerRef.current;
+    const observer = new ResizeObserver(() => {
+      document.documentElement.style.setProperty('--banner-height', `${banner.offsetHeight}px`);
+    });
+    observer.observe(banner);
+    return () => observer.disconnect();
+  }, []);
 
   const signout = async () => {
     setLoggingOut(true);
@@ -30,7 +42,7 @@ const TopBanner = () => {
     return;
   };
   return (
-    <div className="top-banner">
+    <div className="top-banner" ref={bannerRef}>
       <Spinner show={loggingOut} message="Logging out.." />
       <div
         id="title"

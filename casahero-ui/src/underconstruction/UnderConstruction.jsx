@@ -1,5 +1,5 @@
 import React from 'react';
-import TopBanner from '../features/dashboard/TopBanner';
+import TopBanner from '../shared/TopBanner';
 import './UnderConstruction.css'; // CSS file with styles
 
 const UnderConstruction = () => {

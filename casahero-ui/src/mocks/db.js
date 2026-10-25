@@ -1,3 +1,5 @@
+import { seedListings } from './seedListings';
+
 export const landlords = [
   {
     id: 'll-001',
@@ -53,7 +55,8 @@ export const tenants = [
     created_at: '2026-04-02T11:00:00Z',
   },
 ];
-export const properties = [
+// Hand-written records; leases point at these. seedListings() adds the rest.
+const baseProperties = [
   {
     id: 'pr-001',
     landlord_id: 'll-001',
@@ -61,8 +64,9 @@ export const properties = [
     address: 'Blk 821 Tampines Street 81',
     postal_code: '520821',
     region: 'East',
+    type:'Residential',
     city: 'Tampines',
-    property_type: 'hdb',
+    property_type: 'HDB',
     created_at: '2026-01-06T09:00:00Z',
   },
   {
@@ -71,9 +75,10 @@ export const properties = [
     name: 'The Sail Condo',
     address: '2 Marina Boulevard',
     postal_code: '018987',
+    type:'Residential',
     region: 'Central',
     city: 'Downtown Core',
-    property_type: 'condo',
+    property_type: 'Condo',
     created_at: '2026-01-20T09:00:00Z',
   },
   {
@@ -82,13 +87,14 @@ export const properties = [
     name: 'Serangoon Gardens House',
     address: '15 Kensington Park Road',
     postal_code: '557264',
+    type:'Landed',
     region: 'North-East',
     city: 'Serangoon',
-    property_type: 'landed',
+    property_type: 'Landed',
     created_at: '2026-02-12T09:00:00Z',
   },
 ];
-export const units = [
+const baseUnits = [
   {
     id: 'un-001',
     property_id: 'pr-001',
@@ -156,6 +162,37 @@ export const units = [
     photo_paths: [],
   },
 ];
+export const regions =[{region:'East'},{region:'West'},{region:'North'},{region:'South'},{region:'Central'},{region:'North-West'},{region:'North-East'},{region:'South-East'},{region:'South-West'}]
+export const cities = [
+  { region: 'North', city: 'Woodlands' },
+  { region: 'North', city: 'Marsiling' },
+  { region: 'North', city: 'Sembawang' },
+  { region: 'North', city: 'Yishun' },
+  { region: 'North', city: 'Springleaf' },
+  { region: 'North-East', city: 'Ang Mo Kio' },
+  { region: 'North-East', city: 'Serangoon' },
+  { region: 'North-East', city: 'Hougang' },
+  { region: 'North-East', city: 'Sengkang' },
+  { region: 'East', city: 'Tampines' },
+  { region: 'East', city: 'Bedok' },
+  { region: 'East', city: 'Pasir Ris' },
+  { region: 'West', city: 'Jurong West' },
+  { region: 'West', city: 'Clementi' },
+  { region: 'West', city: 'Bukit Batok' },
+  { region: 'Central', city: 'Raffles Place' },
+  { region: 'Central', city: 'Downtown Core' },
+  { region: 'Central', city: 'Toa Payoh' },
+  { region: 'Central', city: 'Bishan' },
+  { region: 'Central', city: 'Queenstown' },
+];
+
+// 10 made-up properties per city, 15 units per property (see seedListings.js)
+export const { properties, units } = seedListings({
+  cities,
+  properties: baseProperties,
+  units: baseUnits,
+});
+
 export const leases = [
   {
     id: 'ls-001',
@@ -203,3 +240,4 @@ export const leases = [
     created_at: '2026-10-12T09:00:00Z',
   },
 ];
+export const propertyTypes = [{type:'HDB'},{type:'Condo'},{type:'Landed'}]
