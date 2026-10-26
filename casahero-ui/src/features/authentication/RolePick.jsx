@@ -2,8 +2,12 @@ import { useContext } from 'react';
 import AppContext from '../../context/AppContext';
 import './Login.css'; // CSS file with styles
 
-const RolePick = () => {
+// controlled when value/onChange are passed (Signup), otherwise reads and writes the user context (Login)
+const RolePick = ({ value, onChange } = {}) => {
   const { updateUserContext, userContext } = useContext(AppContext);
+  const role = value ?? userContext?.default_role;
+  const pick =
+    onChange ?? ((next) => updateUserContext({ ...userContext, default_role: next }));
   return (
     <>
       {/* Toggle styled radio buttons */}
@@ -14,8 +18,8 @@ const RolePick = () => {
             padding: '12px',
             textAlign: 'center',
             cursor: 'pointer',
-            background: userContext?.default_role === 'tenant' ? '#006d5b' : '#f0f0f0',
-            color: userContext?.default_role === 'tenant' ? '#fff' : '#333',
+            background: role === 'tenant' ? 'var(--theme)' : '#f0f0f0',
+            color: role === 'tenant' ? '#fff' : '#333',
             borderRadius: '6px 0 0 6px',
           }}
         >
@@ -23,9 +27,9 @@ const RolePick = () => {
             type="radio"
             name="role"
             value="tenant"
-            checked={userContext?.default_role === 'tenant'}
+            checked={role === 'tenant'}
             onChange={() =>
-              updateUserContext({ ...userContext, default_role: 'tenant' })
+              pick('tenant')
             }
             style={{ display: 'none' }}
           />
@@ -38,8 +42,8 @@ const RolePick = () => {
             textAlign: 'center',
             cursor: 'pointer',
             background:
-              userContext?.default_role === 'landlord' ? '#006d5b' : '#f0f0f0',
-            color: userContext?.default_role === 'landlord' ? '#fff' : '#333',
+              role === 'landlord' ? 'var(--theme)' : '#f0f0f0',
+            color: role === 'landlord' ? '#fff' : '#333',
             borderRadius: '0 6px 6px 0',
           }}
         >
@@ -48,12 +52,12 @@ const RolePick = () => {
             className="login-button-landlord"
             name="role"
             value="landlord"
-            checked={userContext?.default_role === 'landlord'}
+            checked={role === 'landlord'}
             onChange={() =>
-              updateUserContext({ ...userContext, default_role: 'landlord' })
+              pick('landlord')
             }
             style={
-              userContext?.default_role == 'tenant'
+              role === 'tenant'
                 ? { display: 'none', backgroundColor: '#006d5b' }
                 : { display: 'none', backgroundColor: '#f86bad' }
             }

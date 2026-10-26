@@ -3,17 +3,27 @@ import { landlords, tenants, leases, properties, units ,regions,cities,propertyT
 
 const PROVIDERS = ['google', 'facebook'];
 
+// users created through the signup mock; lives until the page reloads
+const registeredUsers = [];
+
 const usersFor = (role) => (role === 'landlord' ? landlords : tenants);
 
 const findUserByEmail = (email) =>
-  [...landlords, ...tenants].find(
+  [...landlords, ...tenants, ...registeredUsers].find(
     (user) => user.email.toLowerCase() === email?.trim().toLowerCase(),
   );
 
-const fakeUser = ({ email, role = 'tenant', provider = 'email' }) => ({
+// never send the stored password back to the client
+const withoutPassword = (user) => {
+  const copy = { ...user };
+  delete copy.password;
+  return copy;
+};
+
+const fakeUser = ({ email, role = 'tenant', provider = 'email', full_name }) => ({
   id: `${role === 'landlord' ? 'll' : 'tn'}-${Date.now()}`,
   email,
-  full_name: email.split('@')[0],
+  full_name: full_name || email.split('@')[0],
   phone: null,
   avatar_url: null,
   default_role: role,
@@ -40,7 +50,7 @@ export const handlers = [
     return HttpResponse.json(leases);
   }),
   http.post('*/casahero-api/signup', async ({ request }) => {
-    const { email } = await request.json();
+    const { name, email, password, role } = await request.json();
     await delay(1000);
     if (findUserByEmail(email)) {
       return HttpResponse.json({
@@ -48,6 +58,15 @@ export const handlers = [
         success: false,
       });
     }
+    registeredUsers.push({
+      ...fakeUser({
+        email: email.trim(),
+        full_name: name?.trim(),
+        // anything other than landlord falls back to tenant
+        role: role === 'landlord' ? 'landlord' : 'tenant',
+      }),
+      password,
+    });
     return HttpResponse.json({ outcome: 'Signup successful!', success: true });
   }),
   http.post('*/casahero-api/login', async ({ request }) => {
@@ -62,9 +81,17 @@ export const handlers = [
       });
     }
     const login = email || username;
-    const user =
-      findUserByEmail(login) ??
-      fakeUser({ email: login.includes('@') ? login : `${login}@example.com` });
+    const found = findUserByEmail(login);
+    // signed-up users must log in with the password they registered with
+    if (found?.password !== undefined && found.password !== password) {
+      return HttpResponse.json({
+        outcome: 'Invalid email or password',
+        success: false,
+      });
+    }
+    const user = found
+      ? withoutPassword(found)
+      : fakeUser({ email: login.includes('@') ? login : `${login}@example.com` });
     return HttpResponse.json({
       outcome: 'login successful!',
       success: true,
@@ -97,11 +124,11 @@ export const handlers = [
   }),
 
   http.post('*/casahero-api/logout', async () => {
-    await delay(3000);
+    await delay(1000);
     return HttpResponse.json({ outcome: 'logout successful!', success: true });
   }),
   http.post('*/casahero-api/listings', async ({ request }) => {
-    await delay(3000);
+    await delay(1000);
 
     let body = {}
     try{

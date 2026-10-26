@@ -1,10 +1,14 @@
 import TopBanner from '../../shared/TopBanner';
 import './Signup.css'; // CSS file with styles
 import { signup } from '../../api/auth';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import AppContext from '../../context/AppContext';
+import { ROLES } from '../../roles';
 import SuccessModal from './SuccessModal';
 import Spinner from '../../shared/Spinner';
 import SocialButtons from '../../shared/SocialButtons';
+import RolePick from '../authentication/RolePick';
 import {
   validateName,
   validateEmail,
@@ -13,6 +17,10 @@ import {
   validateForm,
 } from '../../shared/validators';
 const Signup = () => {
+  const { userContext } = useContext(AppContext);
+  // /signup?role=landlord (from the landing page) wins over the role in the user context
+  const [searchParams] = useSearchParams();
+  const roleParam = searchParams.get('role');
   const [registered, setRegistered] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
@@ -21,7 +29,20 @@ const Signup = () => {
     email: '',
     password: '',
     confirmPassword: '',
+    role: ROLES.includes(roleParam)
+      ? roleParam
+      : (userContext?.default_role ?? 'tenant'),
   });
+  // preview the picked role's color theme (see index.css), and put the old one back on leave
+  useEffect(() => {
+    const root = document.documentElement;
+    const previous = root.dataset.role;
+    root.dataset.role = formData.role;
+    return () => {
+      if (previous) root.dataset.role = previous;
+      else delete root.dataset.role;
+    };
+  }, [formData.role]);
   const handleSubmit = (e) => {
     e.preventDefault();
     const found = validateForm(formData, rules);
@@ -57,6 +78,10 @@ const Signup = () => {
       <div className="signup-wrapper">
         <h2>Sign Up</h2>
         <form onSubmit={handleSubmit} noValidate>
+          <RolePick
+            value={formData.role}
+            onChange={(role) => setFormData({ ...formData, role })}
+          />
           <div className="signup-row">
             <span>Name</span>
             <input
