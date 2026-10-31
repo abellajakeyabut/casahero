@@ -7,4 +7,15 @@ export default defineConfig({
     minify: false, // 🚫 disables minification
     terserOptions: {}, // ensure no terser compression
   },
+  test:{
+    environment:'jsdom',
+    globals:true,
+    setupFiles:'./src/test/setup.js',
+    coverage:{
+      reporter: ['text','html'],
+      include:['src/**/*.{js,jsx}'],
+      exclude:['src/mocks/**','src/main.jsx','src/test/**'],
+
+    },
+  }
 });

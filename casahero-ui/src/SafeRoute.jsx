@@ -10,15 +10,17 @@ import { homeFor } from './roles';
 // Wraps `children`, or renders nested routes through <Outlet /> when used as a layout route.
 const SafeRoute = ({ role, children }) => {
   const { updateUserContext } = useContext(AppContext);
-  const { data, isLoading, isError } = useMe();
+  const { data, isLoading } = useMe();
+  // only a real user object counts; a failed background refetch keeps the last good `data`
+  const user = data?.loggedIn && data?.default_role ? data : null;
   useEffect(() => {
-    if (data) updateUserContext(data);
-  }, [data]);
+    if (user) updateUserContext(user);
+  }, [user, updateUserContext]);
 
   if (isLoading) return <Spinner />;
-  if (isError || !data) return <Navigate to="/login" replace />;
-  if (role && data.default_role !== role) {
-    return <Navigate to={homeFor(data.default_role)} replace />;
+  if (!user) return <Navigate to="/login" replace />;
+  if (role && user.default_role !== role) {
+    return <Navigate to={homeFor(user.default_role)} replace />;
   }
 
   return children ?? <Outlet />;

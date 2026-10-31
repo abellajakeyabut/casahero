@@ -18,7 +18,8 @@ const SearchResults = ({ filters, onEditSearch }) => {
       </div>
     );
   }
-  if (listings.isError) {
+  // a failed background refetch keeps the old results, so only show the error when there are none
+  if (listings.isError && !listings.data) {
     return (
       <div className="search-message">
         <p>Could not load results.</p>
