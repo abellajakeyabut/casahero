@@ -9,8 +9,13 @@ import SafeRoute from './SafeRoute';
 import Signup from './features/signup/Signup';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useMe } from './features/authentication/useMe';
+import { useRoleMenus } from './features/authentication/useRoleMenus';
 import { ROLES, homeFor } from './roles';
+import { useContext } from 'react';
+import AppContext from './context/AppContext'
 import Dashboard from './features/dashboard/Dashboard'
+import Landlord from './features/dashboard/Landlord'
+
 const queryClient = new QueryClient({
   defaultOptions:{
     queries:{
@@ -26,7 +31,11 @@ const RoleHome = () => {
   return <Navigate to={homeFor(data?.default_role)} replace />;
 };
 
+
 const App = () => {
+const { userContext } = useContext(AppContext);
+
+
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
@@ -40,9 +49,10 @@ const App = () => {
             }
           ></Route>
           {/* one guarded route group per role: /landlord/*, /tenant/* */}
+          
           {ROLES.map((role) => (
             <Route key={role} path={`/${role}`} element={<SafeRoute role={role} />}>
-              <Route index element={<Dashboard />} />
+              <Route index element={ role=='landlord' ? <Landlord/> : <Dashboard />} />
               <Route path="*" element={<UnderConstruction />} />
             </Route>
           ))}

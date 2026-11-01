@@ -1,5 +1,5 @@
 import { http, HttpResponse, delay } from 'msw';
-import { landlords, tenants, leases, properties, units ,regions,cities,propertyTypes} from './db';
+import { landlords, tenants, leases, properties, units ,regions,cities,propertyTypes,menus} from './db';
 
 const PROVIDERS = ['google', 'facebook'];
 
@@ -38,6 +38,11 @@ export const handlers = [
       return HttpResponse.json(JSON.parse(userContext));
     }
     return HttpResponse.json({ error: 'Invalid Login' }, { status: 401 });
+  }),
+  http.get('*/casahero-api/menus',async ({request})=>{
+    const {roleId} = await request.json();
+    const data =  menus.filter((menu)=>menu.roleId===roleId);
+    return HttpResponse.json(data);
   }),
   // '*' matches any origin, so this works whether VITE_API_URL is absolute or relative
   http.get('*/casahero-api/test', () => {

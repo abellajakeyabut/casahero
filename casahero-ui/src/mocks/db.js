@@ -240,4 +240,19 @@ export const leases = [
     created_at: '2026-10-12T09:00:00Z',
   },
 ];
+
+export const menus =  [
+    { key: 'home', label: 'Home', icon: 'home' , roleId:'tenant'},
+    { key: 'Search', label: 'Search', icon: 'search' , roleId:'tenant'},
+    { key: 'rent', label: 'Rent', icon: 'rent' , roleId:'tenant'},
+    { key: 'maintenance', label: 'Maintenance', icon: 'maintenance' , roleId:'tenant'},
+    { key: 'messages', label: 'Messages', icon: 'messages', roleId:'tenant' },
+    { key: 'documents', label: 'Documents', icon: 'documents' , roleId:'tenant'},
+    { key: 'home', label: 'home', icon: 'home' , roleId:'landlord'},
+    { key: 'Search', label: 'Search', icon: 'search', roleId:'landlord' },
+    { key: 'leases', label: 'Leases', icon: 'leases' , roleId:'landlord'},
+    { key: 'rent', label: 'Rent', icon: 'rent' , roleId:'landlord'},
+    { key: 'maintenance', label: 'Maintenance Requests', icon: 'maintenance' , roleId:'landlord'},
+    { key: 'messages', label: 'Messages', icon: 'messages' , roleId:'landlord'},
+  ]
 export const propertyTypes = [{type:'HDB'},{type:'Condo'},{type:'Landed'}]
