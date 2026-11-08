@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>22/22</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>19/19</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>5/5</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>18/18</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -100,34 +100,34 @@
 <a name='L35'></a><a href='#L35'>35</a>
 <a name='L36'></a><a href='#L36'>36</a>
 <a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">35x</span>
-<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-yes">22x</span>
-<span class="cline-any cline-yes">22x</span>
-<span class="cline-any cline-yes">110x</span>
-<span class="cline-any cline-yes">110x</span>
-<span class="cline-any cline-yes">29x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">22x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -136,34 +136,34 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// Search filters &lt;-&gt; /search?type=HDB&amp;region=East&amp;bed=2 URL params.
-const KEYS = ['type', 'region', 'city', 'bed', 'bath'];
-const NUMERIC = ['bed', 'bath'];
+const KEYS = <span class="cstat-no" title="statement not covered" >['type', 'region', 'city', 'bed', 'bath'];</span>
+const NUMERIC = <span class="cstat-no" title="statement not covered" >['bed', 'bath'];</span>
 &nbsp;
 // empty values and "Any" (null) are left out of the URL
-export const toSearchUrl = (filters) =&gt; {
-  const params = new URLSearchParams();
-  KEYS.forEach((key) =&gt; {
-    const value = filters[key];
-    if (value !== null &amp;&amp; value !== undefined &amp;&amp; value !== '') params.set(key, value);
+export const <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >toSearchUrl = (f</span>ilters) =&gt; {</span>
+  const params = <span class="cstat-no" title="statement not covered" >new URLSearchParams();</span>
+<span class="cstat-no" title="statement not covered" >  KEYS.<span class="fstat-no" title="function not covered" >forEach((k</span>ey) =&gt; {</span>
+    const value = <span class="cstat-no" title="statement not covered" >filters[key];</span>
+<span class="cstat-no" title="statement not covered" >    if (value !== null &amp;&amp; value !== undefined &amp;&amp; value !== '') <span class="cstat-no" title="statement not covered" >params.set(key, value);</span></span>
   });
-  return `/search?${params}`;
+<span class="cstat-no" title="statement not covered" >  return `/search?${params}`;</span>
 };
 &nbsp;
 // null when the URL has no filters, i.e. no search has been run
-export const fromSearchParams = (params) =&gt; {
-  const filters = {};
-  KEYS.forEach((key) =&gt; {
-    const value = params.get(key);
-    if (!value) return;
-    if (!NUMERIC.includes(key)) filters[key] = value;
-    else if (Number.isFinite(Number(value))) filters[key] = Number(value);
+export const <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >fromSearchParams = (p</span>arams) =&gt; {</span>
+  const filters = <span class="cstat-no" title="statement not covered" >{};</span>
+<span class="cstat-no" title="statement not covered" >  KEYS.<span class="fstat-no" title="function not covered" >forEach((k</span>ey) =&gt; {</span>
+    const value = <span class="cstat-no" title="statement not covered" >params.get(key);</span>
+<span class="cstat-no" title="statement not covered" >    if (!value) <span class="cstat-no" title="statement not covered" >return;</span></span>
+<span class="cstat-no" title="statement not covered" >    if (!NUMERIC.includes(key)) <span class="cstat-no" title="statement not covered" >filters[key] = value;</span></span>
+    else <span class="cstat-no" title="statement not covered" >if (Number.isFinite(Number(value))) <span class="cstat-no" title="statement not covered" >filters[key] = Number(value);</span></span>
   });
-  return Object.keys(filters).length ? filters : null;
+<span class="cstat-no" title="statement not covered" >  return Object.keys(filters).length ? filters : null;</span>
 };
 &nbsp;
 // e.g. "HDB · East › Tampines · 2+ bed · 1+ bath"
-export const describeFilters = ({ type, region, city, bed, bath }) =&gt;
-  [
+export const <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >describeFilters = ({</span> type, region, city, bed, bath }) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >  [</span>
     type,
     city ? `${region} › ${city}` : region,
     bed &amp;&amp; `${bed}+ bed`,
@@ -178,7 +178,7 @@ export const describeFilters = ({ type, region, city, bed, bath }) =&gt;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-31T10:28:01.813Z
+                at 2026-11-08T18:00:57.653Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

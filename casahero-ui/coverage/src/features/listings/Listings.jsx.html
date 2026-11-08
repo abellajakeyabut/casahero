@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>11/11</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>8/8</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>3/3</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>10/10</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -116,25 +116,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">22x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -158,25 +158,25 @@ import AppContext from '../../context/AppContext';
 &nbsp;
 import './Listings.css';
 &nbsp;
-const Listings = () =&gt; {
-  const { userContext } = useContext(AppContext);
-  const role = userContext?.default_role;
-  const menu = getMenu(role);
+const <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >Listings = () =&gt; {</span></span>
+  const { userContext } = <span class="cstat-no" title="statement not covered" >useContext(AppContext);</span>
+  const role = <span class="cstat-no" title="statement not covered" >userContext?.default_role;</span>
+  const menu = <span class="cstat-no" title="statement not covered" >getMenu(role);</span>
   // the sidebar on /search links back here with the item to open
-  const location = useLocation();
-  const [activeKey, setActiveKey] = useState(location.state?.activeKey ?? menu[0].key);
-  const navigate = useNavigate();
+  const location = <span class="cstat-no" title="statement not covered" >useLocation()</span>;
+  const [activeKey, setActiveKey] = <span class="cstat-no" title="statement not covered" >useState(location.state?.activeKey ?? menu[0].key);</span>
+  const navigate = <span class="cstat-no" title="statement not covered" >useNavigate()</span>;
 &nbsp;
   // fall back to the first item if the role changed and the key no longer exists
-  const activeItem = menu.find((item) =&gt; item.key === activeKey) ?? menu[0];
+  const activeItem = <span class="cstat-no" title="statement not covered" >menu.<span class="fstat-no" title="function not covered" >find((i</span>tem) =&gt; <span class="cstat-no" title="statement not covered" >item.key === activeKey)</span> ?? menu[0];</span>
 &nbsp;
-  return (
+<span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;div className="listings-container"&gt;
       &lt;TopBanner userContext={userContext} /&gt;
       &lt;Sidebar role={role} activeKey={activeItem.key} onSelect={setActiveKey} /&gt;
       &lt;main className="listings-main"&gt;
         {activeItem.key === 'listings' || activeItem.key === 'home' ? (
-          &lt;SearchBar onSearch={(filters) =&gt; navigate(toSearchUrl(filters))} /&gt;
+          &lt;SearchBar <span class="fstat-no" title="function not covered" >onSearch={(f</span>ilters) =&gt; <span class="cstat-no" title="statement not covered" >navigate(toSearchUrl(filters))} /&gt;</span>
         ) : (
           &lt;div className="search-container"&gt;
             &lt;h2&gt;{activeItem.label}&lt;/h2&gt;
@@ -196,7 +196,7 @@ export default Listings;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-31T10:28:01.813Z
+                at 2026-11-08T18:00:57.653Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

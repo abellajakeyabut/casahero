@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>11/11</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>4/4</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/2</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>11/11</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -97,22 +97,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-yes">23x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">23x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">23x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -127,22 +127,22 @@
 import AuthContext from './AuthContext';
 import AppContext from '../../context/AppContext';
 import { login } from '../../api/auth';
-const AuthProvider = ({ children }) =&gt; {
-  const { updateUserContext, userContext } = useContext(AppContext);
+const <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >AuthProvider = ({</span> children }) =&gt; {</span>
+  const { updateUserContext, userContext } = <span class="cstat-no" title="statement not covered" >useContext(AppContext);</span>
 &nbsp;
-  const authenticate = async (payload) =&gt; {
-    let response = await login(payload);
-    if (!response || !response.success) {
-      return false;
+  const authenticate = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async (p</span>ayload) =&gt; {</span>
+    let response = <span class="cstat-no" title="statement not covered" >await login(payload);</span>
+<span class="cstat-no" title="statement not covered" >    if (!response || !response.success) {</span>
+<span class="cstat-no" title="statement not covered" >      return false;</span>
     }
-    let cachedData = { ...userContext, ...response.user, loggedIn: true };
+    let cachedData = <span class="cstat-no" title="statement not covered" >{ ...userContext, ...response.user, loggedIn: true };</span>
     // build on the latest state so the chosen role is kept
-    updateUserContext(cachedData);
-    localStorage.setItem('userContext', JSON.stringify(cachedData));
+<span class="cstat-no" title="statement not covered" >    updateUserContext(cachedData);</span>
+<span class="cstat-no" title="statement not covered" >    localStorage.setItem('userContext', JSON.stringify(cachedData));</span>
 &nbsp;
-    return true;
+<span class="cstat-no" title="statement not covered" >    return true;</span>
   };
-  return (
+<span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;AuthContext.Provider
       value={{
         authenticate,
@@ -160,7 +160,7 @@ export default AuthProvider;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-31T10:28:01.813Z
+                at 2026-11-08T18:00:57.653Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

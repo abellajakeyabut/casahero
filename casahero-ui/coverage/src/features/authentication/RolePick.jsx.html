@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>8/8</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>15/15</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>4/4</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>7/7</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -139,14 +139,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">11x</span>
-<span class="cline-any cline-yes">166x</span>
-<span class="cline-any cline-yes">166x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">166x</span>
-<span class="cline-any cline-yes">166x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -165,9 +163,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -190,7 +188,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -210,12 +210,12 @@ import AppContext from '../../context/AppContext';
 import './Login.css'; // CSS file with styles
 &nbsp;
 // controlled when value/onChange are passed (Signup), otherwise reads and writes the user context (Login)
-const RolePick = ({ value, onChange } = {}) =&gt; {
-  const { updateUserContext, userContext } = useContext(AppContext);
-  const role = value ?? userContext?.default_role;
+const <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >RolePick = ({</span> value, onChange } = <span class="branch-0 cbranch-no" title="branch not covered" >{}) =&gt; {</span></span>
+  const { updateUserContext, userContext } = <span class="cstat-no" title="statement not covered" >useContext(AppContext);</span>
+  const role = <span class="cstat-no" title="statement not covered" >value ?? userContext?.default_role;</span>
   const pick =
-    onChange ?? ((next) =&gt; updateUserContext({ ...userContext, default_role: next }));
-  return (
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >    onChange ?? ((n</span>ext) =&gt; <span class="cstat-no" title="statement not covered" >updateUserContext({ ...userContext, default_role: next }));</span></span>
+<span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;&gt;
       {/* Toggle styled radio buttons */}
       &lt;div style={{ display: 'flex', marginBottom: '20px' }}&gt;
@@ -235,8 +235,8 @@ const RolePick = ({ value, onChange } = {}) =&gt; {
             name="role"
             value="tenant"
             checked={role === 'tenant'}
-            onChange={() =&gt;
-              pick('tenant')
+<span class="fstat-no" title="function not covered" >            onChange={() =&gt;</span>
+<span class="cstat-no" title="statement not covered" >              pick('tenant')</span>
             }
             style={{ display: 'none' }}
           /&gt;
@@ -260,8 +260,8 @@ const RolePick = ({ value, onChange } = {}) =&gt; {
             name="role"
             value="landlord"
             checked={role === 'landlord'}
-            onChange={() =&gt;
-              pick('landlord')
+<span class="fstat-no" title="function not covered" >            onChange={() =&gt;</span>
+<span class="cstat-no" title="statement not covered" >              pick('landlord')</span>
             }
             style={
               role === 'tenant'
@@ -283,7 +283,7 @@ export default RolePick;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-31T10:28:01.813Z
+                at 2026-11-08T18:00:57.653Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

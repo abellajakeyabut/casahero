@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>14/14</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>16/16</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/2</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>11/11</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -102,22 +102,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-yes">23x</span>
-<span class="cline-any cline-yes">23x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">23x</span>
-<span class="cline-any cline-yes">23x</span>
-<span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">23x</span>
-<span class="cline-any cline-yes">15x</span>
-<span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -131,22 +131,22 @@ import { homeFor } from './roles';
 // ProtectedRoute component.
 // With `role`, only that role gets in; anyone else is sent to their own home.
 // Wraps `children`, or renders nested routes through &lt;Outlet /&gt; when used as a layout route.
-const SafeRoute = ({ role, children }) =&gt; {
-  const { updateUserContext } = useContext(AppContext);
-  const { data, isLoading } = useMe();
+const <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >SafeRoute = ({</span> role, children }) =&gt; {</span>
+  const { updateUserContext } = <span class="cstat-no" title="statement not covered" >useContext(AppContext);</span>
+  const { data, isLoading } = <span class="cstat-no" title="statement not covered" >useMe()</span>;
   // only a real user object counts; a failed background refetch keeps the last good `data`
-  const user = data?.loggedIn &amp;&amp; data?.default_role ? data : null;
-  useEffect(() =&gt; {
-    if (user) updateUserContext(user);
+  const user = <span class="cstat-no" title="statement not covered" >data?.loggedIn &amp;&amp; data?.default_role ? data : null;</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  useEffect(() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >    if (user) <span class="cstat-no" title="statement not covered" >updateUserContext(user);</span></span>
   }, [user, updateUserContext]);
 &nbsp;
-  if (isLoading) return &lt;Spinner /&gt;;
-  if (!user) return &lt;Navigate to="/login" replace /&gt;;
-  if (role &amp;&amp; user.default_role !== role) {
-    return &lt;Navigate to={homeFor(user.default_role)} replace /&gt;;
+<span class="cstat-no" title="statement not covered" >  if (isLoading) <span class="cstat-no" title="statement not covered" >return &lt;Spinner /&gt;;</span></span>
+<span class="cstat-no" title="statement not covered" >  if (!user) <span class="cstat-no" title="statement not covered" >return &lt;Navigate to="/login" replace /&gt;;</span></span>
+<span class="cstat-no" title="statement not covered" >  if (role &amp;&amp; user.default_role !== role) {</span>
+<span class="cstat-no" title="statement not covered" >    return &lt;Navigate to={homeFor(user.default_role)} replace /&gt;;</span>
   }
 &nbsp;
-  return children ?? &lt;Outlet /&gt;;
+<span class="cstat-no" title="statement not covered" >  return children ?? &lt;Outlet /&gt;;</span>
 };
 &nbsp;
 export default SafeRoute;
@@ -157,7 +157,7 @@ export default SafeRoute;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-31T10:28:01.813Z
+                at 2026-11-08T18:00:57.653Z
             </div>
         <script src="../prettify.js"></script>
         <script>

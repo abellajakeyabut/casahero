@@ -55,7 +55,11 @@ export const loginAs = (user = makeUser()) =>
 
 export const renderWithProviders = (
   ui,
-  { route = '/', userContext = null, queryClient = createTestQueryClient() } = {},
+  {
+    route = '/',
+    userContext = null,
+    queryClient = createTestQueryClient(),
+  } = {},
 ) => {
   const updateUserContext = vi.fn();
   const utils = render(

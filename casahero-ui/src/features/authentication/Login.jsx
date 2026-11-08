@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import AppContext from '../../context/AppContext';
 import './Login.css'; // CSS file with styles
-import RolePick from './RolePick';
+
 import AuthContext from './AuthContext';
 import TopBanner from '../../shared/TopBanner';
 import { useNavigate } from 'react-router-dom';
