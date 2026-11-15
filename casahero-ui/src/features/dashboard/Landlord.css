@@ -1,0 +1,41 @@
+/* Landlord page shell (Landlord.jsx): fixed banner, fixed sidebar, content beside it.
+   Every rule is scoped to .landlord-page so no other screen is affected.
+   Sidebar/banner sizes come from shared/sidebar/Sidebar.css and TopBanner. */
+
+/* Login.css/Signup.css turn <body> into a centering flex box (Vite loads all CSS
+   globally), which pushes this page into the middle of the screen. Undo that here only. */
+body:has(.landlord-page) {
+  display: block;
+  min-height: 100vh;
+  /* background: var(--theme-tint);*/
+  backdrop-filter: none;
+}
+
+.landlord-page {
+  min-height: 100vh;
+  padding-top: var(--banner-height); /* the banner is position: fixed */
+  box-sizing: border-box;
+  font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  color: #1f1a1c;
+  text-align: left;
+}
+
+/* Content area to the right of the sidebar; children start at the top-left */
+.landlord-main {
+  margin-left: calc(var(--sidebar-width) + var(--sidebar-gap));
+  padding: var(--sidebar-gap);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: var(--sidebar-gap);
+}
+
+/* On small screens the sidebar becomes a bottom tab bar */
+@media (max-width: 768px) {
+  .landlord-main {
+    margin-left: 0;
+    padding-bottom: 88px; /* room for the floating bottom tab bar */
+  }
+}
