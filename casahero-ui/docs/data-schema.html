@@ -1,0 +1,608 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CasaHero Data Schema</title>
+<style>
+  :root {
+    --bg: #f7f6f3;
+    --surface: #ffffff;
+    --surface-2: #f1efe9;
+    --text: #1f2328;
+    --muted: #5d6470;
+    --border: #dcd8cf;
+    --accent: #2f6f5e;
+    --accent-soft: #e3efea;
+    --pk: #9a5b00;
+    --fk: #2c5fa8;
+    --line: #6b7380;
+    --code-bg: #f1efe9;
+    --warn-bg: #fff6e5;
+    --warn-border: #e9c98a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #16181b;
+      --surface: #1f2226;
+      --surface-2: #272b30;
+      --text: #e6e6e3;
+      --muted: #9aa1ab;
+      --border: #373c43;
+      --accent: #6fc2a8;
+      --accent-soft: #20342d;
+      --pk: #e3a74a;
+      --fk: #7fa9eb;
+      --line: #8c94a0;
+      --code-bg: #272b30;
+      --warn-bg: #2d2717;
+      --warn-border: #6b5526;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #16181b;
+    --surface: #1f2226;
+    --surface-2: #272b30;
+    --text: #e6e6e3;
+    --muted: #9aa1ab;
+    --border: #373c43;
+    --accent: #6fc2a8;
+    --accent-soft: #20342d;
+    --pk: #e3a74a;
+    --fk: #7fa9eb;
+    --line: #8c94a0;
+    --code-bg: #272b30;
+    --warn-bg: #2d2717;
+    --warn-border: #6b5526;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 15px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  .layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 40px; max-width: 1240px; margin: 0 auto; padding: 32px 24px 80px; }
+  nav { position: sticky; top: 24px; align-self: start; font-size: 14px; }
+  nav .brand { font-weight: 650; margin-bottom: 12px; }
+  nav ol { list-style: none; padding: 0; margin: 0; }
+  nav li { margin: 2px 0; }
+  nav a { color: var(--muted); text-decoration: none; display: block; padding: 3px 8px; border-radius: 6px; }
+  nav a:hover { color: var(--text); background: var(--surface-2); }
+  nav .sub a { padding-left: 20px; font-size: 13px; }
+  main { min-width: 0; }
+  h1 { font-size: 30px; line-height: 1.2; margin: 0 0 6px; letter-spacing: -0.01em; }
+  h2 { font-size: 21px; margin: 48px 0 12px; padding-top: 8px; border-top: 1px solid var(--border); }
+  h3 { font-size: 17px; margin: 32px 0 8px; }
+  h3 code { font-size: 16px; }
+  p { margin: 0 0 12px; }
+  .lede { color: var(--muted); margin-bottom: 20px; }
+  code { font: 13px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+  pre { background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; overflow-x: auto; font-size: 13px; line-height: 1.5; }
+  pre code { background: none; padding: 0; }
+  a { color: var(--accent); }
+  .callout { background: var(--warn-bg); border: 1px solid var(--warn-border); border-radius: 8px; padding: 12px 16px; margin: 16px 0; }
+  .callout ul { margin: 6px 0 0; padding-left: 20px; }
+  .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); margin: 8px 0 16px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { background: var(--surface-2); font-weight: 600; font-size: 13px; white-space: nowrap; }
+  tr:last-child td { border-bottom: none; }
+  td:first-child code { font-weight: 600; }
+  .tag { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 4px; letter-spacing: 0.03em; white-space: nowrap; }
+  .tag.pk { color: var(--pk); border: 1px solid currentColor; }
+  .tag.fk { color: var(--fk); border: 1px solid currentColor; }
+  .tag.uk { color: var(--muted); border: 1px solid currentColor; }
+  .meta { color: var(--muted); font-size: 13px; }
+  .diagram { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px; overflow-x: auto; }
+  .diagram svg { display: block; width: 100%; min-width: 820px; height: auto; }
+  .legend { display: flex; flex-wrap: wrap; gap: 18px; font-size: 13px; color: var(--muted); margin-top: 10px; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .theme-toggle { position: fixed; top: 14px; right: 16px; background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 13px; cursor: pointer; }
+  ol.issues li { margin-bottom: 6px; }
+
+  /* SVG diagram */
+  .er-box { fill: var(--surface); stroke: var(--border); stroke-width: 1.2; }
+  .er-head { fill: var(--accent-soft); }
+  .er-title { fill: var(--accent); font: 700 14px ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .er-col { fill: var(--text); font: 12.5px ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .er-type { fill: var(--muted); font: 11.5px ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .er-key-pk { fill: var(--pk); font: 700 10.5px ui-monospace, monospace; }
+  .er-key-fk { fill: var(--fk); font: 700 10.5px ui-monospace, monospace; }
+  .er-rule { stroke: var(--border); stroke-width: 1; }
+  .er-link { fill: none; stroke: var(--line); stroke-width: 1.6; }
+  .er-link.byvalue { stroke-dasharray: 5 4; }
+  .er-mark { fill: none; stroke: var(--line); stroke-width: 1.6; }
+  .er-label { fill: var(--muted); font: italic 11.5px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .er-label-bg { fill: var(--surface); }
+
+  @media (max-width: 860px) {
+    .layout { grid-template-columns: 1fr; gap: 0; padding: 24px 16px 64px; }
+    nav { position: static; margin-bottom: 8px; }
+    nav ol { display: flex; flex-wrap: wrap; gap: 4px; }
+    nav .sub { display: none; }
+    h1 { font-size: 25px; }
+  }
+</style>
+</head>
+<body>
+<button class="theme-toggle" type="button" id="themeToggle" aria-label="Toggle colour theme">Theme</button>
+<div class="layout">
+  <nav aria-label="Contents">
+    <div class="brand">CasaHero schema</div>
+    <ol>
+      <li><a href="#diagram">ER diagram</a></li>
+      <li><a href="#core">Core tables</a></li>
+      <li class="sub"><a href="#t-landlords">landlords</a></li>
+      <li class="sub"><a href="#t-tenants">tenants</a></li>
+      <li class="sub"><a href="#t-properties">properties</a></li>
+      <li class="sub"><a href="#t-units">units</a></li>
+      <li class="sub"><a href="#t-leases">leases</a></li>
+      <li><a href="#lookup">Lookup tables</a></li>
+      <li><a href="#relationships">Relationships</a></li>
+      <li><a href="#conventions">Conventions</a></li>
+      <li><a href="#volumes">Data volumes</a></li>
+      <li><a href="#issues">Known issues</a></li>
+      <li><a href="#ddl">Suggested DDL</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <h1>CasaHero Data Schema</h1>
+    <p class="lede">The tables, columns, types and relationships behind CasaHero, as of 2026-11-15.</p>
+
+    <div class="callout">
+      <strong>Source of truth.</strong> CasaHero has no database yet. The Express server (<code>casahero-server/server.js</code>) only stubs <code>signup</code>, <code>login</code> and <code>logout</code>. Everything below comes from the MSW mock data layer:
+      <ul>
+        <li><code>src/mocks/db.js</code>: the hand-written records and lookup lists</li>
+        <li><code>src/mocks/seedListings.js</code>: generates most properties and units</li>
+        <li><code>src/mocks/handlers.js</code>: how the endpoints read and join the data</li>
+      </ul>
+      <p style="margin:8px 0 0">Each "table" is an exported array in <code>db.js</code>. <b>Type</b> is the JavaScript type used today. <b>SQL type</b> is a suggested type for a real database (PostgreSQL). Endpoints are documented in <code>api-contracts.md</code>.</p>
+    </div>
+
+    <h2 id="diagram">Entity–relationship diagram</h2>
+    <p>Solid lines are id-based foreign keys. Dashed lines are relationships matched by <b>value</b> (for example <code>properties.city</code> holds a city name, not an id). The bar marks the "one" side and the crow's foot the "many" side.</p>
+    <div class="diagram">
+      <svg id="er" role="img" aria-labelledby="erTitle erDesc" xmlns="http://www.w3.org/2000/svg">
+        <title id="erTitle">CasaHero entity–relationship diagram</title>
+        <desc id="erDesc">Landlords own properties; properties contain units; leases link one unit to one tenant and one landlord. Regions contain cities. Properties reference a city, a region and a property type by name. Menus are keyed by role.</desc>
+        <defs>
+          <marker id="many" viewBox="0 0 14 14" refX="14" refY="7" markerWidth="14" markerHeight="14" markerUnits="userSpaceOnUse" orient="auto">
+            <path class="er-mark" d="M2 7 L14 1 M2 7 L14 7 M2 7 L14 13"/>
+          </marker>
+          <marker id="one" viewBox="0 0 14 14" refX="14" refY="7" markerWidth="14" markerHeight="14" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+            <path class="er-mark" d="M8 1 L8 13"/>
+          </marker>
+        </defs>
+        <g id="er-links"></g>
+        <g id="er-tables"></g>
+        <g id="er-labels"></g>
+      </svg>
+    </div>
+    <div class="legend">
+      <span><svg width="34" height="10" aria-hidden="true"><line x1="0" y1="5" x2="34" y2="5" stroke="var(--line)" stroke-width="1.6"/></svg> foreign key (by id)</span>
+      <span><svg width="34" height="10" aria-hidden="true"><line x1="0" y1="5" x2="34" y2="5" stroke="var(--line)" stroke-width="1.6" stroke-dasharray="5 4"/></svg> reference by value</span>
+      <span><span class="tag pk">PK</span> primary key</span>
+      <span><span class="tag fk">FK</span> foreign key</span>
+    </div>
+    <p class="meta" style="margin-top:10px"><code>menus</code> isn't joined to any table. It is keyed by role, the same value as <code>default_role</code> on landlords and tenants.</p>
+
+    <h2 id="core">Core tables</h2>
+
+    <h3 id="t-landlords"><code>landlords</code></h3>
+    <p>People who own properties and issue leases. Defined in <code>db.js</code>. Served by <code>GET /landlords</code> and returned as the <code>user</code> on login.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Column</th><th>Type</th><th>SQL type</th><th>Key</th><th>Null</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><code>id</code></td><td>string</td><td><code>text</code></td><td><span class="tag pk">PK</span></td><td>No</td><td>Prefix <code>ll-</code>, e.g. <code>ll-001</code>. Generated users get <code>ll-&lt;timestamp&gt;</code>.</td></tr>
+        <tr><td><code>email</code></td><td>string</td><td><code>citext</code></td><td><span class="tag uk">UNIQUE</span></td><td>No</td><td>Login matches it case-insensitively.</td></tr>
+        <tr><td><code>full_name</code></td><td>string</td><td><code>text</code></td><td></td><td>No</td><td></td></tr>
+        <tr><td><code>phone</code></td><td>string</td><td><code>text</code></td><td></td><td>Yes</td><td>E.164 with spaces, e.g. <code>+65 9123 4567</code>.</td></tr>
+        <tr><td><code>avatar_url</code></td><td>string</td><td><code>text</code></td><td></td><td>Yes</td><td>Always <code>null</code> in the mocks.</td></tr>
+        <tr><td><code>default_role</code></td><td>string</td><td><code>text</code></td><td></td><td>No</td><td>Always <code>landlord</code>. Drives routing (<code>/landlord</code>) and the menu set.</td></tr>
+        <tr><td><code>auth_provider</code></td><td>string</td><td><code>text</code></td><td></td><td>No</td><td><code>google</code>, <code>facebook</code> or <code>email</code>.</td></tr>
+        <tr><td><code>created_at</code></td><td>string</td><td><code>timestamptz</code></td><td></td><td>No</td><td>ISO 8601, UTC.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3 id="t-tenants"><code>tenants</code></h3>
+    <p>People who rent units. Defined in <code>db.js</code>, with the same shape as <code>landlords</code>. No endpoint lists them.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Column</th><th>Type</th><th>SQL type</th><th>Key</th><th>Null</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><code>id</code></td><td>string</td><td><code>text</code></td><td><span class="tag pk">PK</span></td><td>No</td><td>Prefix <code>tn-</code>, e.g. <code>tn-001</code>.</td></tr>
+        <tr><td><code>email</code></td><td>string</td><td><code>citext</code></td><td><span class="tag uk">UNIQUE</span></td><td>No</td><td></td></tr>
+        <tr><td><code>full_name</code></td><td>string</td><td><code>text</code></td><td></td><td>No</td><td></td></tr>
+        <tr><td><code>phone</code></td><td>string</td><td><code>text</code></td><td></td><td>Yes</td><td></td></tr>
+        <tr><td><code>avatar_url</code></td><td>string</td><td><code>text</code></td><td></td><td>Yes</td><td></td></tr>
+        <tr><td><code>default_role</code></td><td>string</td><td><code>text</code></td><td></td><td>No</td><td>Always <code>tenant</code>.</td></tr>
+        <tr><td><code>auth_provider</code></td><td>string</td><td><code>text</code></td><td></td><td>No</td><td><code>google</code>, <code>facebook</code> or <code>email</code>.</td></tr>
+        <tr><td><code>created_at</code></td><td>string</td><td><code>timestamptz</code></td><td></td><td>No</td><td></td></tr>
+      </tbody>
+    </table></div>
+    <p><b>Signed-up users.</b> <code>POST /signup</code> stores new users in an in-memory <code>registeredUsers</code> array in <code>handlers.js</code>, which resets on page reload. They have the landlord/tenant shape plus a <b><code>password</code></b> column (plain text, mock only). <code>withoutPassword()</code> strips it before a user is returned.</p>
+
+    <h3 id="t-properties"><code>properties</code></h3>
+    <p>A building or estate that a landlord owns. The 3 hand-written records (<code>pr-001</code> to <code>pr-003</code>) are in <code>db.js</code>. <code>seedListings()</code> generates the rest. Served by <code>POST /listings</code>, with matching units nested under <code>units</code>.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Column</th><th>Type</th><th>SQL type</th><th>Key</th><th>Null</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><code>id</code></td><td>string</td><td><code>text</code></td><td><span class="tag pk">PK</span></td><td>No</td><td>Prefix <code>pr-</code>, zero-padded to 3 digits.</td></tr>
+        <tr><td><code>landlord_id</code></td><td>string</td><td><code>text</code></td><td><span class="tag fk">FK</span> → <code>landlords.id</code></td><td>No</td><td>The seed alternates <code>ll-001</code> and <code>ll-002</code>.</td></tr>
+        <tr><td><code>name</code></td><td>string</td><td><code>text</code></td><td></td><td>No</td><td>e.g. <code>Tampines Central Flat</code>, <code>Parc @ Bishan</code>.</td></tr>
+        <tr><td><code>address</code></td><td>string</td><td><code>text</code></td><td></td><td>No</td><td>HDB: <code>Blk &lt;n&gt; &lt;street&gt;</code>. Others: <code>&lt;house no&gt; &lt;street&gt;</code>.</td></tr>
+        <tr><td><code>postal_code</code></td><td>string</td><td><code>char(6)</code></td><td></td><td>No</td><td>String to keep leading zeros (<code>018987</code>). Starts with the area's postal sector.</td></tr>
+        <tr><td><code>region</code></td><td>string</td><td><code>text</code></td><td>→ <code>regions.region</code> (by value)</td><td>No</td><td>Duplicates the region of <code>city</code>.</td></tr>
+        <tr><td><code>city</code></td><td>string</td><td><code>text</code></td><td>→ <code>cities.city</code> (by value)</td><td>No</td><td></td></tr>
+        <tr><td><code>type</code></td><td>string</td><td><code>text</code></td><td></td><td>No</td><td>Category: <code>Residential</code> or <code>Landed</code>.</td></tr>
+        <tr><td><code>property_type</code></td><td>string</td><td><code>text</code></td><td>→ <code>property_types.type</code> (by value)</td><td>No</td><td><code>HDB</code>, <code>Condo</code> or <code>Landed</code>. The search <code>type</code> filter matches this column.</td></tr>
+        <tr><td><code>created_at</code></td><td>string</td><td><code>timestamptz</code></td><td></td><td>No</td><td></td></tr>
+      </tbody>
+    </table></div>
+
+    <h3 id="t-units"><code>units</code></h3>
+    <p>A rentable unit inside a property. 6 hand-written records (<code>un-001</code> to <code>un-006</code>) are in <code>db.js</code>. The seed tops every property up to 15 units.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Column</th><th>Type</th><th>SQL type</th><th>Key</th><th>Null</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><code>id</code></td><td>string</td><td><code>text</code></td><td><span class="tag pk">PK</span></td><td>No</td><td>Prefix <code>un-</code>.</td></tr>
+        <tr><td><code>property_id</code></td><td>string</td><td><code>text</code></td><td><span class="tag fk">FK</span> → <code>properties.id</code></td><td>No</td><td></td></tr>
+        <tr><td><code>unit_number</code></td><td>string</td><td><code>text</code></td><td></td><td>No</td><td><code>#08-112</code> for HDB/Condo, <code>No. 3</code>, <code>Main house</code> or <code>Annex room</code> for landed. Unique within a property.</td></tr>
+        <tr><td><code>bedrooms</code></td><td>number</td><td><code>smallint</code></td><td></td><td>No</td><td>Integer. HDB 2–4, Condo 1–4, Landed 4–6 in the seed.</td></tr>
+        <tr><td><code>bathrooms</code></td><td>number</td><td><code>smallint</code></td><td></td><td>No</td><td>Integer, at least 1.</td></tr>
+        <tr><td><code>area_sqft</code></td><td>number</td><td><code>integer</code></td><td></td><td>No</td><td></td></tr>
+        <tr><td><code>asking_rent_cents</code></td><td>number</td><td><code>integer</code></td><td></td><td>No</td><td>Minor units: <code>320000</code> = S$3,200.00. Currency is implicitly SGD.</td></tr>
+        <tr><td><code>status</code></td><td>string</td><td><code>text</code></td><td></td><td>No</td><td><code>vacant</code>, <code>occupied</code> or <code>unavailable</code>.</td></tr>
+        <tr><td><code>photo_paths</code></td><td>string[]</td><td><code>text[]</code></td><td></td><td>No</td><td>Storage paths, e.g. <code>units/un-001/living.jpg</code>. Empty array when there are none.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3 id="t-leases"><code>leases</code></h3>
+    <p>A tenancy agreement between a landlord and a tenant for one unit. Defined in <code>db.js</code>. Served by <code>GET /leases</code>.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Column</th><th>Type</th><th>SQL type</th><th>Key</th><th>Null</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><code>id</code></td><td>string</td><td><code>text</code></td><td><span class="tag pk">PK</span></td><td>No</td><td>Prefix <code>ls-</code>.</td></tr>
+        <tr><td><code>unit_id</code></td><td>string</td><td><code>text</code></td><td><span class="tag fk">FK</span> → <code>units.id</code></td><td>No</td><td></td></tr>
+        <tr><td><code>landlord_id</code></td><td>string</td><td><code>text</code></td><td><span class="tag fk">FK</span> → <code>landlords.id</code></td><td>No</td><td>Denormalized: also reachable through <code>unit → property → landlord</code>.</td></tr>
+        <tr><td><code>tenant_id</code></td><td>string</td><td><code>text</code></td><td><span class="tag fk">FK</span> → <code>tenants.id</code></td><td>No</td><td></td></tr>
+        <tr><td><code>start_date</code></td><td>string</td><td><code>date</code></td><td></td><td>No</td><td><code>YYYY-MM-DD</code>.</td></tr>
+        <tr><td><code>end_date</code></td><td>string</td><td><code>date</code></td><td></td><td>No</td><td><code>YYYY-MM-DD</code>, after <code>start_date</code>.</td></tr>
+        <tr><td><code>monthly_rent_cents</code></td><td>number</td><td><code>integer</code></td><td></td><td>No</td><td>The agreed rent. Can differ from the unit's <code>asking_rent_cents</code>.</td></tr>
+        <tr><td><code>deposit_cents</code></td><td>number</td><td><code>integer</code></td><td></td><td>No</td><td>1× or 2× monthly rent in the mocks.</td></tr>
+        <tr><td><code>currency</code></td><td>string</td><td><code>char(3)</code></td><td></td><td>No</td><td>ISO 4217, <code>SGD</code> today.</td></tr>
+        <tr><td><code>due_day</code></td><td>number</td><td><code>smallint</code></td><td></td><td>No</td><td>Day of the month rent is due (1 or 5 in the mocks).</td></tr>
+        <tr><td><code>status</code></td><td>string</td><td><code>text</code></td><td></td><td>No</td><td><code>draft</code> or <code>active</code> in the mocks.</td></tr>
+        <tr><td><code>document_paths</code></td><td>string[]</td><td><code>text[]</code></td><td></td><td>No</td><td>e.g. <code>leases/ls-001/tenancy-agreement.pdf</code>.</td></tr>
+        <tr><td><code>created_at</code></td><td>string</td><td><code>timestamptz</code></td><td></td><td>No</td><td></td></tr>
+      </tbody>
+    </table></div>
+
+    <h2 id="lookup">Lookup tables</h2>
+
+    <h3><code>regions</code></h3>
+    <p>Options for the Region dropdown (<code>POST /regions</code>).</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Column</th><th>Type</th><th>SQL type</th><th>Key</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><code>region</code></td><td>string</td><td><code>text</code></td><td><span class="tag pk">PK</span></td><td>9 values: East, West, North, South, Central, North-West, North-East, South-East, South-West.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3><code>cities</code></h3>
+    <p>Options for the City dropdown, filtered by region (<code>GET /cities?region=</code>).</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Column</th><th>Type</th><th>SQL type</th><th>Key</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><code>region</code></td><td>string</td><td><code>text</code></td><td><span class="tag fk">FK</span> → <code>regions.region</code></td><td></td></tr>
+        <tr><td><code>city</code></td><td>string</td><td><code>text</code></td><td><span class="tag pk">PK</span></td><td>20 cities. Names are unique, so the name works as the key.</td></tr>
+      </tbody>
+    </table></div>
+    <p>Cities exist only in North, North-East, East, West and Central. The other four regions have none, so their dropdown is empty.</p>
+
+    <h3><code>property_types</code></h3>
+    <p>Options for the type pills on the search bar (<code>GET /types</code>). Exported from <code>db.js</code> as <code>propertyTypes</code>.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Column</th><th>Type</th><th>SQL type</th><th>Key</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><code>type</code></td><td>string</td><td><code>text</code></td><td><span class="tag pk">PK</span></td><td><code>HDB</code>, <code>Condo</code>, <code>Landed</code>.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3><code>menus</code></h3>
+    <p>Sidebar entries per role (<code>GET /menus</code>).</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Column</th><th>Type</th><th>SQL type</th><th>Key</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><code>roleId</code></td><td>string</td><td><code>text</code></td><td><span class="tag pk">PK</span> (with <code>key</code>)</td><td><code>tenant</code> or <code>landlord</code>. Matches <code>default_role</code>.</td></tr>
+        <tr><td><code>key</code></td><td>string</td><td><code>text</code></td><td><span class="tag pk">PK</span> (with <code>roleId</code>)</td><td>e.g. <code>home</code>, <code>Search</code>, <code>leases</code>. Repeats across roles.</td></tr>
+        <tr><td><code>label</code></td><td>string</td><td><code>text</code></td><td></td><td>Display text.</td></tr>
+        <tr><td><code>icon</code></td><td>string</td><td><code>text</code></td><td></td><td>Icon name for <code>SidebarIcon</code>.</td></tr>
+      </tbody>
+    </table></div>
+    <p>Tenants get Home, Search, Rent, Maintenance, Messages and Documents. Landlords get home, Search, Leases, Rent, Maintenance Requests and Messages.</p>
+
+    <h2 id="relationships">Relationships</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>From</th><th>To</th><th>Cardinality</th><th>Joined on</th><th>Enforced by</th></tr></thead>
+      <tbody>
+        <tr><td><code>landlords</code></td><td><code>properties</code></td><td>1 → 0..N</td><td><code>properties.landlord_id = landlords.id</code></td><td>Convention only</td></tr>
+        <tr><td><code>properties</code></td><td><code>units</code></td><td>1 → 0..N</td><td><code>units.property_id = properties.id</code></td><td>The <code>/listings</code> handler joins on it</td></tr>
+        <tr><td><code>units</code></td><td><code>leases</code></td><td>1 → 0..N</td><td><code>leases.unit_id = units.id</code></td><td>Convention only</td></tr>
+        <tr><td><code>tenants</code></td><td><code>leases</code></td><td>1 → 0..N</td><td><code>leases.tenant_id = tenants.id</code></td><td>Convention only</td></tr>
+        <tr><td><code>landlords</code></td><td><code>leases</code></td><td>1 → 0..N</td><td><code>leases.landlord_id = landlords.id</code></td><td>Convention only (denormalized)</td></tr>
+        <tr><td><code>regions</code></td><td><code>cities</code></td><td>1 → 0..N</td><td><code>cities.region = regions.region</code></td><td>The <code>/cities</code> handler filters on it</td></tr>
+        <tr><td><code>cities</code></td><td><code>properties</code></td><td>1 → 0..N</td><td><code>properties.city = cities.city</code></td><td>By value</td></tr>
+        <tr><td><code>regions</code></td><td><code>properties</code></td><td>1 → 0..N</td><td><code>properties.region = regions.region</code></td><td>By value</td></tr>
+        <tr><td><code>property_types</code></td><td><code>properties</code></td><td>1 → 0..N</td><td><code>properties.property_type = property_types.type</code></td><td>By value</td></tr>
+        <tr><td>role</td><td><code>menus</code></td><td>1 → N</td><td><code>menus.roleId = &lt;user&gt;.default_role</code></td><td>The <code>/menus</code> handler filters on it</td></tr>
+      </tbody>
+    </table></div>
+    <p>In plain terms: a <b>landlord</b> owns <b>properties</b>. Each property has <b>units</b>. A <b>lease</b> ties one unit to one <b>tenant</b> for a date range at an agreed rent. Properties are placed by <b>region</b> and <b>city</b> and classified by <b>property type</b>.</p>
+    <p>The lease data is consistent with unit status today: <code>un-001</code> and <code>un-003</code> are <code>occupied</code> with an <code>active</code> lease, and <code>un-005</code> is <code>vacant</code> with only a <code>draft</code> lease.</p>
+
+    <h2 id="conventions">Conventions</h2>
+    <ul>
+      <li><b>IDs</b> are strings with a type prefix and a zero-padded number: <code>ll-</code>, <code>tn-</code>, <code>pr-</code>, <code>un-</code>, <code>ls-</code>. Users created at runtime use <code>Date.now()</code> instead of a padded number.</li>
+      <li><b>Money</b> is an integer in minor units (cents), with a <code>_cents</code> suffix. Only <code>leases</code> stores a <code>currency</code>. Units are implicitly SGD.</li>
+      <li><b>Timestamps</b> are ISO 8601 strings in UTC (<code>created_at</code>). <b>Dates</b> without a time are <code>YYYY-MM-DD</code> (<code>start_date</code>, <code>end_date</code>).</li>
+      <li><b>Files</b> are stored as relative storage paths in <code>*_paths</code> arrays, never as URLs.</li>
+      <li><b>Column names</b> are <code>snake_case</code>, except <code>menus.roleId</code>.</li>
+      <li><b>Seeded data is deterministic.</b> <code>seedListings.js</code> uses a fixed-seed PRNG (mulberry32, seed <code>20261025</code>), so ids and values are the same on every reload.</li>
+    </ul>
+
+    <h2 id="volumes">Data volumes</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Table</th><th style="text-align:right">Rows</th><th>How</th></tr></thead>
+      <tbody>
+        <tr><td><code>landlords</code></td><td style="text-align:right">2</td><td>Hand-written</td></tr>
+        <tr><td><code>tenants</code></td><td style="text-align:right">3</td><td>Hand-written</td></tr>
+        <tr><td><code>properties</code></td><td style="text-align:right">203</td><td>3 hand-written + 10 per city × 20 cities</td></tr>
+        <tr><td><code>units</code></td><td style="text-align:right">3,045</td><td>Every property topped up to 15 units</td></tr>
+        <tr><td><code>leases</code></td><td style="text-align:right">3</td><td>Hand-written</td></tr>
+        <tr><td><code>regions</code></td><td style="text-align:right">9</td><td>Hand-written</td></tr>
+        <tr><td><code>cities</code></td><td style="text-align:right">20</td><td>Hand-written</td></tr>
+        <tr><td><code>property_types</code></td><td style="text-align:right">3</td><td>Hand-written</td></tr>
+        <tr><td><code>menus</code></td><td style="text-align:right">12</td><td>6 per role</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2 id="issues">Known issues and gaps</h2>
+    <ol class="issues">
+      <li><b>Landlords and tenants are separate tables with the same shape.</b> One person can't be both, and the role is baked into the id prefix. A single <code>users</code> table with a role column (or a <code>user_roles</code> join table) would fix that.</li>
+      <li><b>Location and type are stored as names, not keys.</b> <code>properties.city</code>, <code>region</code> and <code>property_type</code> are free text. Renaming a city would orphan its properties.</li>
+      <li><b><code>properties.region</code> duplicates <code>cities.region</code>.</b> Nothing stops a property from having a region that doesn't match its city.</li>
+      <li><b><code>leases.landlord_id</code> duplicates <code>unit → property → landlord_id</code>.</b> It can drift if a property changes owner.</li>
+      <li><b><code>type</code> and <code>property_type</code> overlap.</b> <code>Landed</code> appears in both. <code>type</code> is never used by the search.</li>
+      <li><b>Bedroom/bathroom filters are exact matches.</b> <code>api-contracts.md</code> says <code>bed</code> and <code>bath</code> are minimums, but <code>handlers.js</code> compares with <code>==</code>.</li>
+      <li><b>Nothing ties <code>units.status</code> to leases.</b> A unit could be <code>vacant</code> while it has an <code>active</code> lease. A rule is also needed for at most one active lease per unit at a time.</li>
+      <li><b>Missing audit columns.</b> <code>units</code> has no <code>created_at</code>, and no table has <code>updated_at</code>.</li>
+      <li><b>Status values aren't constrained.</b> <code>units.status</code> and <code>leases.status</code> are open strings. Lease statuses such as <code>ended</code> or <code>terminated</code> don't exist yet.</li>
+      <li><b>Passwords are stored in plain text</b> in the signup mock. A real backend must hash them and keep them out of every response.</li>
+    </ol>
+
+    <h2 id="ddl">Suggested DDL (PostgreSQL)</h2>
+    <p>A starting point that follows the current shape and fixes issues 1–3 and 7–9. It is a proposal, not something the code uses yet.</p>
+<pre><code>CREATE EXTENSION IF NOT EXISTS citext;
+
+CREATE TABLE users (
+  id             text PRIMARY KEY,
+  email          citext NOT NULL UNIQUE,
+  full_name      text NOT NULL,
+  phone          text,
+  avatar_url     text,
+  default_role   text NOT NULL CHECK (default_role IN ('landlord', 'tenant')),
+  auth_provider  text NOT NULL CHECK (auth_provider IN ('google', 'facebook', 'email')),
+  password_hash  text,                      -- only for auth_provider = 'email'
+  created_at     timestamptz NOT NULL DEFAULT now(),
+  updated_at     timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE TABLE regions (
+  region  text PRIMARY KEY
+);
+
+CREATE TABLE cities (
+  city    text PRIMARY KEY,
+  region  text NOT NULL REFERENCES regions (region) ON UPDATE CASCADE
+);
+
+CREATE TABLE property_types (
+  type  text PRIMARY KEY
+);
+
+CREATE TABLE properties (
+  id             text PRIMARY KEY,
+  landlord_id    text NOT NULL REFERENCES users (id),
+  name           text NOT NULL,
+  address        text NOT NULL,
+  postal_code    char(6) NOT NULL CHECK (postal_code ~ '^[0-9]{6}$'),
+  city           text NOT NULL REFERENCES cities (city) ON UPDATE CASCADE,  -- region comes from cities
+  type           text NOT NULL,
+  property_type  text NOT NULL REFERENCES property_types (type) ON UPDATE CASCADE,
+  created_at     timestamptz NOT NULL DEFAULT now(),
+  updated_at     timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE TABLE units (
+  id                 text PRIMARY KEY,
+  property_id        text NOT NULL REFERENCES properties (id) ON DELETE CASCADE,
+  unit_number        text NOT NULL,
+  bedrooms           smallint NOT NULL CHECK (bedrooms &gt;= 0),
+  bathrooms          smallint NOT NULL CHECK (bathrooms &gt;= 0),
+  area_sqft          integer NOT NULL CHECK (area_sqft &gt; 0),
+  asking_rent_cents  integer NOT NULL CHECK (asking_rent_cents &gt;= 0),
+  status             text NOT NULL CHECK (status IN ('vacant', 'occupied', 'unavailable')),
+  photo_paths        text[] NOT NULL DEFAULT '{}',
+  created_at         timestamptz NOT NULL DEFAULT now(),
+  updated_at         timestamptz NOT NULL DEFAULT now(),
+  UNIQUE (property_id, unit_number)
+);
+
+CREATE TABLE leases (
+  id                  text PRIMARY KEY,
+  unit_id             text NOT NULL REFERENCES units (id),
+  landlord_id         text NOT NULL REFERENCES users (id),
+  tenant_id           text NOT NULL REFERENCES users (id),
+  start_date          date NOT NULL,
+  end_date            date NOT NULL CHECK (end_date &gt; start_date),
+  monthly_rent_cents  integer NOT NULL CHECK (monthly_rent_cents &gt;= 0),
+  deposit_cents       integer NOT NULL CHECK (deposit_cents &gt;= 0),
+  currency            char(3) NOT NULL DEFAULT 'SGD',
+  due_day             smallint NOT NULL CHECK (due_day BETWEEN 1 AND 31),
+  status              text NOT NULL CHECK (status IN ('draft', 'active', 'ended', 'terminated')),
+  document_paths      text[] NOT NULL DEFAULT '{}',
+  created_at          timestamptz NOT NULL DEFAULT now(),
+  updated_at          timestamptz NOT NULL DEFAULT now()
+);
+
+-- at most one active lease per unit
+CREATE UNIQUE INDEX leases_one_active_per_unit ON leases (unit_id) WHERE status = 'active';
+
+CREATE TABLE menus (
+  role_id  text NOT NULL CHECK (role_id IN ('landlord', 'tenant')),
+  key      text NOT NULL,
+  label    text NOT NULL,
+  icon     text NOT NULL,
+  position smallint NOT NULL,
+  PRIMARY KEY (role_id, key)
+);
+
+CREATE INDEX properties_landlord_idx ON properties (landlord_id);
+CREATE INDEX properties_city_type_idx ON properties (city, property_type);
+CREATE INDEX units_property_idx ON units (property_id);
+CREATE INDEX leases_tenant_idx ON leases (tenant_id);
+CREATE INDEX leases_landlord_idx ON leases (landlord_id);</code></pre>
+  </main>
+</div>
+
+<script>
+(function () {
+  // ---------- theme toggle ----------
+  var root = document.documentElement;
+  try { var saved = localStorage.getItem('schema-theme'); if (saved) root.setAttribute('data-theme', saved); } catch (e) {}
+  document.getElementById('themeToggle').addEventListener('click', function () {
+    var current = root.getAttribute('data-theme') ||
+      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    var next = current === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('schema-theme', next); } catch (e) {}
+  });
+
+  // ---------- ER diagram ----------
+  var NS = 'http://www.w3.org/2000/svg';
+  var HEAD = 30, ROW = 22;
+
+  // [name, type, key]
+  var tables = {
+    regions:        { x: 40,  y: 40,  w: 220, cols: [['region', 'text', 'PK']] },
+    cities:         { x: 320, y: 40,  w: 240, cols: [['city', 'text', 'PK'], ['region', 'text', 'FK']] },
+    property_types: { x: 620, y: 40,  w: 220, cols: [['type', 'text', 'PK']] },
+    menus:          { x: 900, y: 40,  w: 240, cols: [['roleId', 'text', 'PK'], ['key', 'text', 'PK'], ['label', 'text', ''], ['icon', 'text', '']] },
+    landlords:      { x: 40,  y: 270, w: 260, cols: [
+      ['id', 'text', 'PK'], ['email', 'citext', 'UK'], ['full_name', 'text', ''], ['phone', 'text?', ''],
+      ['avatar_url', 'text?', ''], ['default_role', 'text', ''], ['auth_provider', 'text', ''], ['created_at', 'timestamptz', '']] },
+    properties:     { x: 380, y: 270, w: 300, cols: [
+      ['id', 'text', 'PK'], ['landlord_id', 'text', 'FK'], ['name', 'text', ''], ['address', 'text', ''],
+      ['postal_code', 'char(6)', ''], ['region', 'text', ''], ['city', 'text', ''], ['type', 'text', ''],
+      ['property_type', 'text', ''], ['created_at', 'timestamptz', '']] },
+    units:          { x: 760, y: 270, w: 300, cols: [
+      ['id', 'text', 'PK'], ['property_id', 'text', 'FK'], ['unit_number', 'text', ''], ['bedrooms', 'smallint', ''],
+      ['bathrooms', 'smallint', ''], ['area_sqft', 'integer', ''], ['asking_rent_cents', 'integer', ''],
+      ['status', 'text', ''], ['photo_paths', 'text[]', '']] },
+    tenants:        { x: 40,  y: 620, w: 260, cols: [
+      ['id', 'text', 'PK'], ['email', 'citext', 'UK'], ['full_name', 'text', ''], ['phone', 'text?', ''],
+      ['avatar_url', 'text?', ''], ['default_role', 'text', ''], ['auth_provider', 'text', ''], ['created_at', 'timestamptz', '']] },
+    leases:         { x: 380, y: 620, w: 300, cols: [
+      ['id', 'text', 'PK'], ['unit_id', 'text', 'FK'], ['landlord_id', 'text', 'FK'], ['tenant_id', 'text', 'FK'],
+      ['start_date', 'date', ''], ['end_date', 'date', ''], ['monthly_rent_cents', 'integer', ''],
+      ['deposit_cents', 'integer', ''], ['currency', 'char(3)', ''], ['due_day', 'smallint', ''],
+      ['status', 'text', ''], ['document_paths', 'text[]', ''], ['created_at', 'timestamptz', '']] }
+  };
+
+  function h(t) { return HEAD + t.cols.length * ROW; }
+  function right(t) { return t.x + t.w; }
+  function bottom(t) { return t.y + h(t); }
+  function rowY(name, col) {
+    var t = tables[name];
+    for (var i = 0; i < t.cols.length; i++) if (t.cols[i][0] === col) return t.y + HEAD + i * ROW + ROW / 2;
+    throw new Error('no column ' + name + '.' + col);
+  }
+  function el(tag, attrs, text) {
+    var n = document.createElementNS(NS, tag);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    if (text != null) n.textContent = text;
+    return n;
+  }
+
+  var T = tables;
+  // each link: points from the "one" side to the "many" side; label placed at [lx, ly]
+  var links = [
+    { pts: [[right(T.regions), rowY('regions', 'region')], [290, rowY('regions', 'region')], [290, rowY('cities', 'region')], [T.cities.x, rowY('cities', 'region')]],
+      label: 'contains', at: [290, 96] },
+    { pts: [[right(T.landlords), rowY('landlords', 'id')], [340, rowY('landlords', 'id')], [340, rowY('properties', 'landlord_id')], [T.properties.x, rowY('properties', 'landlord_id')]],
+      label: 'owns', at: [340, 326] },
+    { pts: [[right(T.properties), rowY('properties', 'id')], [720, rowY('properties', 'id')], [720, rowY('units', 'property_id')], [T.units.x, rowY('units', 'property_id')]],
+      label: 'contains', at: [720, 326] },
+    { pts: [[910, bottom(T.units)], [910, rowY('leases', 'unit_id')], [right(T.leases), rowY('leases', 'unit_id')]],
+      label: 'leased through', at: [910, 560] },
+    { pts: [[170, bottom(T.landlords)], [170, 560], [350, 560], [350, rowY('leases', 'landlord_id')], [T.leases.x, rowY('leases', 'landlord_id')]],
+      label: 'issues (denormalized)', at: [260, 552] },
+    { pts: [[right(T.tenants), rowY('tenants', 'id')], [325, rowY('tenants', 'id')], [325, rowY('leases', 'tenant_id')], [T.leases.x, rowY('leases', 'tenant_id')]],
+      label: 'signs', at: [325, 698] },
+    { byValue: true, pts: [[150, bottom(T.regions)], [150, 230], [420, 230], [420, T.properties.y]],
+      label: 'region', at: [230, 222] },
+    { byValue: true, pts: [[540, bottom(T.cities)], [540, T.properties.y]],
+      label: 'city', at: [540, 185] },
+    { byValue: true, pts: [[730, bottom(T.property_types)], [730, 230], [640, 230], [640, T.properties.y]],
+      label: 'property_type', at: [730, 185] }
+  ];
+
+  var gLinks = document.getElementById('er-links');
+  var gTables = document.getElementById('er-tables');
+  var gLabels = document.getElementById('er-labels');
+
+  links.forEach(function (l) {
+    var d = l.pts.map(function (p, i) { return (i ? 'L' : 'M') + p[0] + ' ' + p[1]; }).join(' ');
+    gLinks.appendChild(el('path', {
+      d: d, 'class': 'er-link' + (l.byValue ? ' byvalue' : ''),
+      'marker-start': 'url(#one)', 'marker-end': 'url(#many)'
+    }));
+    var text = el('text', { x: l.at[0], y: l.at[1], 'text-anchor': 'middle', 'class': 'er-label' }, l.label);
+    gLabels.appendChild(text);
+  });
+
+  Object.keys(tables).forEach(function (name) {
+    var t = tables[name], g = el('g', {});
+    var H = h(t);
+    g.appendChild(el('rect', { x: t.x, y: t.y, width: t.w, height: H, rx: 8, 'class': 'er-box' }));
+    g.appendChild(el('path', {
+      d: 'M' + t.x + ' ' + (t.y + HEAD) + ' V' + (t.y + 8) + ' a8 8 0 0 1 8 -8 H' + (right(t) - 8) + ' a8 8 0 0 1 8 8 V' + (t.y + HEAD) + ' Z',
+      'class': 'er-head'
+    }));
+    g.appendChild(el('line', { x1: t.x, y1: t.y + HEAD, x2: right(t), y2: t.y + HEAD, 'class': 'er-rule' }));
+    g.appendChild(el('text', { x: t.x + 12, y: t.y + 20, 'class': 'er-title' }, name));
+    t.cols.forEach(function (c, i) {
+      var cy = t.y + HEAD + i * ROW + 15;
+      if (c[2]) g.appendChild(el('text', { x: t.x + 10, y: cy, 'class': c[2] === 'FK' ? 'er-key-fk' : 'er-key-pk' }, c[2]));
+      g.appendChild(el('text', { x: t.x + 38, y: cy, 'class': 'er-col' }, c[0]));
+      g.appendChild(el('text', { x: right(t) - 10, y: cy, 'text-anchor': 'end', 'class': 'er-type' }, c[1]));
+    });
+    gTables.appendChild(g);
+  });
+
+  // label backgrounds so text stays readable over lines
+  Array.prototype.forEach.call(gLabels.querySelectorAll('text'), function (t) {
+    var b = t.getBBox();
+    gLabels.insertBefore(el('rect', { x: b.x - 4, y: b.y - 1, width: b.width + 8, height: b.height + 2, rx: 3, 'class': 'er-label-bg' }), t);
+  });
+
+  var maxX = 0, maxY = 0;
+  Object.keys(tables).forEach(function (n) { maxX = Math.max(maxX, right(tables[n])); maxY = Math.max(maxY, bottom(tables[n])); });
+  document.getElementById('er').setAttribute('viewBox', '0 0 ' + (maxX + 40) + ' ' + (maxY + 40));
+})();
+</script>
+</body>
+</html>

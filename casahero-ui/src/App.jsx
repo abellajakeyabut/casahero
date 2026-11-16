@@ -15,12 +15,12 @@ import { useContext } from 'react';
 import AppContext from './context/AppContext'
 import Dashboard from './features/dashboard/Dashboard'
 import Landlord from './features/dashboard/Landlord'
-
+import PropertyForm from './features/dashboard/components/PropertyForm'
 const queryClient = new QueryClient({
-  defaultOptions:{
-    queries:{
-      staleTime:30_000,
-      retry:1
+  defaultOptions: {
+    queries: {
+      staleTime: 30_000,
+      retry: 1
     }
   }
 });
@@ -33,7 +33,7 @@ const RoleHome = () => {
 
 
 const App = () => {
-const { userContext } = useContext(AppContext);
+  const { userContext } = useContext(AppContext);
 
 
   return (
@@ -49,13 +49,17 @@ const { userContext } = useContext(AppContext);
             }
           ></Route>
           {/* one guarded route group per role: /landlord/*, /tenant/* */}
-          
+
           {ROLES.map((role) => (
             <Route key={role} path={`/${role}`} element={<SafeRoute role={role} />}>
-              <Route index element={ role=='landlord' ? <Landlord/> : <Dashboard />} />
+              <Route index element={role == 'landlord' ? <Landlord /> : <Dashboard />} />
               <Route path="*" element={<UnderConstruction />} />
             </Route>
           ))}
+          <Route key="landlord-addproperty" path="/landlord/addproperty" element={<SafeRoute role={"landlord"}>
+            <PropertyForm />
+          </SafeRoute>} />
+
           {/* where Login lands: send logged-in users to their role's home */}
           <Route
             path="/listings"
