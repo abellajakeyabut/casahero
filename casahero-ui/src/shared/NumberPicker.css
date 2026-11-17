@@ -14,8 +14,14 @@
 }
 
 .number-picker button {
+  flex: 0 0 28px; /* never squash into an oval */
   width: 28px;
   height: 28px;
+  padding: 0; /* browser default padding pushes the glyph off-center */
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 50%;
   border: 1px solid var(--theme);
   background-color: #fff;
