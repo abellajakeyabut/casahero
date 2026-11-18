@@ -137,7 +137,6 @@
       <li class="sub"><a href="#t-landlords">landlords</a></li>
       <li class="sub"><a href="#t-tenants">tenants</a></li>
       <li class="sub"><a href="#t-properties">properties</a></li>
-      <li class="sub"><a href="#t-units">units</a></li>
       <li class="sub"><a href="#t-leases">leases</a></li>
       <li><a href="#lookup">Lookup tables</a></li>
       <li><a href="#relationships">Relationships</a></li>
@@ -150,13 +149,17 @@
 
   <main>
     <h1>CasaHero Data Schema</h1>
-    <p class="lede">The tables, columns, types and relationships behind CasaHero, as of 2026-11-15.</p>
+    <p class="lede">The tables, columns, types and relationships behind CasaHero, as of 2026-11-19.</p>
+
+    <div class="callout">
+      <strong>2026-11-19: flattened.</strong> <code>properties</code> and <code>units</code> were merged into one <code>properties</code> table. Each row is one rentable unit, and leases point at <code>property_id</code>. See <code>RestructureData.md</code>.
+    </div>
 
     <div class="callout">
       <strong>Source of truth.</strong> CasaHero has no database yet. The Express server (<code>casahero-server/server.js</code>) only stubs <code>signup</code>, <code>login</code> and <code>logout</code>. Everything below comes from the MSW mock data layer:
       <ul>
         <li><code>src/mocks/db.js</code>: the hand-written records and lookup lists</li>
-        <li><code>src/mocks/seedListings.js</code>: generates most properties and units</li>
+        <li><code>src/mocks/seedListings.js</code>: generates most properties</li>
         <li><code>src/mocks/handlers.js</code>: how the endpoints read and join the data</li>
       </ul>
       <p style="margin:8px 0 0">Each "table" is an exported array in <code>db.js</code>. <b>Type</b> is the JavaScript type used today. <b>SQL type</b> is a suggested type for a real database (PostgreSQL). Endpoints are documented in <code>api-contracts.md</code>.</p>
@@ -167,7 +170,7 @@
     <div class="diagram">
       <svg id="er" role="img" aria-labelledby="erTitle erDesc" xmlns="http://www.w3.org/2000/svg">
         <title id="erTitle">CasaHero entity–relationship diagram</title>
-        <desc id="erDesc">Landlords own properties; properties contain units; leases link one unit to one tenant and one landlord. Regions contain cities. Properties reference a city, a region and a property type by name. Menus are keyed by role.</desc>
+        <desc id="erDesc">Landlords own properties, and each property is one rentable unit; leases link one property to one tenant and one landlord. Regions contain cities. Properties reference a city, a region and a property type by name. Menus are keyed by role.</desc>
         <defs>
           <marker id="many" viewBox="0 0 14 14" refX="14" refY="7" markerWidth="14" markerHeight="14" markerUnits="userSpaceOnUse" orient="auto">
             <path class="er-mark" d="M2 7 L14 1 M2 7 L14 7 M2 7 L14 13"/>
@@ -208,7 +211,7 @@
     </table></div>
 
     <h3 id="t-tenants"><code>tenants</code></h3>
-    <p>People who rent units. Defined in <code>db.js</code>, with the same shape as <code>landlords</code>. No endpoint lists them.</p>
+    <p>People who rent properties. Defined in <code>db.js</code>, with the same shape as <code>landlords</code>. No endpoint lists them.</p>
     <div class="table-wrap"><table>
       <thead><tr><th>Column</th><th>Type</th><th>SQL type</th><th>Key</th><th>Null</th><th>Notes</th></tr></thead>
       <tbody>
@@ -225,52 +228,42 @@
     <p><b>Signed-up users.</b> <code>POST /signup</code> stores new users in an in-memory <code>registeredUsers</code> array in <code>handlers.js</code>, which resets on page reload. They have the landlord/tenant shape plus a <b><code>password</code></b> column (plain text, mock only). <code>withoutPassword()</code> strips it before a user is returned.</p>
 
     <h3 id="t-properties"><code>properties</code></h3>
-    <p>A building or estate that a landlord owns. The 3 hand-written records (<code>pr-001</code> to <code>pr-003</code>) are in <code>db.js</code>. <code>seedListings()</code> generates the rest. Served by <code>POST /listings</code>, with matching units nested under <code>units</code>.</p>
+    <p>One rentable unit that a landlord owns: an HDB flat, a condo unit, a landed house or a room in one. The 6 hand-written records (<code>pr-001</code> to <code>pr-006</code>) are in <code>db.js</code>. <code>seedListings()</code> generates the rest. Served by <code>POST /listings</code> as a flat array.</p>
+    <p>Units in the same building or estate are separate rows that repeat the building's <code>name</code>, <code>address</code>, <code>postal_code</code>, <code>region</code> and <code>city</code>.</p>
     <div class="table-wrap"><table>
       <thead><tr><th>Column</th><th>Type</th><th>SQL type</th><th>Key</th><th>Null</th><th>Notes</th></tr></thead>
       <tbody>
-        <tr><td><code>id</code></td><td>string</td><td><code>text</code></td><td><span class="tag pk">PK</span></td><td>No</td><td>Prefix <code>pr-</code>, zero-padded to 3 digits.</td></tr>
-        <tr><td><code>landlord_id</code></td><td>string</td><td><code>text</code></td><td><span class="tag fk">FK</span> → <code>landlords.id</code></td><td>No</td><td>The seed alternates <code>ll-001</code> and <code>ll-002</code>.</td></tr>
-        <tr><td><code>name</code></td><td>string</td><td><code>text</code></td><td></td><td>No</td><td>e.g. <code>Tampines Central Flat</code>, <code>Parc @ Bishan</code>.</td></tr>
+        <tr><td><code>id</code></td><td>string</td><td><code>text</code></td><td><span class="tag pk">PK</span></td><td>No</td><td>Prefix <code>pr-</code>, zero-padded to at least 3 digits (<code>pr-001</code> … <code>pr-3006</code>).</td></tr>
+        <tr><td><code>landlord_id</code></td><td>string</td><td><code>text</code></td><td><span class="tag fk">FK</span> → <code>landlords.id</code></td><td>No</td><td>The seed alternates <code>ll-001</code> and <code>ll-002</code> by building.</td></tr>
+        <tr><td><code>name</code></td><td>string</td><td><code>text</code></td><td></td><td>No</td><td>Building/estate name, e.g. <code>Tampines Central Flat</code>, <code>Parc @ Bishan</code>. Repeats across units in one building.</td></tr>
+        <tr><td><code>unit_number</code></td><td>string</td><td><code>text</code></td><td></td><td>Yes</td><td><code>#08-112</code> for HDB/Condo, <code>No. 3</code>, <code>Main house</code> or <code>Annex room</code> for landed. <code>null</code> for a whole house with no unit number. Unique within a building.</td></tr>
         <tr><td><code>address</code></td><td>string</td><td><code>text</code></td><td></td><td>No</td><td>HDB: <code>Blk &lt;n&gt; &lt;street&gt;</code>. Others: <code>&lt;house no&gt; &lt;street&gt;</code>.</td></tr>
-        <tr><td><code>postal_code</code></td><td>string</td><td><code>char(6)</code></td><td></td><td>No</td><td>String to keep leading zeros (<code>018987</code>). Starts with the area's postal sector.</td></tr>
+        <tr><td><code>postal_code</code></td><td>string</td><td><code>char(6)</code></td><td></td><td>No</td><td>String to keep leading zeros (<code>018987</code>). Starts with the area's postal sector. Identifies the building.</td></tr>
         <tr><td><code>region</code></td><td>string</td><td><code>text</code></td><td>→ <code>regions.region</code> (by value)</td><td>No</td><td>Duplicates the region of <code>city</code>.</td></tr>
         <tr><td><code>city</code></td><td>string</td><td><code>text</code></td><td>→ <code>cities.city</code> (by value)</td><td>No</td><td></td></tr>
-        <tr><td><code>type</code></td><td>string</td><td><code>text</code></td><td></td><td>No</td><td>Category: <code>Residential</code> or <code>Landed</code>.</td></tr>
         <tr><td><code>property_type</code></td><td>string</td><td><code>text</code></td><td>→ <code>property_types.type</code> (by value)</td><td>No</td><td><code>HDB</code>, <code>Condo</code> or <code>Landed</code>. The search <code>type</code> filter matches this column.</td></tr>
-        <tr><td><code>created_at</code></td><td>string</td><td><code>timestamptz</code></td><td></td><td>No</td><td></td></tr>
-      </tbody>
-    </table></div>
-
-    <h3 id="t-units"><code>units</code></h3>
-    <p>A rentable unit inside a property. 6 hand-written records (<code>un-001</code> to <code>un-006</code>) are in <code>db.js</code>. The seed tops every property up to 15 units.</p>
-    <div class="table-wrap"><table>
-      <thead><tr><th>Column</th><th>Type</th><th>SQL type</th><th>Key</th><th>Null</th><th>Notes</th></tr></thead>
-      <tbody>
-        <tr><td><code>id</code></td><td>string</td><td><code>text</code></td><td><span class="tag pk">PK</span></td><td>No</td><td>Prefix <code>un-</code>.</td></tr>
-        <tr><td><code>property_id</code></td><td>string</td><td><code>text</code></td><td><span class="tag fk">FK</span> → <code>properties.id</code></td><td>No</td><td></td></tr>
-        <tr><td><code>unit_number</code></td><td>string</td><td><code>text</code></td><td></td><td>No</td><td><code>#08-112</code> for HDB/Condo, <code>No. 3</code>, <code>Main house</code> or <code>Annex room</code> for landed. Unique within a property.</td></tr>
         <tr><td><code>bedrooms</code></td><td>number</td><td><code>smallint</code></td><td></td><td>No</td><td>Integer. HDB 2–4, Condo 1–4, Landed 4–6 in the seed.</td></tr>
         <tr><td><code>bathrooms</code></td><td>number</td><td><code>smallint</code></td><td></td><td>No</td><td>Integer, at least 1.</td></tr>
         <tr><td><code>area_sqft</code></td><td>number</td><td><code>integer</code></td><td></td><td>No</td><td></td></tr>
         <tr><td><code>asking_rent_cents</code></td><td>number</td><td><code>integer</code></td><td></td><td>No</td><td>Minor units: <code>320000</code> = S$3,200.00. Currency is implicitly SGD.</td></tr>
         <tr><td><code>status</code></td><td>string</td><td><code>text</code></td><td></td><td>No</td><td><code>vacant</code>, <code>occupied</code> or <code>unavailable</code>.</td></tr>
-        <tr><td><code>photo_paths</code></td><td>string[]</td><td><code>text[]</code></td><td></td><td>No</td><td>Storage paths, e.g. <code>units/un-001/living.jpg</code>. Empty array when there are none.</td></tr>
+        <tr><td><code>photo_paths</code></td><td>string[]</td><td><code>text[]</code></td><td></td><td>No</td><td>Storage paths, e.g. <code>properties/pr-001/living.jpg</code>. Empty array when there are none.</td></tr>
+        <tr><td><code>created_at</code></td><td>string</td><td><code>timestamptz</code></td><td></td><td>No</td><td></td></tr>
       </tbody>
     </table></div>
 
     <h3 id="t-leases"><code>leases</code></h3>
-    <p>A tenancy agreement between a landlord and a tenant for one unit. Defined in <code>db.js</code>. Served by <code>GET /leases</code>.</p>
+    <p>A tenancy agreement between a landlord and a tenant for one property. Defined in <code>db.js</code>. Served by <code>GET /leases</code>.</p>
     <div class="table-wrap"><table>
       <thead><tr><th>Column</th><th>Type</th><th>SQL type</th><th>Key</th><th>Null</th><th>Notes</th></tr></thead>
       <tbody>
         <tr><td><code>id</code></td><td>string</td><td><code>text</code></td><td><span class="tag pk">PK</span></td><td>No</td><td>Prefix <code>ls-</code>.</td></tr>
-        <tr><td><code>unit_id</code></td><td>string</td><td><code>text</code></td><td><span class="tag fk">FK</span> → <code>units.id</code></td><td>No</td><td></td></tr>
-        <tr><td><code>landlord_id</code></td><td>string</td><td><code>text</code></td><td><span class="tag fk">FK</span> → <code>landlords.id</code></td><td>No</td><td>Denormalized: also reachable through <code>unit → property → landlord</code>.</td></tr>
+        <tr><td><code>property_id</code></td><td>string</td><td><code>text</code></td><td><span class="tag fk">FK</span> → <code>properties.id</code></td><td>No</td><td></td></tr>
+        <tr><td><code>landlord_id</code></td><td>string</td><td><code>text</code></td><td><span class="tag fk">FK</span> → <code>landlords.id</code></td><td>No</td><td>Denormalized: also reachable through <code>property → landlord</code>.</td></tr>
         <tr><td><code>tenant_id</code></td><td>string</td><td><code>text</code></td><td><span class="tag fk">FK</span> → <code>tenants.id</code></td><td>No</td><td></td></tr>
         <tr><td><code>start_date</code></td><td>string</td><td><code>date</code></td><td></td><td>No</td><td><code>YYYY-MM-DD</code>.</td></tr>
         <tr><td><code>end_date</code></td><td>string</td><td><code>date</code></td><td></td><td>No</td><td><code>YYYY-MM-DD</code>, after <code>start_date</code>.</td></tr>
-        <tr><td><code>monthly_rent_cents</code></td><td>number</td><td><code>integer</code></td><td></td><td>No</td><td>The agreed rent. Can differ from the unit's <code>asking_rent_cents</code>.</td></tr>
+        <tr><td><code>monthly_rent_cents</code></td><td>number</td><td><code>integer</code></td><td></td><td>No</td><td>The agreed rent. Can differ from the property's <code>asking_rent_cents</code>.</td></tr>
         <tr><td><code>deposit_cents</code></td><td>number</td><td><code>integer</code></td><td></td><td>No</td><td>1× or 2× monthly rent in the mocks.</td></tr>
         <tr><td><code>currency</code></td><td>string</td><td><code>char(3)</code></td><td></td><td>No</td><td>ISO 4217, <code>SGD</code> today.</td></tr>
         <tr><td><code>due_day</code></td><td>number</td><td><code>smallint</code></td><td></td><td>No</td><td>Day of the month rent is due (1 or 5 in the mocks).</td></tr>
@@ -329,8 +322,7 @@
       <thead><tr><th>From</th><th>To</th><th>Cardinality</th><th>Joined on</th><th>Enforced by</th></tr></thead>
       <tbody>
         <tr><td><code>landlords</code></td><td><code>properties</code></td><td>1 → 0..N</td><td><code>properties.landlord_id = landlords.id</code></td><td>Convention only</td></tr>
-        <tr><td><code>properties</code></td><td><code>units</code></td><td>1 → 0..N</td><td><code>units.property_id = properties.id</code></td><td>The <code>/listings</code> handler joins on it</td></tr>
-        <tr><td><code>units</code></td><td><code>leases</code></td><td>1 → 0..N</td><td><code>leases.unit_id = units.id</code></td><td>Convention only</td></tr>
+        <tr><td><code>properties</code></td><td><code>leases</code></td><td>1 → 0..N</td><td><code>leases.property_id = properties.id</code></td><td>Convention only</td></tr>
         <tr><td><code>tenants</code></td><td><code>leases</code></td><td>1 → 0..N</td><td><code>leases.tenant_id = tenants.id</code></td><td>Convention only</td></tr>
         <tr><td><code>landlords</code></td><td><code>leases</code></td><td>1 → 0..N</td><td><code>leases.landlord_id = landlords.id</code></td><td>Convention only (denormalized)</td></tr>
         <tr><td><code>regions</code></td><td><code>cities</code></td><td>1 → 0..N</td><td><code>cities.region = regions.region</code></td><td>The <code>/cities</code> handler filters on it</td></tr>
@@ -340,13 +332,13 @@
         <tr><td>role</td><td><code>menus</code></td><td>1 → N</td><td><code>menus.roleId = &lt;user&gt;.default_role</code></td><td>The <code>/menus</code> handler filters on it</td></tr>
       </tbody>
     </table></div>
-    <p>In plain terms: a <b>landlord</b> owns <b>properties</b>. Each property has <b>units</b>. A <b>lease</b> ties one unit to one <b>tenant</b> for a date range at an agreed rent. Properties are placed by <b>region</b> and <b>city</b> and classified by <b>property type</b>.</p>
-    <p>The lease data is consistent with unit status today: <code>un-001</code> and <code>un-003</code> are <code>occupied</code> with an <code>active</code> lease, and <code>un-005</code> is <code>vacant</code> with only a <code>draft</code> lease.</p>
+    <p>In plain terms: a <b>landlord</b> owns <b>properties</b>, and each property is one rentable unit. A <b>lease</b> ties one property to one <b>tenant</b> for a date range at an agreed rent. Properties are placed by <b>region</b> and <b>city</b> and classified by <b>property type</b>.</p>
+    <p>The lease data is consistent with property status today: <code>pr-001</code> and <code>pr-003</code> are <code>occupied</code> with an <code>active</code> lease, and <code>pr-005</code> is <code>vacant</code> with only a <code>draft</code> lease.</p>
 
     <h2 id="conventions">Conventions</h2>
     <ul>
-      <li><b>IDs</b> are strings with a type prefix and a zero-padded number: <code>ll-</code>, <code>tn-</code>, <code>pr-</code>, <code>un-</code>, <code>ls-</code>. Users created at runtime use <code>Date.now()</code> instead of a padded number.</li>
-      <li><b>Money</b> is an integer in minor units (cents), with a <code>_cents</code> suffix. Only <code>leases</code> stores a <code>currency</code>. Units are implicitly SGD.</li>
+      <li><b>IDs</b> are strings with a type prefix and a zero-padded number: <code>ll-</code>, <code>tn-</code>, <code>pr-</code>, <code>ls-</code>. Users created at runtime use <code>Date.now()</code> instead of a padded number.</li>
+      <li><b>Money</b> is an integer in minor units (cents), with a <code>_cents</code> suffix. Only <code>leases</code> stores a <code>currency</code>. Properties are implicitly SGD.</li>
       <li><b>Timestamps</b> are ISO 8601 strings in UTC (<code>created_at</code>). <b>Dates</b> without a time are <code>YYYY-MM-DD</code> (<code>start_date</code>, <code>end_date</code>).</li>
       <li><b>Files</b> are stored as relative storage paths in <code>*_paths</code> arrays, never as URLs.</li>
       <li><b>Column names</b> are <code>snake_case</code>, except <code>menus.roleId</code>.</li>
@@ -359,8 +351,7 @@
       <tbody>
         <tr><td><code>landlords</code></td><td style="text-align:right">2</td><td>Hand-written</td></tr>
         <tr><td><code>tenants</code></td><td style="text-align:right">3</td><td>Hand-written</td></tr>
-        <tr><td><code>properties</code></td><td style="text-align:right">203</td><td>3 hand-written + 10 per city × 20 cities</td></tr>
-        <tr><td><code>units</code></td><td style="text-align:right">3,045</td><td>Every property topped up to 15 units</td></tr>
+        <tr><td><code>properties</code></td><td style="text-align:right">3,006</td><td>6 hand-written + 10 buildings per city × 15 units × 20 cities</td></tr>
         <tr><td><code>leases</code></td><td style="text-align:right">3</td><td>Hand-written</td></tr>
         <tr><td><code>regions</code></td><td style="text-align:right">9</td><td>Hand-written</td></tr>
         <tr><td><code>cities</code></td><td style="text-align:right">20</td><td>Hand-written</td></tr>
@@ -374,17 +365,17 @@
       <li><b>Landlords and tenants are separate tables with the same shape.</b> One person can't be both, and the role is baked into the id prefix. A single <code>users</code> table with a role column (or a <code>user_roles</code> join table) would fix that.</li>
       <li><b>Location and type are stored as names, not keys.</b> <code>properties.city</code>, <code>region</code> and <code>property_type</code> are free text. Renaming a city would orphan its properties.</li>
       <li><b><code>properties.region</code> duplicates <code>cities.region</code>.</b> Nothing stops a property from having a region that doesn't match its city.</li>
-      <li><b><code>leases.landlord_id</code> duplicates <code>unit → property → landlord_id</code>.</b> It can drift if a property changes owner.</li>
-      <li><b><code>type</code> and <code>property_type</code> overlap.</b> <code>Landed</code> appears in both. <code>type</code> is never used by the search.</li>
-      <li><b>Bedroom/bathroom filters are exact matches.</b> <code>api-contracts.md</code> says <code>bed</code> and <code>bath</code> are minimums, but <code>handlers.js</code> compares with <code>==</code>.</li>
-      <li><b>Nothing ties <code>units.status</code> to leases.</b> A unit could be <code>vacant</code> while it has an <code>active</code> lease. A rule is also needed for at most one active lease per unit at a time.</li>
-      <li><b>Missing audit columns.</b> <code>units</code> has no <code>created_at</code>, and no table has <code>updated_at</code>.</li>
-      <li><b>Status values aren't constrained.</b> <code>units.status</code> and <code>leases.status</code> are open strings. Lease statuses such as <code>ended</code> or <code>terminated</code> don't exist yet.</li>
+      <li><b><code>leases.landlord_id</code> duplicates <code>property → landlord_id</code>.</b> It can drift if a property changes owner.</li>
+      <li><b>Building details repeat on every unit.</b> <code>name</code>, <code>address</code>, <code>postal_code</code>, <code>region</code> and <code>city</code> are copied onto each row in a building, so renaming a condo means updating every row. Group by <code>postal_code</code> to find a building's units. If building-level data (facilities, management contacts) is needed later, a small <code>buildings</code> lookup can come back as an optional FK.</li>
+      <li><b>Nothing ties <code>properties.status</code> to leases.</b> A property could be <code>vacant</code> while it has an <code>active</code> lease. A rule is also needed for at most one active lease per property at a time.</li>
+      <li><b>Missing audit columns.</b> No table has <code>updated_at</code>.</li>
+      <li><b>Status values aren't constrained.</b> <code>properties.status</code> and <code>leases.status</code> are open strings. Lease statuses such as <code>ended</code> or <code>terminated</code> don't exist yet.</li>
       <li><b>Passwords are stored in plain text</b> in the signup mock. A real backend must hash them and keep them out of every response.</li>
     </ol>
+    <p>Resolved by the 2026-11-19 flattening: the unused <code>type</code> column (it overlapped <code>property_type</code>) was dropped, and the <code>bed</code>/<code>bath</code> filters now compare with <code>&gt;=</code> as documented.</p>
 
     <h2 id="ddl">Suggested DDL (PostgreSQL)</h2>
-    <p>A starting point that follows the current shape and fixes issues 1–3 and 7–9. It is a proposal, not something the code uses yet.</p>
+    <p>A starting point that follows the current shape and fixes issues 1–3 and 6–8. It is a proposal, not something the code uses yet.</p>
 <pre><code>CREATE EXTENSION IF NOT EXISTS citext;
 
 CREATE TABLE users (
@@ -414,22 +405,14 @@ CREATE TABLE property_types (
 );
 
 CREATE TABLE properties (
-  id             text PRIMARY KEY,
-  landlord_id    text NOT NULL REFERENCES users (id),
-  name           text NOT NULL,
-  address        text NOT NULL,
-  postal_code    char(6) NOT NULL CHECK (postal_code ~ '^[0-9]{6}$'),
-  city           text NOT NULL REFERENCES cities (city) ON UPDATE CASCADE,  -- region comes from cities
-  type           text NOT NULL,
-  property_type  text NOT NULL REFERENCES property_types (type) ON UPDATE CASCADE,
-  created_at     timestamptz NOT NULL DEFAULT now(),
-  updated_at     timestamptz NOT NULL DEFAULT now()
-);
-
-CREATE TABLE units (
   id                 text PRIMARY KEY,
-  property_id        text NOT NULL REFERENCES properties (id) ON DELETE CASCADE,
-  unit_number        text NOT NULL,
+  landlord_id        text NOT NULL REFERENCES users (id),
+  name               text NOT NULL,
+  unit_number        text,                  -- null for a whole house
+  address            text NOT NULL,
+  postal_code        char(6) NOT NULL CHECK (postal_code ~ '^[0-9]{6}$'),
+  city               text NOT NULL REFERENCES cities (city) ON UPDATE CASCADE,  -- region comes from cities
+  property_type      text NOT NULL REFERENCES property_types (type) ON UPDATE CASCADE,
   bedrooms           smallint NOT NULL CHECK (bedrooms &gt;= 0),
   bathrooms          smallint NOT NULL CHECK (bathrooms &gt;= 0),
   area_sqft          integer NOT NULL CHECK (area_sqft &gt; 0),
@@ -437,13 +420,15 @@ CREATE TABLE units (
   status             text NOT NULL CHECK (status IN ('vacant', 'occupied', 'unavailable')),
   photo_paths        text[] NOT NULL DEFAULT '{}',
   created_at         timestamptz NOT NULL DEFAULT now(),
-  updated_at         timestamptz NOT NULL DEFAULT now(),
-  UNIQUE (property_id, unit_number)
+  updated_at         timestamptz NOT NULL DEFAULT now()
 );
+
+-- one row per unit in a building; NULLS NOT DISTINCT stops two whole-house rows at one postal code
+CREATE UNIQUE INDEX properties_building_unit_idx ON properties (postal_code, unit_number) NULLS NOT DISTINCT;
 
 CREATE TABLE leases (
   id                  text PRIMARY KEY,
-  unit_id             text NOT NULL REFERENCES units (id),
+  property_id         text NOT NULL REFERENCES properties (id),
   landlord_id         text NOT NULL REFERENCES users (id),
   tenant_id           text NOT NULL REFERENCES users (id),
   start_date          date NOT NULL,
@@ -458,8 +443,8 @@ CREATE TABLE leases (
   updated_at          timestamptz NOT NULL DEFAULT now()
 );
 
--- at most one active lease per unit
-CREATE UNIQUE INDEX leases_one_active_per_unit ON leases (unit_id) WHERE status = 'active';
+-- at most one active lease per property
+CREATE UNIQUE INDEX leases_one_active_per_property ON leases (property_id) WHERE status = 'active';
 
 CREATE TABLE menus (
   role_id  text NOT NULL CHECK (role_id IN ('landlord', 'tenant')),
@@ -472,7 +457,8 @@ CREATE TABLE menus (
 
 CREATE INDEX properties_landlord_idx ON properties (landlord_id);
 CREATE INDEX properties_city_type_idx ON properties (city, property_type);
-CREATE INDEX units_property_idx ON units (property_id);
+CREATE INDEX properties_beds_baths_idx ON properties (bedrooms, bathrooms);
+CREATE INDEX leases_property_idx ON leases (property_id);
 CREATE INDEX leases_tenant_idx ON leases (tenant_id);
 CREATE INDEX leases_landlord_idx ON leases (landlord_id);</code></pre>
   </main>
@@ -505,18 +491,16 @@ CREATE INDEX leases_landlord_idx ON leases (landlord_id);</code></pre>
       ['id', 'text', 'PK'], ['email', 'citext', 'UK'], ['full_name', 'text', ''], ['phone', 'text?', ''],
       ['avatar_url', 'text?', ''], ['default_role', 'text', ''], ['auth_provider', 'text', ''], ['created_at', 'timestamptz', '']] },
     properties:     { x: 380, y: 270, w: 300, cols: [
-      ['id', 'text', 'PK'], ['landlord_id', 'text', 'FK'], ['name', 'text', ''], ['address', 'text', ''],
-      ['postal_code', 'char(6)', ''], ['region', 'text', ''], ['city', 'text', ''], ['type', 'text', ''],
-      ['property_type', 'text', ''], ['created_at', 'timestamptz', '']] },
-    units:          { x: 760, y: 270, w: 300, cols: [
-      ['id', 'text', 'PK'], ['property_id', 'text', 'FK'], ['unit_number', 'text', ''], ['bedrooms', 'smallint', ''],
-      ['bathrooms', 'smallint', ''], ['area_sqft', 'integer', ''], ['asking_rent_cents', 'integer', ''],
-      ['status', 'text', ''], ['photo_paths', 'text[]', '']] },
-    tenants:        { x: 40,  y: 620, w: 260, cols: [
+      ['id', 'text', 'PK'], ['landlord_id', 'text', 'FK'], ['name', 'text', ''], ['unit_number', 'text?', ''],
+      ['address', 'text', ''], ['postal_code', 'char(6)', ''], ['region', 'text', ''], ['city', 'text', ''],
+      ['property_type', 'text', ''], ['bedrooms', 'smallint', ''], ['bathrooms', 'smallint', ''],
+      ['area_sqft', 'integer', ''], ['asking_rent_cents', 'integer', ''], ['status', 'text', ''],
+      ['photo_paths', 'text[]', ''], ['created_at', 'timestamptz', '']] },
+    tenants:        { x: 40,  y: 700, w: 260, cols: [
       ['id', 'text', 'PK'], ['email', 'citext', 'UK'], ['full_name', 'text', ''], ['phone', 'text?', ''],
       ['avatar_url', 'text?', ''], ['default_role', 'text', ''], ['auth_provider', 'text', ''], ['created_at', 'timestamptz', '']] },
-    leases:         { x: 380, y: 620, w: 300, cols: [
-      ['id', 'text', 'PK'], ['unit_id', 'text', 'FK'], ['landlord_id', 'text', 'FK'], ['tenant_id', 'text', 'FK'],
+    leases:         { x: 380, y: 700, w: 300, cols: [
+      ['id', 'text', 'PK'], ['property_id', 'text', 'FK'], ['landlord_id', 'text', 'FK'], ['tenant_id', 'text', 'FK'],
       ['start_date', 'date', ''], ['end_date', 'date', ''], ['monthly_rent_cents', 'integer', ''],
       ['deposit_cents', 'integer', ''], ['currency', 'char(3)', ''], ['due_day', 'smallint', ''],
       ['status', 'text', ''], ['document_paths', 'text[]', ''], ['created_at', 'timestamptz', '']] }
@@ -544,14 +528,12 @@ CREATE INDEX leases_landlord_idx ON leases (landlord_id);</code></pre>
       label: 'contains', at: [290, 96] },
     { pts: [[right(T.landlords), rowY('landlords', 'id')], [340, rowY('landlords', 'id')], [340, rowY('properties', 'landlord_id')], [T.properties.x, rowY('properties', 'landlord_id')]],
       label: 'owns', at: [340, 326] },
-    { pts: [[right(T.properties), rowY('properties', 'id')], [720, rowY('properties', 'id')], [720, rowY('units', 'property_id')], [T.units.x, rowY('units', 'property_id')]],
-      label: 'contains', at: [720, 326] },
-    { pts: [[910, bottom(T.units)], [910, rowY('leases', 'unit_id')], [right(T.leases), rowY('leases', 'unit_id')]],
-      label: 'leased through', at: [910, 560] },
-    { pts: [[170, bottom(T.landlords)], [170, 560], [350, 560], [350, rowY('leases', 'landlord_id')], [T.leases.x, rowY('leases', 'landlord_id')]],
-      label: 'issues (denormalized)', at: [260, 552] },
+    { pts: [[right(T.properties), rowY('properties', 'id')], [720, rowY('properties', 'id')], [720, rowY('leases', 'property_id')], [right(T.leases), rowY('leases', 'property_id')]],
+      label: 'leased through', at: [720, 500] },
+    { pts: [[170, bottom(T.landlords)], [170, 680], [350, 680], [350, rowY('leases', 'landlord_id')], [T.leases.x, rowY('leases', 'landlord_id')]],
+      label: 'issues (denormalized)', at: [260, 672] },
     { pts: [[right(T.tenants), rowY('tenants', 'id')], [325, rowY('tenants', 'id')], [325, rowY('leases', 'tenant_id')], [T.leases.x, rowY('leases', 'tenant_id')]],
-      label: 'signs', at: [325, 698] },
+      label: 'signs', at: [325, 778] },
     { byValue: true, pts: [[150, bottom(T.regions)], [150, 230], [420, 230], [420, T.properties.y]],
       label: 'region', at: [230, 222] },
     { byValue: true, pts: [[540, bottom(T.cities)], [540, T.properties.y]],

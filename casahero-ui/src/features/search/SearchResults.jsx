@@ -3,7 +3,7 @@ import { useListings } from '../../hooks/useListings';
 import AppContext from '../../context/AppContext';
 import ListingCard from './ListingCard';
 
-// one card per unit, with its property's details attached
+// one card per property; each property is a single rentable unit
 const SearchResults = ({ filters, onEditSearch }) => {
   const listings = useListings(filters);
   const { userContext } = useContext(AppContext);
@@ -28,9 +28,7 @@ const SearchResults = ({ filters, onEditSearch }) => {
     );
   }
 
-  const results = listings.data.flatMap((property) =>
-    property.units.map((unit) => ({ unit, property })),
-  );
+  const results = listings.data;
   if (results.length === 0) {
     return (
       <div className="search-message">
@@ -48,8 +46,8 @@ const SearchResults = ({ filters, onEditSearch }) => {
       </p>
       {/* isPlaceholderData: these are the previous search's results while the new ones load */}
       <div className={`results-grid${listings.isPlaceholderData ? ' results-grid-updating' : ''}`}>
-        {results.map(({ unit, property }) => (
-          <ListingCard key={unit.id} unit={unit} property={property} loggedIn={loggedIn} />
+        {results.map((listing) => (
+          <ListingCard key={listing.id} listing={listing} loggedIn={loggedIn} />
         ))}
       </div>
     </>

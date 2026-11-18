@@ -56,59 +56,52 @@ export const tenants = [
   },
 ];
 // Hand-written records; leases point at these. seedListings() adds the rest.
+// Each row is one rentable unit; rows in the same building share name/address/postal_code.
+const tampines = {
+  landlord_id: 'll-001',
+  name: 'Tampines Central Flat',
+  address: 'Blk 821 Tampines Street 81',
+  postal_code: '520821',
+  region: 'East',
+  city: 'Tampines',
+  property_type: 'HDB',
+  created_at: '2026-01-06T09:00:00Z',
+};
+const sail = {
+  landlord_id: 'll-001',
+  name: 'The Sail Condo',
+  address: '2 Marina Boulevard',
+  postal_code: '018987',
+  region: 'Central',
+  city: 'Downtown Core',
+  property_type: 'Condo',
+  created_at: '2026-01-20T09:00:00Z',
+};
+const serangoon = {
+  landlord_id: 'll-002',
+  name: 'Serangoon Gardens House',
+  address: '15 Kensington Park Road',
+  postal_code: '557264',
+  region: 'North-East',
+  city: 'Serangoon',
+  property_type: 'Landed',
+  created_at: '2026-02-12T09:00:00Z',
+};
 const baseProperties = [
   {
+    ...tampines,
     id: 'pr-001',
-    landlord_id: 'll-001',
-    name: 'Tampines Central Flat',
-    address: 'Blk 821 Tampines Street 81',
-    postal_code: '520821',
-    region: 'East',
-    type:'Residential',
-    city: 'Tampines',
-    property_type: 'HDB',
-    created_at: '2026-01-06T09:00:00Z',
-  },
-  {
-    id: 'pr-002',
-    landlord_id: 'll-001',
-    name: 'The Sail Condo',
-    address: '2 Marina Boulevard',
-    postal_code: '018987',
-    type:'Residential',
-    region: 'Central',
-    city: 'Downtown Core',
-    property_type: 'Condo',
-    created_at: '2026-01-20T09:00:00Z',
-  },
-  {
-    id: 'pr-003',
-    landlord_id: 'll-002',
-    name: 'Serangoon Gardens House',
-    address: '15 Kensington Park Road',
-    postal_code: '557264',
-    type:'Landed',
-    region: 'North-East',
-    city: 'Serangoon',
-    property_type: 'Landed',
-    created_at: '2026-02-12T09:00:00Z',
-  },
-];
-const baseUnits = [
-  {
-    id: 'un-001',
-    property_id: 'pr-001',
     unit_number: '#08-112',
     bedrooms: 3,
     bathrooms: 2,
     area_sqft: 1001,
     asking_rent_cents: 320000,
     status: 'occupied',
-    photo_paths: ['units/un-001/living.jpg'],
+    photo_paths: ['properties/pr-001/living.jpg'],
   },
   {
-    id: 'un-002',
-    property_id: 'pr-001',
+    ...tampines,
+    id: 'pr-002',
     unit_number: '#11-115',
     bedrooms: 2,
     bathrooms: 1,
@@ -118,19 +111,19 @@ const baseUnits = [
     photo_paths: [],
   },
   {
-    id: 'un-003',
-    property_id: 'pr-002',
+    ...sail,
+    id: 'pr-003',
     unit_number: '#32-05',
     bedrooms: 2,
     bathrooms: 2,
     area_sqft: 990,
     asking_rent_cents: 650000,
     status: 'occupied',
-    photo_paths: ['units/un-003/view.jpg', 'units/un-003/kitchen.jpg'],
+    photo_paths: ['properties/pr-003/view.jpg', 'properties/pr-003/kitchen.jpg'],
   },
   {
-    id: 'un-004',
-    property_id: 'pr-002',
+    ...sail,
+    id: 'pr-004',
     unit_number: '#45-01',
     bedrooms: 3,
     bathrooms: 3,
@@ -140,19 +133,19 @@ const baseUnits = [
     photo_paths: [],
   },
   {
-    id: 'un-005',
-    property_id: 'pr-003',
+    ...serangoon,
+    id: 'pr-005',
     unit_number: 'Main house',
     bedrooms: 4,
     bathrooms: 3,
     area_sqft: 2800,
     asking_rent_cents: 880000,
     status: 'vacant',
-    photo_paths: ['units/un-005/front.jpg'],
+    photo_paths: ['properties/pr-005/front.jpg'],
   },
   {
-    id: 'un-006',
-    property_id: 'pr-003',
+    ...serangoon,
+    id: 'pr-006',
     unit_number: 'Annex room',
     bedrooms: 1,
     bathrooms: 1,
@@ -186,17 +179,13 @@ export const cities = [
   { region: 'Central', city: 'Queenstown' },
 ];
 
-// 10 made-up properties per city, 15 units per property (see seedListings.js)
-export const { properties, units } = seedListings({
-  cities,
-  properties: baseProperties,
-  units: baseUnits,
-});
+// 10 made-up buildings per city, 15 rentable properties per building (see seedListings.js)
+export const properties = seedListings({ cities, properties: baseProperties });
 
 export const leases = [
   {
     id: 'ls-001',
-    unit_id: 'un-001',
+    property_id: 'pr-001',
     landlord_id: 'll-001',
     tenant_id: 'tn-001',
     start_date: '2026-04-01',
@@ -211,7 +200,7 @@ export const leases = [
   },
   {
     id: 'ls-002',
-    unit_id: 'un-003',
+    property_id: 'pr-003',
     landlord_id: 'll-001',
     tenant_id: 'tn-002',
     start_date: '2026-05-01',
@@ -226,7 +215,7 @@ export const leases = [
   },
   {
     id: 'ls-003',
-    unit_id: 'un-005',
+    property_id: 'pr-005',
     landlord_id: 'll-002',
     tenant_id: 'tn-003',
     start_date: '2026-11-01',

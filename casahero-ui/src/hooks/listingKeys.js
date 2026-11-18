@@ -5,7 +5,6 @@ export const listingKeys = {
     listByType:()=>[...listingKeys.all,'by-type'],
     listByRegion:()=>[...listingKeys.all, 'by-region'],
     listByCity:()=>[...listingKeys.all,'by-city'],
-    listByPropperty:()=>[...listingKeys.all,'by-property'],
     listByLandlord:()=>[...listingKeys.all,'by-landlord'],
     listByTenant:()=>[...listingKeys.all,'by-tenant'],
     listRegions:()=>[...listingKeys.all,'list-regions'],

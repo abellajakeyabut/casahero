@@ -1,6 +1,6 @@
 # Search Results View — Ideas
 
-The SearchBar is shown in two places: the **Landing** page and the signed-in **Listings** page (`Listings.jsx`). Search returns **units** (bedrooms, bathrooms, sqft, rent, photos), and each unit belongs to a **property** (name, city, region, HDB/Condo/Landed). So each result is one unit with its property details attached.
+The SearchBar is shown in two places: the **Landing** page and the signed-in **Listings** page (`Listings.jsx`). Search returns **properties**, and each property is one rentable unit: name, unit number, city, region, HDB/Condo/Landed, bedrooms, bathrooms, sqft, rent and photos all sit on one flat row. So each result is one property.
 
 ## 1. Structure: one public results page
 
@@ -38,7 +38,7 @@ The filters live in the **URL**, which gives shareable links, a working back but
 - **A. Card grid (the safe default):** 3–4 columns of photo cards. Good for the landing page, where the photo sells the place.
 - **B. Compact list rows:** small thumbnail, name, unit number, beds/baths/sqft, and rent on the right. Faster to scan, which suits the signed-in Listings page.
 - **C. Split view with a map:** list on the left, map on the right, with pins grouped by city. Region/city/postal code already exist, so geocoding by postal code is enough. This looks impressive but is the most work, so save it for v2.
-- **D. Grouped by property:** one card per building, like "The Sail Condo, 3 units available from S$4,200", which expands to show the units. This fits the data model, where one property has many units.
+- **D. Grouped by property:** one card per building, like "The Sail Condo, 3 units available from S$4,200", which expands to show the units. Since the 2026-11-19 flattening there's no building table, so this would group rows by `postal_code` (or `name` + `address`).
 
 **Chosen: A, the card grid**, on `/search` for everyone. A grid/list toggle (B), the map (C) and grouping by property (D) are for later.
 
@@ -86,7 +86,7 @@ The filters live in the **URL**, which gives shareable links, a working back but
 
 - `Landing.jsx` and `Listings.jsx` (formerly `Dashboard.jsx`) now pass `onSearch` to `<SearchBar />`, which routes to `/search` with the filters in the URL. The results live in `features/search/` (`SearchResultsPage`, `SearchResults`, `ListingCard`).
 - `getListings` now sends `{ type, region, city, bed, bath }`, matching what `SearchBar` produces. `useListings(filters)` keys the query on the filters and stays idle until the first search.
-- The mock handler filters `type` against `property_type`, treats `bed`/`bath` as minimums on units, and no longer defaults `city` to Tampines. `db.js` now uses `'Landed'` (capitalised) to match `/types`.
+- The mock handler filters `type` against `property_type`, treats `bed`/`bath` as minimums, and no longer defaults `city` to Tampines. `db.js` now uses `'Landed'` (capitalised) to match `/types`.
 
 ## Next
 

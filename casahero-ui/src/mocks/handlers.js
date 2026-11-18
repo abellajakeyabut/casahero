@@ -1,5 +1,5 @@
 import { http, HttpResponse, delay } from 'msw';
-import { landlords, tenants, leases, properties, units ,regions,cities,propertyTypes,menus} from './db';
+import { landlords, tenants, leases, properties, regions, cities, propertyTypes, menus } from './db';
 
 const PROVIDERS = ['google', 'facebook'];
 
@@ -136,25 +136,22 @@ export const handlers = [
     await delay(1000);
 
     let body = {}
-    try{
+    try {
       body = await request.json();
-    }catch{
-  
+    } catch {
+      // no body means no filters
     }
     const { city = '', region = '', type = '', bed, bath } = body ?? {}
-    // bed/bath are minimums; a property only matches if one of its units does
-    const unitMatches = (unit) =>
-      (bed == null || unit.bedrooms == bed) && (bath == null || unit.bathrooms == bath)
-    let props = properties.map((data) => { return { ...data, units: units.filter((unit) => unit.property_id == data.id && unitMatches(unit)) } })
-
-    if(city) props = props.filter((p)=>p.city==city)
-    if(region) props = props.filter((p)=>p.region==region)
+    // each property is one rentable unit, so this is a plain filter; bed/bath are minimums
+    let rows = properties;
+    if (city) rows = rows.filter((p) => p.city === city);
+    if (region) rows = rows.filter((p) => p.region === region);
     // the SearchBar sends HDB/Condo/Landed as `type`; that lives in property_type
-    if(type) props = props.filter((p)=>p.property_type==type)
-    // p.units is an array (already narrowed by unitMatches), so drop properties with no matching unit
-    if(bed != null || bath != null) props = props.filter((p)=>p.units.length > 0)
+    if (type) rows = rows.filter((p) => p.property_type === type);
+    if (bed != null) rows = rows.filter((p) => p.bedrooms >= Number(bed));
+    if (bath != null) rows = rows.filter((p) => p.bathrooms >= Number(bath));
 
-    return HttpResponse.json(props);
+    return HttpResponse.json(rows);
   }),
   http.post('*/casahero-api/regions',async()=>{
     await delay(2000);

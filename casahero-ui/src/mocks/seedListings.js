@@ -1,9 +1,10 @@
-// Generates made-up listings for the mocks: PROPERTIES_PER_CITY properties in every city,
-// each topped up to UNITS_PER_PROPERTY units. Streets and postal sectors are real Singapore
+// Generates made-up listings for the mocks: BUILDINGS_PER_CITY buildings in every city, each
+// with UNITS_PER_BUILDING rentable properties. Each property is one flat row (one rentable unit);
+// rows in the same building share its name, address and postal code. Streets and postal sectors are real Singapore
 // ones; names, blocks, rents and sizes are invented. A fixed seed keeps ids and data
 // identical on every reload.
-const PROPERTIES_PER_CITY = 10;
-const UNITS_PER_PROPERTY = 15;
+const BUILDINGS_PER_CITY = 10;
+const UNITS_PER_BUILDING = 15;
 const LANDLORD_IDS = ['ll-001', 'll-002'];
 
 // postal: first two digits (postal sector) of the area's postal codes
@@ -32,7 +33,7 @@ export const AREAS = {
 
 // the mix of property types per city; the CBD has no HDB blocks or landed estates
 const TYPE_MIX = ['HDB', 'HDB', 'HDB', 'HDB', 'HDB', 'Condo', 'Condo', 'Condo', 'Landed', 'Landed'];
-const CBD_TYPE_MIX = Array(PROPERTIES_PER_CITY).fill('Condo');
+const CBD_TYPE_MIX = Array(BUILDINGS_PER_CITY).fill('Condo');
 
 const HDB_NAMES = ['Court', 'Green', 'Vista', 'Heights', 'Grove', 'Spring', 'Crest', 'Meadow', 'Breeze', 'Residences'];
 const CONDO_NAMES = ['Parc', 'The Botanica', 'Lakeview', 'The Signature', 'Skyline', 'Residences', 'The Orchid', 'Waterfront', 'Regency', 'Luxe'];
@@ -62,7 +63,8 @@ const propertyName = (type, city, street, i) => {
   return `${street} Estate`;
 };
 
-const makeProperty = ({ id, city, region, type, index }) => {
+// the fields every unit in one building shares
+const makeBuilding = ({ city, region, type, index }) => {
   const area = AREAS[city];
   const street = pick(area.streets);
   // HDB postal codes end in the block number, e.g. Blk 821 -> 520821
@@ -70,22 +72,21 @@ const makeProperty = ({ id, city, region, type, index }) => {
   const houseNo = between(1, 120);
   const created = `2026-${pad(between(1, 9), 2)}-${pad(between(1, 28), 2)}T09:00:00Z`;
   return {
-    id,
     landlord_id: LANDLORD_IDS[index % LANDLORD_IDS.length],
     name: propertyName(type, city, street, index),
     address: type === 'HDB' ? `Blk ${block} ${street}` : `${houseNo} ${street}`,
     postal_code: `${area.postal}${pad(type === 'HDB' ? block : between(1000, 9999), 4)}`,
     region,
-    type: type === 'Landed' ? 'Landed' : 'Residential',
     city,
     property_type: type,
     created_at: created,
   };
 };
 
-// i is the unit's position in its property; it keeps unit numbers unique within the property
-const makeUnit = ({ id, property, i, cbd }) => {
-  const spec = UNIT_SPECS[property.property_type];
+// one rentable property: the building's shared fields plus this unit's details.
+// i is the unit's position in its building; it keeps unit numbers unique within the building
+const makeProperty = ({ id, building, i, cbd }) => {
+  const spec = UNIT_SPECS[building.property_type];
   const bedrooms = between(...spec.bedrooms);
   const bathrooms = Math.max(1, bedrooms - between(0, 1));
   const [minRent, maxRent] = spec.rent;
@@ -95,11 +96,11 @@ const makeUnit = ({ id, property, i, cbd }) => {
   const roll = random();
   return {
     id,
-    property_id: property.id,
+    ...building,
     unit_number:
-      property.property_type === 'Landed'
+      building.property_type === 'Landed'
         ? `No. ${i * 2 + 1}`
-        : `#${pad(2 + i * 2 + between(0, 1), 2)}-${pad(between(1, 8) + (property.property_type === 'HDB' ? 300 : 0), 2)}`,
+        : `#${pad(2 + i * 2 + between(0, 1), 2)}-${pad(between(1, 8) + (building.property_type === 'HDB' ? 300 : 0), 2)}`,
     bedrooms,
     bathrooms,
     area_sqft: bedrooms * between(...spec.sqftPerBed),
@@ -109,30 +110,21 @@ const makeUnit = ({ id, property, i, cbd }) => {
   };
 };
 
-// Returns the hand-written properties plus generated ones, and every property's units
-// topped up to UNITS_PER_PROPERTY (hand-written units are kept as they are).
-export const seedListings = ({ cities, properties, units }) => {
-  const allProperties = [...properties];
-  const allUnits = [...units];
-  let nextProperty = properties.length + 1;
-  let nextUnit = units.length + 1;
+// Returns the hand-written properties plus generated ones, as one flat array.
+export const seedListings = ({ cities, properties }) => {
+  const all = [...properties];
+  let next = properties.length + 1;
 
   cities.forEach(({ region, city }) => {
-    const mix = AREAS[city]?.cbd ? CBD_TYPE_MIX : TYPE_MIX;
-    for (let index = 0; index < PROPERTIES_PER_CITY; index++) {
-      allProperties.push(
-        makeProperty({ id: `pr-${pad(nextProperty++, 3)}`, city, region, type: mix[index], index }),
-      );
+    const cbd = !!AREAS[city]?.cbd;
+    const mix = cbd ? CBD_TYPE_MIX : TYPE_MIX;
+    for (let index = 0; index < BUILDINGS_PER_CITY; index++) {
+      const building = makeBuilding({ city, region, type: mix[index], index });
+      for (let i = 0; i < UNITS_PER_BUILDING; i++) {
+        all.push(makeProperty({ id: `pr-${pad(next++, 3)}`, building, i, cbd }));
+      }
     }
   });
 
-  allProperties.forEach((property) => {
-    const cbd = !!AREAS[property.city]?.cbd;
-    const existing = units.filter((u) => u.property_id === property.id).length;
-    for (let i = existing; i < UNITS_PER_PROPERTY; i++) {
-      allUnits.push(makeUnit({ id: `un-${pad(nextUnit++, 3)}`, property, i, cbd }));
-    }
-  });
-
-  return { properties: allProperties, units: allUnits };
+  return all;
 };

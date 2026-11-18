@@ -1,26 +1,42 @@
 import "./PropertyForm.css";
 import { useEffect, useState } from "react";
-
+import Spinner from "../../../shared/Spinner";
 const MAX_PHOTOS = 10;
 const MAX_PHOTO_BYTES = 5 * 1024 * 1024; // 5 MB
-import { useCities, useRegions } from "../../../hooks/useListings";
+import { useCities, useRegions, useTypes } from "../../../hooks/useListings";
 
-const PropertyForm = ({ show, onClose }) => {
+const STATUSES = [
+    { value: "vacant", label: "Available" },
+    { value: "occupied", label: "Occupied" },
+    { value: "unavailable", label: "Unavailable" },
+];
+
+// one property = one rentable unit, so the form captures every column of a properties row
+const PropertyForm = ({ show, onClose, onSubmit }) => {
     const regions = useRegions();
+    const types = useTypes();
     const filters = { region: '', cities: '' }
     const [formSelect, setFormSelect] = useState(filters);
 
     const cityList = useCities(formSelect.region);
 
 
+    // keys match the properties columns; asking_rent is in S$ here and converted to cents on submit
     const [formData, setFormData] = useState({
-        propertyType: '',
+        name: '',
+        unit_number: '',
+        address: '',
+        postal_code: '',
+        property_type: '',
         region: '',
         city: '',
-        bed: '',
-        bath: '',
-        propertyName: ''
+        bedrooms: '',
+        bathrooms: '',
+        area_sqft: '',
+        asking_rent: '',
+        status: 'vacant',
     });
+    const setField = (key) => (e) => setFormData({ ...formData, [key]: e.target.value });
     // each photo: { id, file, url } — url is a local preview from createObjectURL
     const [photos, setPhotos] = useState([]);
     const [photoError, setPhotoError] = useState('');
@@ -57,7 +73,18 @@ const PropertyForm = ({ show, onClose }) => {
     };
 
     const handleSubmit = (e) => {
-        e.preventDefuault();
+        e.preventDefault();
+        const { asking_rent, ...fields } = formData;
+        // there's no create endpoint yet; the parent decides what to do with the row
+        onSubmit?.({
+            ...fields,
+            unit_number: fields.unit_number.trim() || null,
+            bedrooms: Number(fields.bedrooms),
+            bathrooms: Number(fields.bathrooms),
+            area_sqft: Number(fields.area_sqft),
+            asking_rent_cents: Math.round(Number(asking_rent) * 100),
+            photos: photos.map((p) => p.file),
+        });
     }
     const selectRegion = (regionValue) => {
         setFormSelect({ ...formSelect, region: regionValue })
@@ -68,33 +95,46 @@ const PropertyForm = ({ show, onClose }) => {
     return (
         show ? <div className="modal-overlay" onClick={onClose}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                <Spinner show={cityList.isFetching || regions.isFetching } />
                 <form onSubmit={handleSubmit}>
-                    <button className="modal-close" onClick={onClose}>
+                    <button type="button" className="modal-close" onClick={onClose}>
                         X
                     </button>
                     <p>Fill in the details of your property</p>
                     <hr />
                     <div className="modal-header">
-                        <h2>{formData.propertyName}</h2>
+                        <h2>{[formData.name, formData.unit_number].filter(Boolean).join(' ')}</h2>
 
                     </div>
                     <div className="modal-body">
                         <div className="form-row">
-                            <label for="name">Property Name : </label>
-                            <input required type="text" placeholder="Name" value={formData.propertyName} onChange={(e) => setFormData({ ...formData, propertyName: e.target.value })} />
+                            <label htmlFor="name">Property Name : </label>
+                            <input required id="name" type="text" placeholder="e.g. Parc @ Bishan" value={formData.name} onChange={setField('name')} />
                         </div>
                         <div className="form-row">
-                            <label for="type">Property Type : </label>
-                            <select value={formData.propertyType} onChange={(e) => setFormData({ ...formData, propertyType: e.target.value })}>
+                            <label htmlFor="unit_number">Unit No. : </label>
+                            <input id="unit_number" type="text" placeholder="e.g. #08-112 (optional)" value={formData.unit_number} onChange={setField('unit_number')} />
+                        </div>
+                        <div className="form-row">
+                            <label htmlFor="address">Address : </label>
+                            <input required id="address" type="text" placeholder="e.g. Blk 821 Tampines Street 81" value={formData.address} onChange={setField('address')} />
+                        </div>
+                        <div className="form-row">
+                            <label htmlFor="postal_code">Postal Code : </label>
+                            <input required id="postal_code" type="text" inputMode="numeric" pattern="[0-9]{6}" title="6 digits" placeholder="520821" value={formData.postal_code} onChange={setField('postal_code')} />
+                        </div>
+                        <div className="form-row">
+                            <label htmlFor="type">Property Type : </label>
+                            <select required id="type" value={formData.property_type} onChange={setField('property_type')} disabled={types.isPending}>
                                 <option value="">Select Type</option>
-                                <option value="apartment">Apartment</option>
-                                <option value="house">House</option>
-                                <option value="condo">Condo</option>
+                                {types.data?.map(({ type }) => (
+                                    <option key={type} value={type}>{type}</option>
+                                ))}
                             </select>
 
                         </div>
                         <div className="form-row">
-                            <label for="region">Region: </label>
+                            <label htmlFor="region">Region: </label>
                             <select
                                 required
                                 id="region"
@@ -111,14 +151,14 @@ const PropertyForm = ({ show, onClose }) => {
 
                         </div>
                         <div className="form-row">
-                            <label for="City">City: </label>
+                            <label htmlFor="city">City: </label>
                             <select
                                 required
                                 id="city"
                                 value={formData.city}
                                 // a new region invalidates the chosen city
-                                onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                                disabled={regions.isPending}
+                                onChange={setField('city')}
+                                disabled={!formData.region || cityList.isPending}
                             >
                                 <option value="">Select City...</option>
                                 {cityList?.data?.map(({ city }) => (
@@ -128,10 +168,26 @@ const PropertyForm = ({ show, onClose }) => {
 
                         </div>
                         <div className="form-row">
-                            <label for="beds">Beds : </label>
-                            <input type="number" id="beds" placeholder="Beds"></input>
-                            <label for="baths">Baths : </label>
-                            <input type="number" id="baths" placeholder="Baths"></input>
+                            <label htmlFor="beds">Beds : </label>
+                            <input required type="number" id="beds" min="0" step="1" placeholder="Beds" value={formData.bedrooms} onChange={setField('bedrooms')} />
+                            <label htmlFor="baths">Baths : </label>
+                            <input required type="number" id="baths" min="0" step="1" placeholder="Baths" value={formData.bathrooms} onChange={setField('bathrooms')} />
+                        </div>
+                        <div className="form-row">
+                            <label htmlFor="area">Size (sqft) : </label>
+                            <input required type="number" id="area" min="1" step="1" placeholder="e.g. 1001" value={formData.area_sqft} onChange={setField('area_sqft')} />
+                        </div>
+                        <div className="form-row">
+                            <label htmlFor="rent">Asking Rent (S$/mo) : </label>
+                            <input required type="number" id="rent" min="0" step="50" placeholder="e.g. 3200" value={formData.asking_rent} onChange={setField('asking_rent')} />
+                        </div>
+                        <div className="form-row">
+                            <label htmlFor="status">Status : </label>
+                            <select id="status" value={formData.status} onChange={setField('status')}>
+                                {STATUSES.map(({ value, label }) => (
+                                    <option key={value} value={value}>{label}</option>
+                                ))}
+                            </select>
                         </div>
                         <div className="form-row form-row--top">
                             <label htmlFor="photos">Photos : </label>
