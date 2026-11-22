@@ -8,6 +8,7 @@ import LandlordHome from '../dashboard/LandlordHome';
 import SearchBar from '../search/SearchBar';
 import { toSearchUrl } from '../search/searchParams';
 import './Landlord.css';
+import LandlordHomeProvider from './LandlordHomeProvider';
 
 const Landlord = () => {
   const { userContext } = useContext(AppContext);
@@ -28,7 +29,7 @@ const Landlord = () => {
       <TopBanner></TopBanner>
       <Sidebar role={role} activeKey={activeItem.key} onSelect={setActiveKey} />
       <main className="landlord-main">
-        {activeItem.key === 'home' && <LandlordHome />}
+        {activeItem.key === 'home' && <LandlordHomeProvider><LandlordHome/></LandlordHomeProvider>}
         {activeItem.key === 'Search' && (
           <SearchBar onSearch={(filters) => navigate(toSearchUrl(filters))} />
         )}

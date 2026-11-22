@@ -19,6 +19,10 @@ const withoutPassword = (user) => {
   delete copy.password;
   return copy;
 };
+const findPropertiesByLandLordId=(landlord_id)=>{
+  const filtered = properties.find((prop)=>prop.landlord_id==landlord_id);
+  return filtered;
+}
 
 const fakeUser = ({ email, role = 'tenant', provider = 'email', full_name }) => ({
   id: `${role === 'landlord' ? 'll' : 'tn'}-${Date.now()}`,
@@ -47,6 +51,12 @@ export const handlers = [
   // '*' matches any origin, so this works whether VITE_API_URL is absolute or relative
   http.get('*/casahero-api/test', () => {
     return HttpResponse.json({ id: 1, message: 'hello bandit' });
+  }),
+  http.post('*/casahero-api/listingsByLandlord',async({request})=>{
+    const {landlord_id} = await request.json();
+    let landlordProperties = findPropertiesByLandLordId(landlord_id);
+
+    return HttpResponse.json(landlordProperties);
   }),
   http.get('*/casahero-api/landlords', () => {
     return HttpResponse.json(landlords);

@@ -56,9 +56,7 @@ const App = () => {
               <Route path="*" element={<UnderConstruction />} />
             </Route>
           ))}
-          <Route key="landlord-addproperty" path="/landlord/addproperty" element={<SafeRoute role={"landlord"}>
-            <PropertyForm />
-          </SafeRoute>} />
+
 
           {/* where Login lands: send logged-in users to their role's home */}
           <Route

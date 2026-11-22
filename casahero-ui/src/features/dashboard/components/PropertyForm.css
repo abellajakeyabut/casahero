@@ -775,3 +775,10 @@ form button{
   line-height: 1;
 }
 .photo-upload__remove:hover { background: var(--ch-primary); }
+.modal-splitter{
+  display:flex;
+  flex-direction: row;
+  gap:10px;
+  
+
+}

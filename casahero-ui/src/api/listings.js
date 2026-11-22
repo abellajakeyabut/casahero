@@ -21,3 +21,7 @@ export const getTypes=async()=>{
     return response.data;
     
 }
+export const getPropertiesByLandlordId=async(landlord_id)=>{
+    const response = await api.post('/listingsByLandlord',{landlord_id:landlord_id});
+    return response.data
+}
