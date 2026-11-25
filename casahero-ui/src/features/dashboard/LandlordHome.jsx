@@ -19,7 +19,7 @@ const LandlordHome = () => {
   const [showForm, setShowForm] = useState(false);
   const onClose = () => setShowForm(false);
   const {landlordProperties,updateLandlordProperties} = useContext(LandlordHomeContext)
-  alert(landlordProperties.length)
+  
   return (
     <section className="landlord-home">
       <div className="landlord-home-row-title">

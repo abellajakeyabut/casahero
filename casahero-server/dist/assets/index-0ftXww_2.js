@@ -1,11 +1,11 @@
-//#region \0rolldown/runtime.js
+// \0rolldown/runtime.js
 var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __commonJSMin = (cb, mod) => () => (mod || (cb((mod = { exports: {} }).exports, mod), cb = null), mod.exports);
+var __commonJSMin = (cb, mod) => () => (mod || (cb((mod = { exports: {} }).exports, mod, mod.exports), cb = null), mod.exports);
 var __exportAll = (all, no_symbols) => {
 	let target = {};
 	for (var name in all) __defProp(target, name, {
@@ -29,8 +29,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 	value: mod,
 	enumerable: true
 }) : target, mod));
-//#endregion
-//#region \0vite/modulepreload-polyfill.js
+// \0vite/modulepreload-polyfill.js
 (function polyfill() {
 	const relList = document.createElement("link").relList;
 	if (relList && relList.supports && relList.supports("modulepreload")) return;
@@ -60,8 +59,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 		fetch(link.href, fetchOpts);
 	}
 })();
-//#endregion
-//#region node_modules/react/cjs/react.production.js
+// node_modules/react/cjs/react.production.js
 /**
 * @license React
 * react.production.js
@@ -447,13 +445,11 @@ var require_react_production = /* @__PURE__ */ __commonJSMin(((exports) => {
 	};
 	exports.version = "19.3.0";
 }));
-//#endregion
-//#region node_modules/react/index.js
+// node_modules/react/index.js
 var require_react = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = require_react_production();
 }));
-//#endregion
-//#region node_modules/scheduler/cjs/scheduler.production.js
+// node_modules/scheduler/cjs/scheduler.production.js
 /**
 * @license React
 * scheduler.production.js
@@ -707,13 +703,11 @@ var require_scheduler_production = /* @__PURE__ */ __commonJSMin(((exports) => {
 		};
 	};
 }));
-//#endregion
-//#region node_modules/scheduler/index.js
+// node_modules/scheduler/index.js
 var require_scheduler = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = require_scheduler_production();
 }));
-//#endregion
-//#region node_modules/react-dom/cjs/react-dom.production.js
+// node_modules/react-dom/cjs/react-dom.production.js
 /**
 * @license React
 * react-dom.production.js
@@ -865,8 +859,7 @@ var require_react_dom_production = /* @__PURE__ */ __commonJSMin(((exports) => {
 	};
 	exports.version = "19.3.0";
 }));
-//#endregion
-//#region node_modules/react-dom/index.js
+// node_modules/react-dom/index.js
 var require_react_dom = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function checkDCE() {
 		if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ === "undefined" || typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE !== "function") return;
@@ -879,8 +872,7 @@ var require_react_dom = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	checkDCE();
 	module.exports = require_react_dom_production();
 }));
-//#endregion
-//#region node_modules/react-dom/cjs/react-dom-client.production.js
+// node_modules/react-dom/cjs/react-dom-client.production.js
 /**
 * @license React
 * react-dom-client.production.js
@@ -11454,8 +11446,7 @@ var require_react_dom_client_production = /* @__PURE__ */ __commonJSMin(((export
 		return new ReactDOMRoot(options);
 	};
 }));
-//#endregion
-//#region node_modules/react-dom/client.js
+// node_modules/react-dom/client.js
 var require_client = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function checkDCE() {
 		if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ === "undefined" || typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE !== "function") return;
@@ -11468,79 +11459,10 @@ var require_client = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	checkDCE();
 	module.exports = require_react_dom_client_production();
 }));
-//#endregion
-//#region src/index.css
+// src/index.css
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 var import_client = require_client();
-//#endregion
-//#region \0vite/preload-helper.js
-var scriptRel = "modulepreload";
-var assetsURL = function(dep) {
-	return "/" + dep;
-};
-var seen = {};
-var __vitePreload = function preload(baseModule, deps, importerUrl) {
-	let promise = Promise.resolve();
-	if (deps && deps.length > 0) {
-		const links = document.getElementsByTagName("link");
-		const cspNonceMeta = document.querySelector("meta[property=csp-nonce]");
-		const cspNonce = cspNonceMeta?.nonce || cspNonceMeta?.getAttribute("nonce");
-		function allSettled(promises) {
-			return Promise.all(promises.map((p) => Promise.resolve(p).then((value) => ({
-				status: "fulfilled",
-				value
-			}), (reason) => ({
-				status: "rejected",
-				reason
-			}))));
-		}
-		function importMetaResolve(specifier) {
-			if (import.meta.resolve) return import.meta.resolve(specifier);
-			return new URL(
-				specifier,
-				/** #__KEEP__ */
-				import.meta.url
-			).href;
-		}
-		promise = allSettled(deps.map((dep) => {
-			dep = assetsURL(dep, importerUrl);
-			dep = importMetaResolve(dep);
-			if (dep in seen) return;
-			seen[dep] = true;
-			const isCss = dep.endsWith(".css");
-			for (let i = links.length - 1; i >= 0; i--) {
-				const link = links[i];
-				if (link.href === dep && (!isCss || link.rel === "stylesheet")) return;
-			}
-			const link = document.createElement("link");
-			link.rel = isCss ? "stylesheet" : scriptRel;
-			if (!isCss) link.as = "script";
-			link.crossOrigin = "";
-			link.href = dep;
-			if (cspNonce) link.setAttribute("nonce", cspNonce);
-			document.head.appendChild(link);
-			if (isCss) return new Promise((res, rej) => {
-				link.addEventListener("load", res);
-				link.addEventListener("error", () => rej(/* @__PURE__ */ new Error(`Unable to preload CSS for ${dep}`)));
-			});
-		}).filter((p) => p !== void 0));
-	}
-	function handlePreloadError(err) {
-		const e = new Event("vite:preloadError", { cancelable: true });
-		e.payload = err;
-		window.dispatchEvent(e);
-		if (!e.defaultPrevented) throw err;
-	}
-	return promise.then((res) => {
-		for (const item of res || []) {
-			if (item.status !== "rejected") continue;
-			handlePreloadError(item.reason);
-		}
-		return baseModule().catch(handlePreloadError);
-	});
-};
-//#endregion
-//#region node_modules/react-router/dist/development/chunk-OB3PAWPO.mjs
+// node_modules/react-router/dist/development/chunk-OB3PAWPO.mjs
 /**
 * react-router v7.18.4
 *
@@ -12223,7 +12145,11 @@ function useNavigateUnstable() {
 		dataRouterContext
 	]);
 }
-import_react.createContext(null);
+var OutletContext = import_react.createContext(null);
+function useOutlet(context) {
+	let outlet = import_react.useContext(RouteContext).outlet;
+	return import_react.useMemo(() => outlet && /* @__PURE__ */ import_react.createElement(OutletContext.Provider, { value: context }, outlet), [outlet, context]);
+}
 function useResolvedPath(to, { relative } = {}) {
 	let { matches } = import_react.useContext(RouteContext);
 	let { pathname: locationPathname } = useLocation();
@@ -12557,6 +12483,34 @@ function DataRoutes2({ routes, manifest, future, state, isStatic, onError }) {
 		future
 	});
 }
+function Navigate({ to, replace: replace2, state, relative }) {
+	invariant(useInRouterContext(), `<Navigate> may be used only in the context of a <Router> component.`);
+	let { static: isStatic, navigator } = import_react.useContext(NavigationContext);
+	warning(!isStatic, `<Navigate> must not be used on the initial render in a <StaticRouter>. This is a no-op, but you should modify your code so the <Navigate> is only ever rendered in response to some user interaction or state change.`);
+	let { matches } = import_react.useContext(RouteContext);
+	let { pathname: locationPathname } = useLocation();
+	let navigate = useNavigate();
+	let path = resolveTo(to, getResolveToMatches(matches), locationPathname, relative === "path");
+	validateNavigationTarget(typeof to === "string" ? to : createPath(to), navigator.createHref(path), getNavigatorCurrentUrl(navigator), "reject");
+	let jsonPath = JSON.stringify(path);
+	import_react.useEffect(() => {
+		navigate(JSON.parse(jsonPath), {
+			replace: replace2,
+			state,
+			relative
+		});
+	}, [
+		navigate,
+		jsonPath,
+		relative,
+		replace2,
+		state
+	]);
+	return null;
+}
+function Outlet(props) {
+	return useOutlet(props.context);
+}
 function Route(props) {
 	invariant(false, `A <Route> is only ever to be used as the child of <Routes> element, never rendered directly. Please wrap your <Route> in a <Routes>.`);
 }
@@ -12667,6 +12621,21 @@ function isModifiedEvent(event) {
 function shouldProcessLinkClick(event, target) {
 	return event.button === 0 && (!target || target === "_self") && !isModifiedEvent(event);
 }
+function createSearchParams(init = "") {
+	return new URLSearchParams(typeof init === "string" || Array.isArray(init) || init instanceof URLSearchParams ? init : Object.keys(init).reduce((memo2, key) => {
+		let value = init[key];
+		return memo2.concat(Array.isArray(value) ? value.map((v) => [key, v]) : [[key, value]]);
+	}, []));
+}
+function getSearchParamsForLocation(locationSearch, defaultSearchParams) {
+	let searchParams = createSearchParams(locationSearch);
+	if (defaultSearchParams) defaultSearchParams.forEach((_, key) => {
+		if (!searchParams.has(key)) defaultSearchParams.getAll(key).forEach((value) => {
+			searchParams.append(key, value);
+		});
+	});
+	return searchParams;
+}
 var _formDataSupportsSubmitter = null;
 function isFormDataSubmitterSupported() {
 	if (_formDataSupportsSubmitter === null) try {
@@ -12764,11 +12733,11 @@ function singleFetchUrl(reqUrl, basename, trailingSlashAware, extension) {
 async function loadRouteModule(route, routeModulesCache) {
 	if (route.id in routeModulesCache) return routeModulesCache[route.id];
 	try {
-		let routeModule = await __vitePreload(() => import(
+		let routeModule = await import(
 			/* @vite-ignore */
 			/* webpackIgnore: true */
 			route.module
-), []);
+);
 		routeModulesCache[route.id] = routeModule;
 		return routeModule;
 	} catch (error) {
@@ -13352,6 +13321,19 @@ function useLinkClickHandler(to, { target, replace: replaceProp, mask, state, pr
 		useTransitions
 	]);
 }
+function useSearchParams(defaultInit) {
+	warning(typeof URLSearchParams !== "undefined", `You cannot use the \`useSearchParams\` hook in a browser that does not support the URLSearchParams API. If you need to support Internet Explorer 11, we recommend you load a polyfill such as https://github.com/ungap/url-search-params.`);
+	let defaultSearchParamsRef = import_react.useRef(createSearchParams(defaultInit));
+	let hasSetSearchParamsRef = import_react.useRef(false);
+	let location = useLocation();
+	let searchParams = import_react.useMemo(() => getSearchParamsForLocation(location.search, hasSetSearchParamsRef.current ? null : defaultSearchParamsRef.current), [location.search]);
+	let navigate = useNavigate();
+	return [searchParams, import_react.useCallback((nextInit, navigateOptions) => {
+		const newSearchParams = createSearchParams(typeof nextInit === "function" ? nextInit(new URLSearchParams(searchParams)) : nextInit);
+		hasSetSearchParamsRef.current = true;
+		navigate("?" + newSearchParams, navigateOptions);
+	}, [navigate, searchParams])];
+}
 var fetcherId = 0;
 var getUniqueFetcherId = () => `__${String(++fetcherId)}__`;
 function useSubmit() {
@@ -13522,113 +13504,11 @@ function useViewTransitionState(to, { relative } = {}) {
 	let nextPath = stripBasename(vtContext.nextLocation.pathname, basename) || vtContext.nextLocation.pathname;
 	return matchPath(path.pathname, nextPath) != null || matchPath(path.pathname, currentPath) != null;
 }
-//#endregion
-//#region src/context/AppContext.jsx
+// src/context/AppContext.jsx
 var AppContext = (0, import_react.createContext)();
-//#endregion
-//#region node_modules/react/cjs/react-jsx-runtime.production.js
-/**
-* @license React
-* react-jsx-runtime.production.js
-*
-* Copyright (c) Meta Platforms, Inc. and affiliates.
-*
-* This source code is licensed under the MIT license found in the
-* LICENSE file in the root directory of this source tree.
-*/
-var require_react_jsx_runtime_production = /* @__PURE__ */ __commonJSMin(((exports) => {
-	var REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element");
-	var REACT_FRAGMENT_TYPE = Symbol.for("react.fragment");
-	function jsxProd(type, config, maybeKey) {
-		var key = null;
-		void 0 !== maybeKey && (key = "" + maybeKey);
-		void 0 !== config.key && (key = "" + config.key);
-		if ("key" in config) {
-			maybeKey = {};
-			for (var propName in config) "key" !== propName && (maybeKey[propName] = config[propName]);
-		} else maybeKey = config;
-		config = maybeKey.ref;
-		return {
-			$$typeof: REACT_ELEMENT_TYPE,
-			type,
-			key,
-			ref: void 0 !== config ? config : null,
-			props: maybeKey
-		};
-	}
-	exports.Fragment = REACT_FRAGMENT_TYPE;
-	exports.jsx = jsxProd;
-	exports.jsxs = jsxProd;
-}));
-//#endregion
-//#region src/authentication/RolePick.jsx
-var import_jsx_runtime = (/* @__PURE__ */ __commonJSMin(((exports, module) => {
-	module.exports = require_react_jsx_runtime_production();
-})))();
-var RolePick = () => {
-	const { updateUserContext, userContext } = (0, import_react.useContext)(AppContext);
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		style: {
-			display: "flex",
-			marginBottom: "20px"
-		},
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
-			style: {
-				flex: 1,
-				padding: "12px",
-				textAlign: "center",
-				cursor: "pointer",
-				background: userContext?.role === "tenant" ? "#006d5b" : "#f0f0f0",
-				color: userContext?.role === "tenant" ? "#fff" : "#333",
-				borderRadius: "6px 0 0 6px"
-			},
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-				type: "radio",
-				name: "role",
-				value: "tenant",
-				checked: userContext?.role === "tenant",
-				onChange: () => updateUserContext({
-					...userContext,
-					role: "tenant"
-				}),
-				style: { display: "none" }
-			}), "Tenant"]
-		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
-			style: {
-				flex: 1,
-				padding: "12px",
-				textAlign: "center",
-				cursor: "pointer",
-				background: userContext?.role === "landlord" ? "#006d5b" : "#f0f0f0",
-				color: userContext?.role === "landlord" ? "#fff" : "#333",
-				borderRadius: "0 6px 6px 0"
-			},
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-				type: "radio",
-				className: "login-button-landlord",
-				name: "role",
-				value: "landlord",
-				checked: userContext?.role === "landlord",
-				onChange: () => updateUserContext({
-					...userContext,
-					role: "landlord"
-				}),
-				style: userContext?.role == "tenant" ? {
-					display: "none",
-					backgroundColor: "#006d5b"
-				} : {
-					display: "none",
-					backgroundColor: "#f86bad"
-				}
-			}), "Landlord"]
-		})]
-	}) });
-};
-//#endregion
-//#region src/authentication/AuthContext.jsx
+// src/features/authentication/AuthContext.jsx
 var AuthContext = (0, import_react.createContext)();
-//#endregion
-//#region node_modules/axios/lib/helpers/bind.js
+// node_modules/axios/lib/helpers/bind.js
 /**
 * Create a bound version of a function with a specified `this` context
 *
@@ -13641,8 +13521,7 @@ function bind(fn, thisArg) {
 		return fn.apply(thisArg, arguments);
 	};
 }
-//#endregion
-//#region node_modules/axios/lib/utils.js
+// node_modules/axios/lib/utils.js
 var { toString } = Object.prototype;
 var { getPrototypeOf } = Object;
 var { iterator, toStringTag } = Symbol;
@@ -13858,7 +13737,7 @@ var isBoolean = (thing) => thing === true || thing === false;
 *
 * @returns {boolean} True if value is a plain Object, otherwise false
 */
-var isPlainObject = (val) => {
+var isPlainObject$1 = (val) => {
 	if (!isObject(val)) return false;
 	const prototype = getPrototypeOf(val);
 	return (prototype === null || prototype === Object.prototype || getPrototypeOf(prototype) === null) && !hasOwnInPrototypeChain(val, toStringTag) && !hasOwnInPrototypeChain(val, iterator);
@@ -14074,8 +13953,8 @@ function merge(...objs) {
 		if (key === "__proto__" || key === "constructor" || key === "prototype") return;
 		const targetKey = caseless && typeof key === "string" && findKey(result, key) || key;
 		const existing = hasOwnProperty(result, targetKey) ? result[targetKey] : void 0;
-		if (isPlainObject(existing) && isPlainObject(val)) result[targetKey] = merge(existing, val);
-		else if (isPlainObject(val)) result[targetKey] = merge({}, val);
+		if (isPlainObject$1(existing) && isPlainObject$1(val)) result[targetKey] = merge(existing, val);
+		else if (isPlainObject$1(val)) result[targetKey] = merge({}, val);
 		else if (isArray(val)) result[targetKey] = val.slice();
 		else if (!skipUndefined || !isUndefined(val)) result[targetKey] = val;
 	};
@@ -14327,7 +14206,7 @@ var toObjectSet = (arrayOrString, delimiter) => {
 	isArray(arrayOrString) ? define(arrayOrString) : define(String(arrayOrString).split(delimiter));
 	return obj;
 };
-var noop = () => {};
+var noop$1 = () => {};
 var toFiniteNumber = (value, defaultValue) => {
 	return value != null && Number.isFinite(value = +value) ? value : defaultValue;
 };
@@ -14441,7 +14320,7 @@ var utils_default = {
 	isNumber,
 	isBoolean,
 	isObject,
-	isPlainObject,
+	isPlainObject: isPlainObject$1,
 	isEmptyObject,
 	isReadableStream,
 	isRequest,
@@ -14482,7 +14361,7 @@ var utils_default = {
 	freezeMethods,
 	toObjectSet,
 	toCamelCase,
-	noop,
+	noop: noop$1,
 	toFiniteNumber,
 	findKey,
 	global: _global,
@@ -14496,8 +14375,7 @@ var utils_default = {
 	isIterable,
 	isSafeIterable
 };
-//#endregion
-//#region node_modules/axios/lib/helpers/parseHeaders.js
+// node_modules/axios/lib/helpers/parseHeaders.js
 var ignoreDuplicateOf = utils_default.toObjectSet([
 	"age",
 	"authorization",
@@ -14549,8 +14427,7 @@ var parseHeaders_default = (rawHeaders) => {
 	});
 	return parsed;
 };
-//#endregion
-//#region node_modules/axios/lib/helpers/sanitizeHeaderValue.js
+// node_modules/axios/lib/helpers/sanitizeHeaderValue.js
 function trimSPorHTAB(str) {
 	let start = 0;
 	let end = str.length;
@@ -14581,8 +14458,7 @@ function toByteStringHeaderObject(headers) {
 	});
 	return byteStringHeaders;
 }
-//#endregion
-//#region node_modules/axios/lib/core/AxiosHeaders.js
+// node_modules/axios/lib/core/AxiosHeaders.js
 var $internals$1 = Symbol("internals");
 function normalizeHeader(header) {
 	return header && String(header).trim().toLowerCase();
@@ -14854,8 +14730,7 @@ utils_default.reduceDescriptors(AxiosHeaders.prototype, ({ value }, key) => {
 	};
 });
 utils_default.freezeMethods(AxiosHeaders);
-//#endregion
-//#region node_modules/axios/lib/core/AxiosError.js
+// node_modules/axios/lib/core/AxiosError.js
 var REDACTED = "[REDACTED ****]";
 function hasOwnOrPrototypeToJSON(source) {
 	if (utils_default.hasOwnProp(source, "toJSON")) return true;
@@ -15157,8 +15032,7 @@ function toFormData(obj, formData, options) {
 	build(obj);
 	return formData;
 }
-//#endregion
-//#region node_modules/axios/lib/helpers/AxiosURLSearchParams.js
+// node_modules/axios/lib/helpers/AxiosURLSearchParams.js
 /**
 * It encodes a string by replacing all characters that are not in the unreserved set with
 * their percent-encoded equivalents
@@ -15202,8 +15076,7 @@ prototype.toString = function toString(encoder) {
 		return _encode(pair[0]) + "=" + _encode(pair[1]);
 	}, "").join("&");
 };
-//#endregion
-//#region node_modules/axios/lib/helpers/buildURL.js
+// node_modules/axios/lib/helpers/buildURL.js
 /**
 * It replaces URL-encoded forms of `:`, `$`, `,`, and spaces with
 * their plain counterparts (`:`, `$`, `,`, `+`).
@@ -15240,8 +15113,7 @@ function buildURL(url, params, options) {
 	}
 	return url;
 }
-//#endregion
-//#region node_modules/axios/lib/core/InterceptorManager.js
+// node_modules/axios/lib/core/InterceptorManager.js
 var $internals = Symbol("internals");
 function countHandlers(handlers) {
 	return handlers ? handlers.length : 0;
@@ -15362,8 +15234,7 @@ var InterceptorManager = class {
 		}
 	}
 };
-//#endregion
-//#region node_modules/axios/lib/defaults/transitional.js
+// node_modules/axios/lib/defaults/transitional.js
 var transitional_default = {
 	silentJSONParsing: true,
 	forcedJSONParsing: true,
@@ -15372,8 +15243,7 @@ var transitional_default = {
 	advertiseZstdAcceptEncoding: false,
 	validateStatusUndefinedResolves: true
 };
-//#endregion
-//#region node_modules/axios/lib/platform/browser/index.js
+// node_modules/axios/lib/platform/browser/index.js
 var browser_default = {
 	isBrowser: true,
 	classes: {
@@ -15390,8 +15260,7 @@ var browser_default = {
 		"data"
 	]
 };
-//#endregion
-//#region node_modules/axios/lib/platform/common/utils.js
+// node_modules/axios/lib/platform/common/utils.js
 var utils_exports = /* @__PURE__ */ __exportAll({
 	hasBrowserEnv: () => hasBrowserEnv,
 	hasStandardBrowserEnv: () => hasStandardBrowserEnv,
@@ -15436,14 +15305,12 @@ var hasStandardBrowserWebWorkerEnv = (() => {
 	return typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope && typeof self.importScripts === "function";
 })();
 var origin = hasBrowserEnv && window.location.href || "http://localhost";
-//#endregion
-//#region node_modules/axios/lib/platform/index.js
+// node_modules/axios/lib/platform/index.js
 var platform_default = {
 	...utils_exports,
 	...browser_default
 };
-//#endregion
-//#region node_modules/axios/lib/helpers/toURLEncodedForm.js
+// node_modules/axios/lib/helpers/toURLEncodedForm.js
 function toURLEncodedForm(data, options) {
 	return toFormData(data, new platform_default.classes.URLSearchParams(), {
 		visitor: function(value, key, path, helpers) {
@@ -15456,8 +15323,7 @@ function toURLEncodedForm(data, options) {
 		...options
 	});
 }
-//#endregion
-//#region node_modules/axios/lib/helpers/formDataToJSON.js
+// node_modules/axios/lib/helpers/formDataToJSON.js
 var MAX_DEPTH = 100;
 function throwIfDepthExceeded(index) {
 	if (index > MAX_DEPTH) throw new AxiosError("FormData field is too deeply nested (" + index + " levels). Max depth: " + MAX_DEPTH, AxiosError.ERR_FORM_DATA_DEPTH_EXCEEDED);
@@ -15531,8 +15397,7 @@ function formDataToJSON(formData) {
 	}
 	return null;
 }
-//#endregion
-//#region node_modules/axios/lib/core/methodList.js
+// node_modules/axios/lib/core/methodList.js
 var methodList = Object.freeze([
 	"get",
 	"delete",
@@ -15546,8 +15411,7 @@ var methodList = Object.freeze([
 	"unlink",
 	"query"
 ]);
-//#endregion
-//#region node_modules/axios/lib/defaults/index.js
+// node_modules/axios/lib/defaults/index.js
 var own = (obj, key) => obj != null && utils_default.hasOwnProp(obj, key) ? obj[key] : void 0;
 /**
 * It takes a string, tries to parse it, and if it fails, it returns the stringified version
@@ -15646,8 +15510,7 @@ var defaults = {
 utils_default.forEach(methodList, (method) => {
 	defaults.headers[method] = {};
 });
-//#endregion
-//#region node_modules/axios/lib/core/transformData.js
+// node_modules/axios/lib/core/transformData.js
 /**
 * Transform the data for a request or a response
 *
@@ -15667,13 +15530,11 @@ function transformData(fns, response) {
 	headers.normalize();
 	return data;
 }
-//#endregion
-//#region node_modules/axios/lib/cancel/isCancel.js
+// node_modules/axios/lib/cancel/isCancel.js
 function isCancel(value) {
 	return !!(value && value.__CANCEL__);
 }
-//#endregion
-//#region node_modules/axios/lib/cancel/CanceledError.js
+// node_modules/axios/lib/cancel/CanceledError.js
 var CanceledError = class extends AxiosError {
 	/**
 	* A `CanceledError` is an object that is thrown when an operation is canceled.
@@ -15690,8 +15551,7 @@ var CanceledError = class extends AxiosError {
 		this.__CANCEL__ = true;
 	}
 };
-//#endregion
-//#region node_modules/axios/lib/core/settle.js
+// node_modules/axios/lib/core/settle.js
 /**
 * Resolve or reject a Promise based on response status.
 *
@@ -15706,8 +15566,7 @@ function settle(resolve, reject, response) {
 	if (!response.status || !validateStatus || validateStatus(response.status)) resolve(response);
 	else reject(new AxiosError("Request failed with status code " + response.status, response.status >= 400 && response.status < 500 ? AxiosError.ERR_BAD_REQUEST : AxiosError.ERR_BAD_RESPONSE, response.config, response.request, response));
 }
-//#endregion
-//#region node_modules/axios/lib/helpers/normalizeURLForProtocolCheck.js
+// node_modules/axios/lib/helpers/normalizeURLForProtocolCheck.js
 var urlParserControlCharacters = /[\t\n\r]/g;
 /**
 * Match WHATWG URL preprocessing before checking a URL's protocol.
@@ -15722,14 +15581,12 @@ function normalizeURLForProtocolCheck(url) {
 	while (start < url.length && url.charCodeAt(start) <= 32) start++;
 	return url.slice(start).replace(urlParserControlCharacters, "");
 }
-//#endregion
-//#region node_modules/axios/lib/helpers/parseProtocol.js
+// node_modules/axios/lib/helpers/parseProtocol.js
 function parseProtocol(url) {
 	const match = /^([-+\w]{1,25}):(?:\/\/)?/.exec(url);
 	return match && match[1] || "";
 }
-//#endregion
-//#region node_modules/axios/lib/helpers/speedometer.js
+// node_modules/axios/lib/helpers/speedometer.js
 /**
 * Calculate data maxRate
 * @param {Number} [samplesCount= 10]
@@ -15763,8 +15620,7 @@ function speedometer(samplesCount, min) {
 		return passed ? Math.round(bytesCount * 1e3 / passed) : void 0;
 	};
 }
-//#endregion
-//#region node_modules/axios/lib/helpers/throttle.js
+// node_modules/axios/lib/helpers/throttle.js
 /**
 * Throttle decorator
 * @param {Function} fn
@@ -15805,8 +15661,7 @@ function throttle(fn, freq) {
 		flushWith
 	];
 }
-//#endregion
-//#region node_modules/axios/lib/helpers/progressEventReducer.js
+// node_modules/axios/lib/helpers/progressEventReducer.js
 var progressEventReducer = (listener, isDownloadStream, freq = 3) => {
 	let bytesNotified = 0;
 	const _speedometer = speedometer(50, 250);
@@ -15840,14 +15695,12 @@ var progressEventDecorator = (total, throttled) => {
 	}), throttled[1]];
 };
 var asyncDecorator = (fn, scheduler = utils_default.asap) => (...args) => scheduler(() => fn(...args));
-//#endregion
-//#region node_modules/axios/lib/helpers/isURLSameOrigin.js
+// node_modules/axios/lib/helpers/isURLSameOrigin.js
 var isURLSameOrigin_default = platform_default.hasStandardBrowserEnv ? ((origin, isMSIE) => (url) => {
 	url = new URL(url, platform_default.origin);
 	return origin.protocol === url.protocol && origin.host === url.host && (isMSIE || origin.port === url.port);
 })(new URL(platform_default.origin), platform_default.navigator && /(msie|trident)/i.test(platform_default.navigator.userAgent)) : () => true;
-//#endregion
-//#region node_modules/axios/lib/helpers/cookies.js
+// node_modules/axios/lib/helpers/cookies.js
 var cookies_default = platform_default.hasStandardBrowserEnv ? {
 	write(name, value, expires, path, domain, secure, sameSite) {
 		if (typeof document === "undefined") return;
@@ -15883,8 +15736,7 @@ var cookies_default = platform_default.hasStandardBrowserEnv ? {
 	},
 	remove() {}
 };
-//#endregion
-//#region node_modules/axios/lib/helpers/isAbsoluteURL.js
+// node_modules/axios/lib/helpers/isAbsoluteURL.js
 /**
 * Determines whether the specified URL is absolute
 *
@@ -15896,8 +15748,7 @@ function isAbsoluteURL(url) {
 	if (typeof url !== "string") return false;
 	return /^([a-z][a-z\d+\-.]*:)?\/\//i.test(url);
 }
-//#endregion
-//#region node_modules/axios/lib/helpers/combineURLs.js
+// node_modules/axios/lib/helpers/combineURLs.js
 /**
 * Creates a new URL by combining the specified URLs
 *
@@ -15912,8 +15763,7 @@ function combineURLs(baseURL, relativeURL) {
 	while (end > 0 && baseURL.charCodeAt(end - 1) === 47) end--;
 	return baseURL.slice(0, end) + "/" + relativeURL.replace(/^\/+/, "");
 }
-//#endregion
-//#region node_modules/axios/lib/core/buildFullPath.js
+// node_modules/axios/lib/core/buildFullPath.js
 var malformedHttpProtocol = /^https?:(?!\/\/)/i;
 function redactFragment(fragment) {
 	if (!fragment) return fragment;
@@ -15953,8 +15803,7 @@ function buildFullPath(baseURL, requestedURL, allowAbsoluteUrls, config) {
 	}
 	return requestedURL;
 }
-//#endregion
-//#region node_modules/axios/lib/core/mergeConfig.js
+// node_modules/axios/lib/core/mergeConfig.js
 var headersToObject = (thing) => thing instanceof AxiosHeaders ? { ...thing } : thing;
 var ownEnumerableKeys = (thing) => {
 	if (Object.getOwnPropertySymbols && Object.getOwnPropertyDescriptor) return Object.keys(thing).concat(Object.getOwnPropertySymbols(thing).filter((symbol) => Object.getOwnPropertyDescriptor(thing, symbol).enumerable));
@@ -16058,8 +15907,7 @@ function mergeConfig(config1, config2) {
 	}
 	return config;
 }
-//#endregion
-//#region node_modules/axios/lib/core/setFormDataHeaders.js
+// node_modules/axios/lib/core/setFormDataHeaders.js
 var FORM_DATA_CONTENT_HEADERS = ["content-type", "content-length"];
 /**
 * Apply the headers generated by a FormData implementation to the request headers,
@@ -16081,8 +15929,7 @@ function setFormDataHeaders(headers, formHeaders, policy) {
 		if (FORM_DATA_CONTENT_HEADERS.includes(key.toLowerCase())) headers.set(key, val);
 	});
 }
-//#endregion
-//#region node_modules/axios/lib/helpers/resolveConfig.js
+// node_modules/axios/lib/helpers/resolveConfig.js
 /**
 * Encode a UTF-8 string to a Latin-1 byte string for use with btoa().
 * This is a modern replacement for the deprecated unescape(encodeURIComponent(str)) pattern.
@@ -16243,8 +16090,7 @@ var xhr_default = typeof XMLHttpRequest !== "undefined" && function(config) {
 		request.send(requestData || null);
 	});
 };
-//#endregion
-//#region node_modules/axios/lib/helpers/composeSignals.js
+// node_modules/axios/lib/helpers/composeSignals.js
 var composeSignals = (signals, timeout) => {
 	signals = signals ? signals.filter(Boolean) : [];
 	if (!timeout && !signals.length) return;
@@ -16283,8 +16129,7 @@ var composeSignals = (signals, timeout) => {
 	signal.unsubscribe = () => utils_default.asap(unsubscribe);
 	return signal;
 };
-//#endregion
-//#region node_modules/axios/lib/helpers/trackStream.js
+// node_modules/axios/lib/helpers/trackStream.js
 var streamChunk = function* (chunk, chunkSize) {
 	let len = chunk.byteLength;
 	if (!chunkSize || len < chunkSize) {
@@ -16351,8 +16196,7 @@ var trackStream = (stream, chunkSize, onProgress, onFinish) => {
 		}
 	}, { highWaterMark: 2 });
 };
-//#endregion
-//#region node_modules/axios/lib/helpers/estimateDataURLDecodedBytes.js
+// node_modules/axios/lib/helpers/estimateDataURLDecodedBytes.js
 /**
 * Estimate data: URL byte lengths *without* allocating large buffers.
 * - Fetch percent-decodes a base64 body before decoding it.
@@ -16440,11 +16284,9 @@ function estimateDataURLDecodedBytes(url) {
 	const fragmentIndex = typeof url === "string" ? url.indexOf("#") : -1;
 	return estimateDataURLBytes(fragmentIndex === -1 ? url : url.slice(0, fragmentIndex), estimatePercentDecodedBase64Bytes);
 }
-//#endregion
-//#region node_modules/axios/lib/env/data.js
+// node_modules/axios/lib/env/data.js
 var VERSION = "1.20.0";
-//#endregion
-//#region node_modules/axios/lib/adapters/fetch.js
+// node_modules/axios/lib/adapters/fetch.js
 var DEFAULT_CHUNK_SIZE = 65536;
 var DEFAULT_REQUEST_OPTIONS = {
 	cache: "default",
@@ -16764,8 +16606,7 @@ var getFetch = (config) => {
 	return target;
 };
 getFetch();
-//#endregion
-//#region node_modules/axios/lib/adapters/adapters.js
+// node_modules/axios/lib/adapters/adapters.js
 /**
 * Known adapters mapping.
 * Provides environment-specific adapters for Axios:
@@ -16856,8 +16697,7 @@ var adapters_default = {
 	*/
 	adapters: knownAdapters
 };
-//#endregion
-//#region node_modules/axios/lib/core/dispatchRequest.js
+// node_modules/axios/lib/core/dispatchRequest.js
 /**
 * Throws a `CanceledError` if cancellation has been requested.
 *
@@ -16912,8 +16752,7 @@ function dispatchRequest(_config) {
 		return Promise.reject(reason);
 	});
 }
-//#endregion
-//#region node_modules/axios/lib/helpers/validator.js
+// node_modules/axios/lib/helpers/validator.js
 var validators$1 = {};
 [
 	"object",
@@ -16985,8 +16824,7 @@ var validator_default = {
 	assertOptions,
 	validators: validators$1
 };
-//#endregion
-//#region node_modules/axios/lib/core/Axios.js
+// node_modules/axios/lib/core/Axios.js
 var validators = validator_default.validators;
 /**
 * Create a new instance of Axios
@@ -17163,8 +17001,7 @@ utils_default.forEach([
 	Axios.prototype[method] = generateHTTPMethod();
 	if (method !== "query") Axios.prototype[method + "Form"] = generateHTTPMethod(true);
 });
-//#endregion
-//#region node_modules/axios/lib/cancel/CancelToken.js
+// node_modules/axios/lib/cancel/CancelToken.js
 /**
 * A `CancelToken` is an object that can be used to request cancellation of an operation.
 *
@@ -17251,8 +17088,7 @@ var CancelToken = class CancelToken {
 		};
 	}
 };
-//#endregion
-//#region node_modules/axios/lib/helpers/spread.js
+// node_modules/axios/lib/helpers/spread.js
 /**
 * Syntactic sugar for invoking a function and expanding an array for arguments.
 *
@@ -17279,8 +17115,7 @@ function spread(callback) {
 		return callback.apply(null, arr);
 	};
 }
-//#endregion
-//#region node_modules/axios/lib/helpers/isAxiosError.js
+// node_modules/axios/lib/helpers/isAxiosError.js
 /**
 * Determines whether the payload is an error thrown by Axios
 *
@@ -17291,8 +17126,7 @@ function spread(callback) {
 function isAxiosError(payload) {
 	return utils_default.isObject(payload) && payload.isAxiosError === true;
 }
-//#endregion
-//#region node_modules/axios/lib/helpers/HttpStatusCode.js
+// node_modules/axios/lib/helpers/HttpStatusCode.js
 var HttpStatusCode = {
 	Continue: 100,
 	SwitchingProtocols: 101,
@@ -17376,8 +17210,7 @@ var HttpStatusCode = {
 Object.entries(HttpStatusCode).forEach(([key, value]) => {
 	if (HttpStatusCode[value] === void 0) HttpStatusCode[value] = key;
 });
-//#endregion
-//#region node_modules/axios/lib/axios.js
+// node_modules/axios/lib/axios.js
 /**
 * Create an instance of Axios
 *
@@ -17415,15 +17248,23 @@ axios.formToJSON = (thing) => formDataToJSON(utils_default.isHTMLForm(thing) ? n
 axios.getAdapter = adapters_default.getAdapter;
 axios.HttpStatusCode = HttpStatusCode;
 axios.default = axios;
-//#endregion
-//#region src/api/api.js
+// src/api/api.js
 var api = axios.create({
-	baseURL: "http://localhost:3000/casahero-api",
+	baseURL: "http://localhost:5173/casahero-api",
 	timeout: 1e4,
 	headers: { "Content-Type": "application/json" }
 });
-//#endregion
-//#region src/api/auth.js
+api.interceptors.response.use((response) => {
+	const contentType = response.headers["content-type"] ?? "";
+	if (response.status !== 204 && !contentType.includes("application/json")) {
+		const error = /* @__PURE__ */ new Error(`Expected JSON from ${response.config.url}, got "${contentType || "no content type"}"`);
+		error.config = response.config;
+		error.notJson = true;
+		return Promise.reject(error);
+	}
+	return response;
+});
+// src/api/auth.js
 var signup = async (data) => {
 	return (await api.post("/signup", data)).data;
 };
@@ -17433,62 +17274,4226 @@ var login = async (data) => {
 var logout = async (data) => {
 	return (await api.post("/logout", data)).data;
 };
-//#endregion
-//#region src/dashboard/TopBanner.jsx
+var getMe = async (data) => {
+	return (await api.get("/me")).data;
+};
+// node_modules/react/cjs/react-jsx-runtime.production.js
+/**
+* @license React
+* react-jsx-runtime.production.js
+*
+* Copyright (c) Meta Platforms, Inc. and affiliates.
+*
+* This source code is licensed under the MIT license found in the
+* LICENSE file in the root directory of this source tree.
+*/
+var require_react_jsx_runtime_production = /* @__PURE__ */ __commonJSMin(((exports) => {
+	var REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element");
+	var REACT_FRAGMENT_TYPE = Symbol.for("react.fragment");
+	function jsxProd(type, config, maybeKey) {
+		var key = null;
+		void 0 !== maybeKey && (key = "" + maybeKey);
+		void 0 !== config.key && (key = "" + config.key);
+		if ("key" in config) {
+			maybeKey = {};
+			for (var propName in config) "key" !== propName && (maybeKey[propName] = config[propName]);
+		} else maybeKey = config;
+		config = maybeKey.ref;
+		return {
+			$$typeof: REACT_ELEMENT_TYPE,
+			type,
+			key,
+			ref: void 0 !== config ? config : null,
+			props: maybeKey
+		};
+	}
+	exports.Fragment = REACT_FRAGMENT_TYPE;
+	exports.jsx = jsxProd;
+	exports.jsxs = jsxProd;
+}));
+// node_modules/@tanstack/react-query/build/modern/QueryClientProvider.js
+var import_jsx_runtime = (/* @__PURE__ */ __commonJSMin(((exports, module) => {
+	module.exports = require_react_jsx_runtime_production();
+})))();
+/**
+* The context that `useQueryClient` reads from. `QueryClientProvider` is the normal way to set it.
+*/
+var QueryClientContext = import_react.createContext(void 0);
+/**
+* The `useQueryClient` hook returns the current `QueryClient` instance.
+* @param queryClient - Use this to use a custom `QueryClient`. Otherwise, the one from the nearest context will
+* be used.
+* @returns The current `QueryClient` instance.
+* @throws {Error} If no `queryClient` argument is passed and no `QueryClientProvider` is found in the
+* component tree.
+*/
+var useQueryClient = (queryClient) => {
+	const client = import_react.useContext(QueryClientContext);
+	if (queryClient) return queryClient;
+	if (!client) throw new Error("No QueryClient set, use QueryClientProvider to set one");
+	return client;
+};
+/**
+* Use the `QueryClientProvider` component to connect and provide a `QueryClient` to your application. Also
+* calls `client.mount()`/`client.unmount()` as this component mounts/unmounts, which subscribes the client to
+* focus/online events (resuming any paused mutations and refetching as needed when the app regains focus or
+* comes back online).
+* @param props - The `client` to provide, and the `children` that get access to it.
+* @returns The provided `children`, wrapped so they can read the `QueryClient` via `useQueryClient`.
+* @example
+* ```tsx
+* import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+*
+* const queryClient = new QueryClient()
+*
+* function App() {
+*   return <QueryClientProvider client={queryClient}>...</QueryClientProvider>
+* }
+* ```
+*/
+var QueryClientProvider = ({ client, children }) => {
+	import_react.useEffect(() => {
+		client.mount();
+		return () => {
+			client.unmount();
+		};
+	}, [client]);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(QueryClientContext.Provider, {
+		value: client,
+		children
+	});
+};
+// node_modules/@tanstack/query-core/build/modern/timeoutManager.js
+var defaultTimeoutProvider = {
+	setTimeout: (callback, delay) => setTimeout(callback, delay),
+	clearTimeout: (timeoutId) => clearTimeout(timeoutId),
+	setInterval: (callback, delay) => setInterval(callback, delay),
+	clearInterval: (intervalId) => clearInterval(intervalId)
+};
+/**
+* Allows customization of how timeouts are created.
+*
+* `@tanstack/query-core` makes liberal use of timeouts to implement `staleTime`
+* and `gcTime`. The default TimeoutManager provider uses the platform's global
+* `setTimeout` implementation, which is known to have scalability issues with
+* thousands of timeouts on the event loop.
+*
+* If you hit this limitation, consider providing a custom TimeoutProvider that
+* coalesces timeouts.
+*/
+var TimeoutManager = class {
+	#provider = defaultTimeoutProvider;
+	#providerCalled = false;
+	/**
+	* `setTimeoutProvider` can be used to set a custom implementation of the
+	* `setTimeout`, `clearTimeout`, `setInterval`, `clearInterval` functions,
+	* called a `TimeoutProvider`.
+	*
+	* This may be useful if you notice event loop performance issues with
+	* thousands of queries. A custom TimeoutProvider could also support timer
+	* delays longer than the global `setTimeout` maximum delay value of about
+	* 24 days.
+	*
+	* It is important to call `setTimeoutProvider` before creating a
+	* QueryClient or queries, so that the same provider is used consistently
+	* for all timers in the application, since different TimeoutProviders
+	* cannot cancel each others' timers.
+	* @param provider - The `TimeoutProvider` to use for all timers from now on.
+	* @example
+	* ```ts
+	* import { timeoutManager, QueryClient } from '@tanstack/query-core'
+	* import { CustomTimeoutProvider } from './CustomTimeoutProvider'
+	*
+	* timeoutManager.setTimeoutProvider(new CustomTimeoutProvider())
+	*
+	* export const queryClient = new QueryClient()
+	* ```
+	*/
+	setTimeoutProvider(provider) {
+		this.#provider = provider;
+	}
+	/**
+	* `setTimeout` schedules a callback to run after approximately `delay`
+	* milliseconds, like the global `setTimeout` function. The callback can be
+	* canceled with `clearTimeout`.
+	*
+	* It returns a timer ID, which may be a number or an object that can be
+	* coerced to a number via `Symbol.toPrimitive`.
+	* @param callback - The function to call when the timeout elapses.
+	* @param delay - The time to wait before calling `callback`, in milliseconds.
+	* @returns The timer ID, to pass to {@link TimeoutManager#clearTimeout}.
+	* @example
+	* ```ts
+	* import { timeoutManager } from '@tanstack/query-core'
+	*
+	* const timeoutId = timeoutManager.setTimeout(
+	*   () => console.log('ran at:', new Date()),
+	*   1000,
+	* )
+	*
+	* const timeoutIdNumber: number = Number(timeoutId)
+	* ```
+	*/
+	setTimeout(callback, delay) {
+		return this.#provider.setTimeout(callback, delay);
+	}
+	/**
+	* `clearTimeout` cancels a timeout callback scheduled with `setTimeout`,
+	* like the global `clearTimeout` function. It should be called with a
+	* timer ID returned by `setTimeout`.
+	* @param timeoutId - The timer ID returned by `setTimeout`, or `undefined`.
+	* @example
+	* ```ts
+	* import { timeoutManager } from '@tanstack/query-core'
+	*
+	* const timeoutId = timeoutManager.setTimeout(
+	*   () => console.log('ran at:', new Date()),
+	*   1000,
+	* )
+	*
+	* timeoutManager.clearTimeout(timeoutId)
+	* ```
+	*/
+	clearTimeout(timeoutId) {
+		this.#provider.clearTimeout(timeoutId);
+	}
+	/**
+	* `setInterval` schedules a callback to be called approximately every
+	* `delay` milliseconds, like the global `setInterval` function.
+	*
+	* Like `setTimeout`, it returns a timer ID, which may be a number or an
+	* object that can be coerced to a number via `Symbol.toPrimitive`.
+	* @param callback - The function to call on every interval.
+	* @param delay - The time between calls, in milliseconds.
+	* @returns The timer ID, to pass to {@link TimeoutManager#clearInterval}.
+	* @example
+	* ```ts
+	* import { timeoutManager } from '@tanstack/query-core'
+	*
+	* const intervalId = timeoutManager.setInterval(
+	*   () => console.log('ran at:', new Date()),
+	*   1000,
+	* )
+	* ```
+	*/
+	setInterval(callback, delay) {
+		return this.#provider.setInterval(callback, delay);
+	}
+	/**
+	* `clearInterval` can be used to cancel an interval, like the global
+	* `clearInterval` function. It should be called with an interval ID
+	* returned by `setInterval`.
+	* @param intervalId - The timer ID returned by `setInterval`, or `undefined`.
+	* @example
+	* ```ts
+	* import { timeoutManager } from '@tanstack/query-core'
+	*
+	* const intervalId = timeoutManager.setInterval(
+	*   () => console.log('ran at:', new Date()),
+	*   1000,
+	* )
+	*
+	* timeoutManager.clearInterval(intervalId)
+	* ```
+	*/
+	clearInterval(intervalId) {
+		this.#provider.clearInterval(intervalId);
+	}
+};
+/**
+* Singleton instance of {@link TimeoutManager}, used throughout TanStack Query to schedule and cancel timers.
+*/
+var timeoutManager = new TimeoutManager();
+/**
+* In many cases code wants to delay to the next event loop tick; this is not
+* mediated by {@link timeoutManager}.
+*
+* This function is provided to make auditing the `tanstack/query-core` for
+* incorrect use of system `setTimeout` easier.
+* @param callback - The function to call on the next event loop tick.
+*/
+function systemSetTimeoutZero(callback) {
+	setTimeout(callback, 0);
+}
+// node_modules/@tanstack/query-core/build/modern/utils.js
+/**
+* @deprecated use `environmentManager.isServer()` instead.
+*/
+var isServer$1 = typeof window === "undefined" || "Deno" in globalThis;
+function noop() {}
+/**
+* Resolves an {@link Updater}: calls it with `input` if it is a function, otherwise returns it as
+* is.
+* @param updater - The new value, or a function that receives `input` and returns the new value.
+* @param input - The current value, passed to `updater` if it is a function.
+* @returns The new value.
+*/
+function functionalUpdate(updater, input) {
+	return typeof updater === "function" ? updater(input) : updater;
+}
+/**
+* Checks whether a value can be used as a timeout: a non-negative, finite number.
+* @param value - The value to check.
+* @returns `true` if `value` is a number that is `>= 0` and not `Infinity`.
+*/
+function isValidTimeout(value) {
+	return typeof value === "number" && value >= 0 && value !== Infinity;
+}
+/**
+* Calculates how long until data updated at `updatedAt` becomes stale.
+* @param updatedAt - The timestamp, in milliseconds, at which the data was last updated.
+* @param staleTime - The time, in milliseconds, after which data is considered stale. Defaults to
+* `0`.
+* @returns The remaining time in milliseconds, or `0` if the data is already stale.
+*/
+function timeUntilStale(updatedAt, staleTime) {
+	return Math.max(updatedAt + (staleTime || 0) - Date.now(), 0);
+}
+/**
+* Resolves an option that can be given either as a value or as a function of the query, such as
+* `staleTime`.
+* @param value - The option value, or a function that receives `query` and returns the value.
+* @param query - The query passed to `value` if it is a function.
+* @returns The resolved value, or `undefined` if `value` is `undefined`.
+*/
+function resolveQueryValue(value, query) {
+	return typeof value === "function" ? value(query) : value;
+}
+/**
+* Checks whether a query matches the given {@link QueryFilters}.
+* Every filter that is specified must match; filters that are left unspecified are ignored.
+* @param filters - The filters to check the query against.
+* @param query - The query to check.
+* @returns `true` if the query matches every specified filter.
+* @example
+* ```ts
+* const queryCache = queryClient.getQueryCache()
+*
+* const matchingQueries = queryCache
+*   .getAll()
+*   .filter((query) => matchQuery({ queryKey: ['posts'] }, query))
+* ```
+*/
+function matchQuery(filters, query) {
+	const { type = "all", exact, fetchStatus, predicate, queryKey, stale } = filters;
+	if (queryKey) {
+		if (exact) {
+			if (query.queryHash !== hashQueryKeyByOptions(queryKey, query.options)) return false;
+		} else if (!partialMatchKey(query.queryKey, queryKey)) return false;
+	}
+	if (type !== "all") {
+		const isActive = query.isActive();
+		if (type === "active" && !isActive) return false;
+		if (type === "inactive" && isActive) return false;
+	}
+	if (typeof stale === "boolean" && query.isStale() !== stale) return false;
+	if (fetchStatus && fetchStatus !== query.state.fetchStatus) return false;
+	if (predicate && !predicate(query)) return false;
+	return true;
+}
+/**
+* Checks whether a mutation matches the given {@link MutationFilters}.
+* Every filter that is specified must match; filters that are left unspecified are ignored.
+* If a `mutationKey` filter is provided but the mutation has no `mutationKey` of its own, it does not match.
+* @param filters - The filters to check the mutation against.
+* @param mutation - The mutation to check.
+* @returns `true` if the mutation matches every specified filter.
+* @example
+* ```ts
+* const mutationCache = queryClient.getMutationCache()
+*
+* const matchingMutations = mutationCache
+*   .getAll()
+*   .filter((mutation) => matchMutation({ mutationKey: ['addPost'] }, mutation))
+* ```
+*/
+function matchMutation(filters, mutation) {
+	const { exact, status, predicate, mutationKey } = filters;
+	if (mutationKey) {
+		if (!mutation.options.mutationKey) return false;
+		if (exact) {
+			if (hashKey(mutation.options.mutationKey) !== hashKey(mutationKey)) return false;
+		} else if (!partialMatchKey(mutation.options.mutationKey, mutationKey)) return false;
+	}
+	if (status && mutation.state.status !== status) return false;
+	if (predicate && !predicate(mutation)) return false;
+	return true;
+}
+/**
+* Hashes a query key with the query's `queryKeyHashFn` option, falling back to {@link hashKey}.
+* @param queryKey - The query key to hash.
+* @param options - The query options that may provide a custom `queryKeyHashFn`.
+* @returns The query hash, a string that identifies the query in the cache.
+*/
+function hashQueryKeyByOptions(queryKey, options) {
+	return (options?.queryKeyHashFn || hashKey)(queryKey);
+}
+/**
+* Default query & mutation keys hash function.
+* Hashes the value into a stable hash.
+* @param queryKey - The query or mutation key to hash.
+* @returns The stable hash of the key, as a JSON string.
+* @example
+* ```ts
+* // Object keys are sorted, so key order doesn't affect the hash:
+* hashKey(['todos', { page: 1, filter: 'done' }]) // === '["todos",{"filter":"done","page":1}]'
+* ```
+*/
+function hashKey(queryKey) {
+	return JSON.stringify(queryKey, (_, val) => isPlainObject(val) ? Object.keys(val).sort().reduce((result, key) => {
+		result[key] = val[key];
+		return result;
+	}, {}) : val);
+}
+function partialMatchKey(a, b) {
+	if (a === b) return true;
+	if (typeof a !== typeof b) return false;
+	if (a && b && typeof a === "object" && typeof b === "object") {
+		if (Array.isArray(a) && Array.isArray(b)) {
+			if (b.length > a.length) return false;
+			for (let i = 0; i < b.length; i++) if (!partialMatchKey(a[i], b[i])) return false;
+			return true;
+		}
+		const bKeys = Object.keys(b);
+		for (const key of bKeys) if (!partialMatchKey(a[key], b[key])) return false;
+		return true;
+	}
+	return false;
+}
+var hasOwn = Object.prototype.hasOwnProperty;
+function replaceEqualDeep(a, b, depth = 0) {
+	if (a === b) return a;
+	if (depth > 500) return b;
+	const array = isPlainArray(a) && isPlainArray(b);
+	if (!array && !(isPlainObject(a) && isPlainObject(b))) return b;
+	const aSize = (array ? a : Object.keys(a)).length;
+	const bItems = array ? b : Object.keys(b);
+	const bSize = bItems.length;
+	const copy = array ? new Array(bSize) : {};
+	let equalItems = 0;
+	for (let i = 0; i < bSize; i++) {
+		const key = array ? i : bItems[i];
+		const aItem = a[key];
+		const bItem = b[key];
+		if (aItem === bItem) {
+			copy[key] = aItem;
+			if (array ? i < aSize : hasOwn.call(a, key)) equalItems++;
+			continue;
+		}
+		if (aItem === null || bItem === null || typeof aItem !== "object" || typeof bItem !== "object") {
+			copy[key] = bItem;
+			continue;
+		}
+		const v = replaceEqualDeep(aItem, bItem, depth + 1);
+		copy[key] = v;
+		if (v === aItem) equalItems++;
+	}
+	return aSize === bSize && equalItems === aSize ? a : copy;
+}
+/**
+* Shallow compare objects.
+* @param a - The first object.
+* @param b - The second object, or `undefined`.
+* @returns `true` if both objects have the same keys, with strictly equal values for each key.
+*/
+function shallowEqualObjects(a, b) {
+	if (!b || Object.keys(a).length !== Object.keys(b).length) return false;
+	for (const key in a) if (a[key] !== b[key]) return false;
+	return true;
+}
+/**
+* Checks whether a value is an array with no holes and no extra properties.
+* @param value - The value to check.
+* @returns `true` if `value` is an array whose number of own keys equals its `length`.
+*/
+function isPlainArray(value) {
+	return Array.isArray(value) && value.length === Object.keys(value).length;
+}
+/**
+* Checks whether a value is a plain object, e.g. created with an object literal or
+* `Object.create(null)`.
+* @param o - The value to check.
+* @returns `true` if `o` is a plain object.
+*/
+function isPlainObject(o) {
+	if (!hasObjectPrototype(o)) return false;
+	const objectPrototype = Object.getPrototypeOf(o);
+	const ctor = objectPrototype?.constructor;
+	if (ctor === void 0) return true;
+	if (typeof ctor !== "function") return false;
+	const prot = ctor.prototype;
+	if (!hasObjectPrototype(prot)) return false;
+	if (!prot.hasOwnProperty("isPrototypeOf")) return false;
+	if (objectPrototype !== Object.prototype) return false;
+	return true;
+}
+/**
+* Checks whether a value's `Object.prototype.toString` tag is `[object Object]`.
+* @param o - The value to check.
+* @returns `true` if the tag is `[object Object]`.
+*/
+function hasObjectPrototype(o) {
+	return Object.prototype.toString.call(o) === "[object Object]";
+}
+/**
+* Waits for the given time, using the configured {@link timeoutManager}.
+* @param timeout - The time to wait, in milliseconds.
+* @returns A promise that resolves after `timeout` milliseconds.
+*/
+function sleep(timeout) {
+	return new Promise((resolve) => {
+		timeoutManager.setTimeout(resolve, timeout);
+	});
+}
+/**
+* Applies a query's `structuralSharing` option when writing new data.
+* @param prevData - The previously cached data.
+* @param data - The new data.
+* @param options - The query options, whose `structuralSharing` decides how the data is merged.
+* @returns The result of a custom `structuralSharing` function, `data` with its unchanged parts
+* replaced by those of `prevData` by default, or `data` as is if `structuralSharing` is `false`.
+* @throws {Error} The error from the default structural sharing, e.g. when the data is not JSON serializable.
+* Outside production, it is also logged to the console.
+*/
+function replaceData(prevData, data, options) {
+	if (typeof options.structuralSharing === "function") return options.structuralSharing(prevData, data);
+	else if (options.structuralSharing !== false) return replaceEqualDeep(prevData, data);
+	return data;
+}
+/**
+* Intended to be passed as a query's `placeholderData` option, for example
+* `placeholderData: keepPreviousData`. Instead of resetting the query's data to `undefined` while a new
+* query key is fetching, it keeps displaying the previously fetched data until the new data arrives.
+* @param previousData - The data of the previous query key, passed by the observer.
+* @returns The previous data, unchanged.
+* @example
+* ```ts
+* new QueryObserver(queryClient, {
+*   queryKey: ['posts', page],
+*   queryFn: () => fetchPosts(page),
+*   placeholderData: keepPreviousData,
+* })
+* ```
+*/
+function keepPreviousData(previousData) {
+	return previousData;
+}
+/**
+* Returns a new array with `item` added at the end. If that makes the array longer than `max`,
+* the first item is dropped. Only one item is dropped, so the result can still exceed `max` if
+* `items` already did.
+* @param items - The current items.
+* @param item - The value to append.
+* @param max - The length above which an item is dropped. `0` (the default) means no limit.
+* @returns A new array with `item` added.
+*/
+function addToEnd(items, item, max = 0) {
+	const newItems = [...items, item];
+	return max && newItems.length > max ? newItems.slice(1) : newItems;
+}
+/**
+* Returns a new array with `item` added at the start. If that makes the array longer than `max`,
+* the last item is dropped. Only one item is dropped, so the result can still exceed `max` if
+* `items` already did.
+* @param items - The current items.
+* @param item - The value to prepend.
+* @param max - The length above which an item is dropped. `0` (the default) means no limit.
+* @returns A new array with `item` added.
+*/
+function addToStart(items, item, max = 0) {
+	const newItems = [item, ...items];
+	return max && newItems.length > max ? newItems.slice(0, -1) : newItems;
+}
+/**
+* Sentinel value that can be passed as a query's `queryFn` to conditionally disable the query (equivalent
+* to `enabled: false`) while preserving full type inference for the query's data. Unlike `enabled: false`,
+* a query disabled via `skipToken` cannot be triggered with `refetch`.
+* @example
+* ```ts
+* new QueryObserver(queryClient, {
+*   queryKey: ['post', postId],
+*   queryFn: postId != null ? () => fetchPost(postId) : skipToken,
+* })
+* ```
+*/
+var skipToken = Symbol();
+/**
+* Returns the function to call for a fetch. If there is no `queryFn` but the fetch was started from
+* an `initialPromise`, that promise is returned instead. If there is no usable `queryFn` (missing or
+* {@link skipToken}), the returned function rejects with a `Missing queryFn` error.
+* @param options - The query options with the `queryFn`, and the `queryHash` used in error messages.
+* @param fetchOptions - The fetch options, which may carry an `initialPromise`.
+* @returns The function to call for the fetch.
+*/
+function ensureQueryFn(options, fetchOptions) {
+	if (!options.queryFn && fetchOptions?.initialPromise) return () => fetchOptions.initialPromise;
+	if (!options.queryFn || options.queryFn === skipToken) return () => Promise.reject(/* @__PURE__ */ new Error(`Missing queryFn: '${options.queryHash}'`));
+	return options.queryFn;
+}
+/**
+* Resolves a `throwOnError` option to a boolean.
+* If `throwOnError` is a function, it is called with `params` (e.g. the error and, depending on the caller,
+* additional context such as the query or mutation) and its result is returned, allowing the throwing
+* behavior to be decided per error. Otherwise, `throwOnError` itself is coerced to a boolean (`undefined`
+* resolves to `false`).
+* @param throwOnError - The `throwOnError` option: a boolean, a function that decides per error, or
+* `undefined`.
+* @param params - The arguments passed to `throwOnError` if it is a function.
+* @returns Whether the error should be thrown.
+* @example
+* ```ts
+* const throwOnError =
+*   query.state.error && typeof options.throwOnError === 'function'
+*     ? shouldThrowError(options.throwOnError, [query.state.error, query])
+*     : options.throwOnError
+* ```
+*/
+function shouldThrowError(throwOnError, params) {
+	if (typeof throwOnError === "function") return throwOnError(...params);
+	return !!throwOnError;
+}
+/**
+* Adds a lazy `signal` getter to an object, such as a query function context. The first time
+* `signal` is read, `onCancelled` is registered for the signal's `abort` event (or called right
+* away if it is already aborted), so cancellation is only tracked when the signal is actually used.
+* @param object - The object to add the `signal` property to.
+* @param getSignal - Returns the `AbortSignal`. Called once, when `signal` is first read.
+* @param onCancelled - Called when the signal is aborted, if `signal` was read.
+* @returns The same object, with the `signal` property added.
+*/
+function addConsumeAwareSignal(object, getSignal, onCancelled) {
+	let consumed = false;
+	let signal;
+	Object.defineProperty(object, "signal", {
+		enumerable: true,
+		get: () => {
+			signal ??= getSignal();
+			if (consumed) return signal;
+			consumed = true;
+			if (signal.aborted) onCancelled();
+			else signal.addEventListener("abort", onCancelled, { once: true });
+			return signal;
+		}
+	});
+	return object;
+}
+// node_modules/@tanstack/query-core/build/modern/environmentManager.js
+var isServerFn = () => isServer$1;
+/**
+* Returns whether the current runtime should be treated as a server environment.
+* @returns `true` if the runtime is treated as a server.
+*/
+var isServer = () => isServerFn();
+// node_modules/@tanstack/query-core/build/modern/subscribable.js
+/**
+* The base class behind everything in Query that you can subscribe to: `QueryCache`, `MutationCache`,
+* the observers, and the `FocusManager`/`OnlineManager` behind `focusManager` and `onlineManager`.
+* Subclasses decide what a listener receives and when it is called.
+*/
+var Subscribable = class {
+	constructor() {
+		this.listeners = /* @__PURE__ */ new Set();
+		this.subscribe = this.subscribe.bind(this);
+	}
+	/**
+	* Registers a listener to be called on every update this object notifies about. Returns a function
+	* that removes the listener again — call it to stop listening. The base class never drops a listener
+	* on its own, though some subclasses clear all of theirs in `destroy()`.
+	* @param listener - Called on each update, with whatever the subclass passes to its subscribers.
+	* @returns A function that removes the listener.
+	* @example
+	* ```ts
+	* const unsubscribe = subscribable.subscribe(() => {
+	*   // react to the update
+	* })
+	*
+	* unsubscribe()
+	* ```
+	*/
+	subscribe(listener) {
+		this.listeners.add(listener);
+		this.onSubscribe();
+		return () => {
+			this.listeners.delete(listener);
+			this.onUnsubscribe();
+		};
+	}
+	/**
+	* Returns `true` while at least one listener is registered, `false` once they have all unsubscribed.
+	* @returns `true` if at least one listener is registered.
+	*/
+	hasListeners() {
+		return this.listeners.size > 0;
+	}
+	/**
+	* Called after a listener is added. Does nothing here; subclasses override it, e.g. to start
+	* tracking what they observe once the first listener subscribes.
+	*/
+	onSubscribe() {}
+	/**
+	* Called after a listener is removed. Does nothing here; subclasses override it, e.g. to clean up
+	* once the last listener unsubscribes.
+	*/
+	onUnsubscribe() {}
+};
+// node_modules/@tanstack/query-core/build/modern/focusManager.js
+/**
+* The `FocusManager` manages the focus state within TanStack Query.
+*
+* It can be used to change the default event listeners or to manually change the focus state.
+*/
+var FocusManager = class extends Subscribable {
+	#focused;
+	#cleanup;
+	#setup;
+	constructor() {
+		super();
+		this.#setup = (onFocus) => {
+			if (typeof window !== "undefined" && window.addEventListener) {
+				const listener = () => onFocus();
+				window.addEventListener("visibilitychange", listener, false);
+				return () => {
+					window.removeEventListener("visibilitychange", listener);
+				};
+			}
+		};
+	}
+	onSubscribe() {
+		if (!this.#cleanup) this.setEventListener(this.#setup);
+	}
+	onUnsubscribe() {
+		if (!this.hasListeners()) {
+			this.#cleanup?.();
+			this.#cleanup = void 0;
+		}
+	}
+	/**
+	* `setEventListener` can be used to set a custom event listener that will
+	* be used to determine the focus state. The provided `setup` function
+	* receives a `setFocused` callback: call it with a `boolean` to manually
+	* set the focus state, or with no arguments to re-evaluate the current
+	* focus state and notify subscribers.
+	* @param setup - Receives the `setFocused` callback, registers the event listener, and may return
+	* a cleanup function that is called when the listener is replaced or no longer needed.
+	* @example
+	* ```ts
+	* import { focusManager } from '@tanstack/query-core'
+	*
+	* focusManager.setEventListener((handleFocus) => {
+	*   const listener = () => handleFocus()
+	*   // Listen to visibilitychange
+	*   if (typeof window !== 'undefined' && window.addEventListener) {
+	*     window.addEventListener('visibilitychange', listener, false)
+	*   }
+	*
+	*   return () => {
+	*     // Be sure to unsubscribe if a new handler is set
+	*     window.removeEventListener('visibilitychange', listener)
+	*   }
+	* })
+	* ```
+	*/
+	setEventListener(setup) {
+		this.#setup = setup;
+		this.#cleanup?.();
+		this.#cleanup = setup((focused) => {
+			if (typeof focused === "boolean") this.setFocused(focused);
+			else this.onFocus();
+		});
+	}
+	/**
+	* `setFocused` can be used to manually set the focus state. Set `undefined`
+	* to fall back to the default focus check.
+	* @param focused - The focus state, or `undefined` to use the default focus check.
+	* @example
+	* ```ts
+	* import { focusManager } from '@tanstack/query-core'
+	*
+	* // Set focused
+	* focusManager.setFocused(true)
+	*
+	* // Set unfocused
+	* focusManager.setFocused(false)
+	*
+	* // Fallback to the default focus check
+	* focusManager.setFocused(undefined)
+	* ```
+	*/
+	setFocused(focused) {
+		if (this.#focused !== focused) {
+			this.#focused = focused;
+			this.onFocus();
+		}
+	}
+	/**
+	* `onFocus` notifies all subscribed listeners with the current focus state.
+	*/
+	onFocus() {
+		const isFocused = this.isFocused();
+		this.listeners.forEach((listener) => {
+			listener(isFocused);
+		});
+	}
+	/**
+	* `isFocused` can be used to get the current focus state.
+	* @returns The focus state set with `setFocused`, or otherwise whether the document is visible.
+	*/
+	isFocused() {
+		if (typeof this.#focused === "boolean") return this.#focused;
+		return globalThis.document?.visibilityState !== "hidden";
+	}
+};
+/**
+* Singleton instance of {@link FocusManager}, used to manage and observe the focus state within TanStack Query.
+*/
+var focusManager = new FocusManager();
+// node_modules/@tanstack/query-core/build/modern/notifyManager.js
+/**
+* Default scheduling function used by the notify manager.
+* Schedules the callback with the system's `setTimeout(callback, 0)`.
+*/
+var defaultScheduler = systemSetTimeoutZero;
+/**
+* Creates a notify manager, which schedules and batches notifications to subscribers. Query uses a
+* single instance of it, exported as {@link notifyManager}.
+* @returns A new notify manager.
+*/
+function createNotifyManager() {
+	let queue = [];
+	let transactions = 0;
+	let notifyFn = (callback) => {
+		callback();
+	};
+	let batchNotifyFn = (callback) => {
+		callback();
+	};
+	let scheduleFn = defaultScheduler;
+	const schedule = (callback) => {
+		if (transactions) queue.push(callback);
+		else scheduleFn(() => {
+			notifyFn(callback);
+		});
+	};
+	const flush = () => {
+		const originalQueue = queue;
+		queue = [];
+		if (originalQueue.length) scheduleFn(() => {
+			batchNotifyFn(() => {
+				originalQueue.forEach((callback) => {
+					notifyFn(callback);
+				});
+			});
+		});
+	};
+	return {
+		/**
+		* Batches all updates scheduled inside the passed callback.
+		* This is mainly used internally to optimize query client updating.
+		* Batches can be nested; the queue is only flushed once the outermost `batch` call finishes.
+		* The return value of `callback` is passed through.
+		* @param callback - The function to run in the batch.
+		* @returns The return value of `callback`.
+		*/
+		batch: (callback) => {
+			let result;
+			transactions++;
+			try {
+				result = callback();
+			} finally {
+				transactions--;
+				if (!transactions) flush();
+			}
+			return result;
+		},
+		/**
+		* All calls to the wrapped function will be batched.
+		* @param callback - The function to wrap.
+		* @returns A function that schedules a call to `callback` with the given arguments.
+		*/
+		batchCalls: (callback) => {
+			return (...args) => {
+				schedule(() => {
+					callback(...args);
+				});
+			};
+		},
+		/**
+		* Schedules a function to be run on the next batch.
+		* By default, the batch is run with a `setTimeout`, but this can be configured via `setScheduler`.
+		*/
+		schedule,
+		/**
+		* Use this method to set a custom notify function.
+		* This can be used to for example wrap notifications with `React.act` while running tests.
+		* @param fn - Receives each notification callback and must call it.
+		*/
+		setNotifyFunction: (fn) => {
+			notifyFn = fn;
+		},
+		/**
+		* Use this method to set a custom function to batch notifications together into a single tick.
+		* Framework adapters use this to plug in their own batching primitive, so that a single query
+		* update only triggers one re-render instead of one per subscriber.
+		* @param fn - Receives a function that runs a batch of notifications and must call it.
+		* @example
+		* ```ts
+		* import { notifyManager } from '@tanstack/query-core'
+		* import { batch } from 'solid-js'
+		*
+		* notifyManager.setBatchNotifyFunction(batch)
+		* ```
+		*/
+		setBatchNotifyFunction: (fn) => {
+			batchNotifyFn = fn;
+		},
+		/**
+		* Configures a custom callback that schedules when the next batch runs.
+		* The default behavior is `setTimeout(callback, 0)`.
+		* @param fn - Receives a callback that runs the next batch, and schedules it.
+		* @example
+		* ```ts
+		* import { notifyManager } from '@tanstack/query-core'
+		*
+		* // Schedule batches in the next microtask
+		* notifyManager.setScheduler(queueMicrotask)
+		*
+		* // Schedule batches before the next frame is rendered
+		* notifyManager.setScheduler(requestAnimationFrame)
+		*
+		* // Schedule batches some time in the future
+		* notifyManager.setScheduler((cb) => setTimeout(cb, 10))
+		* ```
+		*/
+		setScheduler: (fn) => {
+			scheduleFn = fn;
+		}
+	};
+}
+/**
+* Handles scheduling and batching callbacks in TanStack Query.
+*/
+var notifyManager = createNotifyManager();
+// node_modules/@tanstack/query-core/build/modern/onlineManager.js
+/**
+* The `OnlineManager` manages the online state within TanStack Query. It can
+* be used to change the default event listeners or to manually change the
+* online state.
+*
+* By default, the `onlineManager` assumes an active network connection, and
+* listens to the `online` and `offline` events on the `window` object to
+* detect changes.
+*/
+var OnlineManager = class extends Subscribable {
+	#online = true;
+	#cleanup;
+	#setup;
+	constructor() {
+		super();
+		this.#setup = (onOnline) => {
+			if (typeof window !== "undefined" && window.addEventListener) {
+				const onlineListener = () => onOnline(true);
+				const offlineListener = () => onOnline(false);
+				window.addEventListener("online", onlineListener, false);
+				window.addEventListener("offline", offlineListener, false);
+				return () => {
+					window.removeEventListener("online", onlineListener);
+					window.removeEventListener("offline", offlineListener);
+				};
+			}
+		};
+	}
+	onSubscribe() {
+		if (!this.#cleanup) this.setEventListener(this.#setup);
+	}
+	onUnsubscribe() {
+		if (!this.hasListeners()) {
+			this.#cleanup?.();
+			this.#cleanup = void 0;
+		}
+	}
+	/**
+	* `setEventListener` can be used to set a custom event listener that will
+	* be used to determine the online state. The provided `setup` function
+	* receives a `setOnline` callback that should be called with a `boolean`
+	* whenever the online state changes.
+	* @param setup - Receives the `setOnline` callback, registers the event listener, and may return
+	* a cleanup function that is called when the listener is replaced or no longer needed.
+	* @example
+	* ```ts
+	* import NetInfo from '@react-native-community/netinfo'
+	* import { onlineManager } from '@tanstack/query-core'
+	*
+	* onlineManager.setEventListener((setOnline) => {
+	*   return NetInfo.addEventListener((state) => {
+	*     setOnline(!!state.isConnected)
+	*   })
+	* })
+	* ```
+	*/
+	setEventListener(setup) {
+		this.#setup = setup;
+		this.#cleanup?.();
+		this.#cleanup = setup(this.setOnline.bind(this));
+	}
+	/**
+	* `setOnline` can be used to manually set the online state.
+	* @param online - The online state.
+	* @example
+	* ```ts
+	* import { onlineManager } from '@tanstack/query-core'
+	*
+	* // Set to online
+	* onlineManager.setOnline(true)
+	*
+	* // Set to offline
+	* onlineManager.setOnline(false)
+	* ```
+	*/
+	setOnline(online) {
+		if (this.#online !== online) {
+			this.#online = online;
+			this.listeners.forEach((listener) => {
+				listener(online);
+			});
+		}
+	}
+	/**
+	* `isOnline` can be used to get the current online state.
+	* @returns `true` if online.
+	*/
+	isOnline() {
+		return this.#online;
+	}
+};
+/**
+* Singleton instance of {@link OnlineManager}, used to manage and observe the online state within TanStack Query.
+*/
+var onlineManager = new OnlineManager();
+// node_modules/@tanstack/query-core/build/modern/retryer.js
+/**
+* The default `retryDelay`: doubles with every failure, starting at 1 second, up to 30 seconds.
+* @param failureCount - The number of failures so far.
+* @returns The delay before the next retry, in milliseconds.
+*/
+function defaultRetryDelay(failureCount) {
+	return Math.min(1e3 * 2 ** failureCount, 3e4);
+}
+/**
+* Checks whether a fetch can run for the given network mode.
+* @param networkMode - The `networkMode` option. Defaults to `'online'`.
+* @returns `true` if the network mode is not `'online'`, or if it is and the client is online.
+*/
+function canFetch(networkMode) {
+	return (networkMode ?? "online") === "online" ? onlineManager.isOnline() : true;
+}
+/**
+* The error thrown by a `Retryer` (and surfaced to `query.promise`/`mutation`) when a fetch is cancelled, e.g. via
+* `query.cancel()`. `revert`, if `true`, tells the caller to restore the state the query was in before the fetch
+* started instead of surfacing the error. `silent`, if `true`, tells the caller to suppress this error and instead
+* resolve with the promise of the fetch that triggered the cancellation.
+* @example
+* ```ts
+* query.cancel()
+*
+* try {
+*   await query.promise
+* } catch (error) {
+*   if (error instanceof CancelledError) {
+*     // the fetch was cancelled, e.g. via `query.cancel()`
+*   }
+* }
+* ```
+*/
+var CancelledError = class extends Error {
+	constructor(options) {
+		super("CancelledError");
+		this.revert = options?.revert;
+		this.silent = options?.silent;
+	}
+};
+/**
+* Creates a retryer, which runs a function and retries it on failure according to the `retry` and
+* `retryDelay` options. It pauses while the network mode doesn't allow fetching or `canRun` returns
+* `false`, and can be cancelled. Queries and mutations use it to run their `queryFn` and
+* `mutationFn`.
+* @param config - The function to run, the retry options, and the callbacks for failures, pausing,
+* continuing, and cancellation.
+* @returns The retryer, whose `promise` settles with the result of the function.
+*/
+function createRetryer(config) {
+	let isRetryCancelled = false;
+	let failureCount = 0;
+	let continueFn;
+	let status = "pending";
+	let promiseResolve;
+	let promiseReject;
+	const promise = new Promise((resolve, reject) => {
+		promiseResolve = resolve;
+		promiseReject = reject;
+	});
+	promise.catch(noop);
+	const isResolved = () => status !== "pending";
+	const cancel = (cancelOptions) => {
+		if (!isResolved()) {
+			const error = new CancelledError(cancelOptions);
+			reject(error);
+			config.onCancel?.(error);
+		}
+	};
+	const cancelRetry = () => {
+		isRetryCancelled = true;
+	};
+	const continueRetry = () => {
+		isRetryCancelled = false;
+	};
+	const canContinue = () => focusManager.isFocused() && (config.networkMode === "always" || onlineManager.isOnline()) && config.canRun();
+	const canStart = () => canFetch(config.networkMode) && config.canRun();
+	const resolve = (value) => {
+		if (!isResolved()) {
+			continueFn?.();
+			status = "resolved";
+			promiseResolve(value);
+		}
+	};
+	const reject = (value) => {
+		if (!isResolved()) {
+			continueFn?.();
+			status = "rejected";
+			promiseReject(value);
+		}
+	};
+	const pause = (canResume) => {
+		return new Promise((continueResolve) => {
+			continueFn = (value) => {
+				if (isResolved() || canResume()) continueResolve(value);
+			};
+			config.onPause?.();
+		}).then(() => {
+			continueFn = void 0;
+			if (!isResolved()) config.onContinue?.();
+		});
+	};
+	const run = () => {
+		if (isResolved()) return;
+		let promiseOrValue;
+		const initialPromise = failureCount === 0 ? config.initialPromise : void 0;
+		try {
+			promiseOrValue = initialPromise ?? config.fn();
+		} catch (error) {
+			promiseOrValue = Promise.reject(error);
+		}
+		Promise.resolve(promiseOrValue).then(resolve).catch((error) => {
+			if (isResolved()) return;
+			const retry = config.retry ?? (isServer() ? 0 : 3);
+			const retryDelay = config.retryDelay ?? defaultRetryDelay;
+			const delay = typeof retryDelay === "function" ? retryDelay(failureCount, error) : retryDelay;
+			const shouldRetry = retry === true || typeof retry === "number" && failureCount < retry || typeof retry === "function" && retry(failureCount, error);
+			if (isRetryCancelled || !shouldRetry) {
+				reject(error);
+				return;
+			}
+			failureCount++;
+			config.onFail?.(failureCount, error);
+			sleep(delay).then(() => {
+				return canContinue() ? void 0 : pause(canContinue);
+			}).then(() => {
+				if (isRetryCancelled) reject(error);
+				else run();
+			});
+		});
+	};
+	return {
+		promise,
+		status: () => status,
+		cancel,
+		continue: () => {
+			continueFn?.();
+			return promise;
+		},
+		cancelRetry,
+		continueRetry,
+		canStart,
+		start: () => {
+			if (canStart()) run();
+			else pause(canStart).then(run);
+			return promise;
+		}
+	};
+}
+// node_modules/@tanstack/query-core/build/modern/removable.js
+/**
+* The base class for cache entries that are garbage collected once nothing is using them —
+* `Query` and `Mutation` both extend it. `gcTime` controls how long an unused entry is kept.
+*/
+var Removable = class {
+	#gcTimeout;
+	/**
+	* Clears the pending garbage collection timeout, so the entry is no longer scheduled for removal.
+	* A subclass may override this to release what it holds on to as well — `Query` also cancels any
+	* in-flight fetch.
+	*/
+	destroy() {
+		this.clearGcTimeout();
+	}
+	/**
+	* Schedules the entry to be removed from its cache after `gcTime`, replacing any timeout scheduled
+	* before. Nothing is scheduled if `gcTime` is `Infinity`.
+	*/
+	scheduleGc() {
+		this.clearGcTimeout();
+		if (isValidTimeout(this.gcTime)) this.#gcTimeout = timeoutManager.setTimeout(() => {
+			this.optionalRemove();
+		}, this.gcTime);
+	}
+	/**
+	* Updates `gcTime`, keeping the longest one seen so far. Without a value, it defaults to 5 minutes
+	* on the client and `Infinity` on the server.
+	* @param newGcTime - The `gcTime` from the latest options, if any.
+	*/
+	updateGcTime(newGcTime) {
+		this.gcTime = Math.max(this.gcTime || 0, newGcTime ?? (isServer() ? Infinity : 3e5));
+	}
+	/**
+	* Cancels the scheduled removal, if there is one.
+	*/
+	clearGcTimeout() {
+		if (this.#gcTimeout !== void 0) {
+			timeoutManager.clearTimeout(this.#gcTimeout);
+			this.#gcTimeout = void 0;
+		}
+	}
+};
+// node_modules/@tanstack/query-core/build/modern/infiniteQueryBehavior.js
+/**
+* Creates the behavior that fetches the pages of an infinite query: the next or previous page for
+* `fetchNextPage`/`fetchPreviousPage`, or all pages again from the start on a refetch.
+* @param pages - The number of pages to fetch from the start when all pages are fetched again,
+* e.g. from the `pages` option of `queryClient.infiniteQuery`. Defaults to the number of cached
+* pages.
+* @returns The query behavior to set on an infinite query.
+*/
+function infiniteQueryBehavior(pages) {
+	return { onFetch: (context, query) => {
+		const options = context.options;
+		const direction = context.fetchOptions?.meta?.fetchMore?.direction;
+		const oldPages = context.state.data?.pages || [];
+		const oldPageParams = context.state.data?.pageParams || [];
+		let result = {
+			pages: [],
+			pageParams: []
+		};
+		let currentPage = 0;
+		const fetchFn = async () => {
+			let cancelled = false;
+			const addSignalProperty = (object) => {
+				addConsumeAwareSignal(object, () => context.signal, () => cancelled = true);
+			};
+			const queryFn = ensureQueryFn(context.options, context.fetchOptions);
+			const fetchPage = async (data, param, previous) => {
+				if (cancelled) return Promise.reject(context.signal.reason);
+				if (param == null && data.pages.length) return Promise.resolve(data);
+				const createQueryFnContext = () => {
+					const queryFnContext = {
+						client: context.client,
+						queryKey: context.queryKey,
+						pageParam: param,
+						direction: previous ? "backward" : "forward",
+						meta: context.options.meta
+					};
+					addSignalProperty(queryFnContext);
+					return queryFnContext;
+				};
+				const queryFnContext = createQueryFnContext();
+				const page = await queryFn(queryFnContext);
+				const { maxPages } = context.options;
+				const addTo = previous ? addToStart : addToEnd;
+				return {
+					pages: addTo(data.pages, page, maxPages),
+					pageParams: addTo(data.pageParams, param, maxPages)
+				};
+			};
+			if (direction && oldPages.length) {
+				const previous = direction === "backward";
+				const pageParamFn = previous ? getPreviousPageParam : getNextPageParam;
+				const oldData = {
+					pages: oldPages,
+					pageParams: oldPageParams
+				};
+				result = await fetchPage(oldData, pageParamFn(options, oldData), previous);
+			} else {
+				const remainingPages = pages ?? oldPages.length;
+				do {
+					const param = currentPage === 0 ? oldPageParams[0] === void 0 ? options.initialPageParam : oldPageParams[0] : getNextPageParam(options, result);
+					if (currentPage > 0 && param == null) break;
+					result = await fetchPage(result, param);
+					currentPage++;
+				} while (currentPage < remainingPages);
+			}
+			return result;
+		};
+		if (context.options.persister) context.fetchFn = () => {
+			return context.options.persister?.(fetchFn, {
+				client: context.client,
+				queryKey: context.queryKey,
+				meta: context.options.meta,
+				signal: context.signal
+			}, query);
+		};
+		else context.fetchFn = fetchFn;
+	} };
+}
+/**
+* Computes the page param of the page after the last one, with the `getNextPageParam` option.
+* @param options - The infinite query options.
+* @param data - The current pages and page params.
+* @returns The next page param, or `undefined` if there are no pages yet.
+*/
+function getNextPageParam(options, { pages, pageParams }) {
+	const lastIndex = pages.length - 1;
+	return pages.length > 0 ? options.getNextPageParam(pages[lastIndex], pages, pageParams[lastIndex], pageParams) : void 0;
+}
+/**
+* Computes the page param of the page before the first one, with the `getPreviousPageParam`
+* option.
+* @param options - The infinite query options.
+* @param data - The current pages and page params.
+* @returns The previous page param, or `undefined` if there are no pages yet or no
+* `getPreviousPageParam` option.
+*/
+function getPreviousPageParam(options, { pages, pageParams }) {
+	return pages.length > 0 ? options.getPreviousPageParam?.(pages[0], pages, pageParams[0], pageParams) : void 0;
+}
+// node_modules/@tanstack/query-core/build/modern/query.js
+/**
+* Represents a single cached query. A `Query` holds the query's key, options,
+* state (data/error/status), and the observers currently subscribed to it.
+*
+* Instances are created and managed internally by `QueryCache`; application
+* code typically interacts with queries indirectly through `QueryClient` or
+* a framework hook like `useQuery`. Direct access to a `Query` instance is
+* possible via `queryCache.find()`/`findAll()` for inspecting cache state.
+* @example
+* ```ts
+* const queryCache = queryClient.getQueryCache()
+* const query = queryCache.find({ queryKey: ['posts'] })
+*
+* if (query) {
+*   console.log(query.state.dataUpdatedAt)
+* }
+* ```
+*/
+var Query = class extends Removable {
+	#queryType;
+	#initialState;
+	#revertState;
+	#cache;
+	#client;
+	#retryer;
+	#defaultOptions;
+	#abortSignalConsumed;
+	constructor(config) {
+		super();
+		this.#abortSignalConsumed = false;
+		this.#defaultOptions = config.defaultOptions;
+		this.setOptions(config.options);
+		this.observers = [];
+		this.#client = config.client;
+		this.#cache = this.#client.getQueryCache();
+		this.queryKey = config.queryKey;
+		this.queryHash = config.queryHash;
+		this.#initialState = getDefaultState$1(this.options);
+		this.state = config.state ?? this.#initialState;
+		this.scheduleGc();
+	}
+	/**
+	* The `meta` object passed in the query's options, if any.
+	* @returns The query's `meta`, or `undefined` if none was set.
+	*/
+	get meta() {
+		return this.options.meta;
+	}
+	/**
+	* `'infinite'` for an infinite query, otherwise `undefined`.
+	* @internal
+	* @returns The type of the query, set from the `_type` option (e.g. `'infinite'`).
+	*/
+	get queryType() {
+		return this.#queryType;
+	}
+	/**
+	* The promise for the currently in-flight fetch, if the query is fetching.
+	* `undefined` when the query is not fetching.
+	* @returns The promise of the in-flight fetch, or `undefined`.
+	*/
+	get promise() {
+		return this.#retryer?.promise;
+	}
+	/**
+	* Replaces the query's options and applies their `gcTime`. If the query has no data yet, it gets
+	* the `initialData` from the new options, if any.
+	* @internal
+	* @param options - The new query options, merged on top of the query's default options.
+	*/
+	setOptions(options) {
+		this.options = {
+			...this.#defaultOptions,
+			...options
+		};
+		if (options?._type) this.#queryType = options._type;
+		this.updateGcTime(this.options.gcTime);
+		if (this.state && this.state.data === void 0) {
+			const defaultState = getDefaultState$1(this.options);
+			if (defaultState.data !== void 0) {
+				this.setState(successState(defaultState.data, defaultState.dataUpdatedAt));
+				this.#initialState = defaultState;
+			}
+		}
+	}
+	optionalRemove() {
+		if (!this.observers.length && this.state.fetchStatus === "idle") this.#cache.remove(this);
+	}
+	/**
+	* Writes new data to the query and marks it as successfully fetched.
+	* @internal
+	* @param newData - The data to write. Structural sharing with the current data is applied.
+	* @param options - Set `updatedAt` to override the timestamp, and `manual` to mark the write as
+	* manual (e.g. from `queryClient.setQueryData`).
+	* @returns The data that was written.
+	*/
+	setData(newData, options) {
+		const data = replaceData(this.state.data, newData, this.options);
+		this.#dispatch({
+			data,
+			type: "success",
+			dataUpdatedAt: options?.updatedAt,
+			manual: options?.manual
+		});
+		return data;
+	}
+	/**
+	* Merges the given partial state directly into this query's state, notifying observers. Used
+	* by persistence and broadcast plugins to restore a state snapshot, and by devtools to let a
+	* user manually trigger a loading/error state or edit the cached data.
+	* @param state - The partial state to merge into the query's state.
+	*/
+	setState(state) {
+		this.#dispatch({
+			type: "setState",
+			state
+		});
+	}
+	/**
+	* Cancels the query's currently in-flight fetch, if any.
+	* - Returns a promise that resolves once the cancellation has settled.
+	* - If no fetch is in progress, resolves immediately.
+	* @param options - Set `revert` to restore the state from before the fetch started, and `silent`
+	* to suppress the cancellation error when a new fetch replaces the cancelled one.
+	* @returns A promise that resolves once the cancellation has settled.
+	* @example
+	* ```ts
+	* await query.cancel()
+	* ```
+	*/
+	cancel(options) {
+		const promise = this.#retryer?.promise;
+		this.#retryer?.cancel(options);
+		return promise ? promise.then(noop).catch(noop) : Promise.resolve();
+	}
+	/**
+	* Clears the query's garbage collection timeout and silently cancels any
+	* in-flight fetch. Called by `QueryCache` when the query is removed from
+	* the cache.
+	* @see {@link Query#cancel}
+	*/
+	destroy() {
+		super.destroy();
+		this.cancel({ silent: true });
+	}
+	/**
+	* The state the query was created with.
+	* @internal
+	* @returns The state the query had when it was first created, used by {@link Query#reset}.
+	*/
+	get resetState() {
+		return this.#initialState;
+	}
+	/**
+	* Resets the query back to its initial state (the state it had when it was
+	* first created, e.g. any `initialData`), destroying it first to cancel any
+	* in-flight fetch.
+	*/
+	reset() {
+		this.destroy();
+		this.setState(this.resetState);
+	}
+	/**
+	* Returns `true` if the query has at least one observer for which `enabled`
+	* does not resolve to `false`.
+	* @returns `true` if the query has an enabled observer.
+	*/
+	isActive() {
+		return this.observers.some((observer) => resolveQueryValue(observer.options.enabled, this) !== false);
+	}
+	/**
+	* Returns `true` if the query is disabled, meaning it will not fetch
+	* automatically.
+	* - If the query has observers, it is disabled when none of them are active
+	*   (see `isActive`).
+	* - If the query has no observers, it is disabled when its `queryFn` is
+	*   `skipToken` or it has never been fetched.
+	* @returns `true` if the query is disabled.
+	*/
+	isDisabled() {
+		if (this.getObserversCount() > 0) return !this.isActive();
+		return this.options.queryFn === skipToken || !this.isFetched();
+	}
+	/**
+	* Returns `true` if the query has been fetched, i.e. it has resolved with
+	* either data or an error at least once.
+	* @returns `true` if the query has been fetched.
+	*/
+	isFetched() {
+		return this.state.dataUpdateCount + this.state.errorUpdateCount > 0;
+	}
+	/**
+	* Returns `true` if the query has at least one observer configured with
+	* `staleTime: 'static'`, meaning it is treated as never stale.
+	* @returns `true` if the query is static.
+	*/
+	isStatic() {
+		if (this.getObserversCount() > 0) return this.observers.some((observer) => resolveQueryValue(observer.options.staleTime, this) === "static");
+		return false;
+	}
+	/**
+	* Returns `true` if the query is stale.
+	* - If the query has observers, defers to whether any observer's current
+	*   result reports `isStale` (which accounts for each observer's own
+	*   `staleTime` and `enabled` state).
+	* - If the query has no observers, it is considered stale when it has no
+	*   data or has been invalidated.
+	* @returns `true` if the query is stale.
+	* @see {@link Query#isStaleByTime}
+	* @example
+	* ```ts
+	* if (query.isStale()) {
+	*   // refetch or otherwise treat the cached data as outdated
+	* }
+	* ```
+	*/
+	isStale() {
+		if (this.getObserversCount() > 0) return this.observers.some((observer) => observer.getCurrentResult().isStale);
+		return this.state.data === void 0 || this.state.isInvalidated;
+	}
+	/**
+	* Returns `true` if the query's data is stale relative to the given
+	* `staleTime` (defaults to `0`).
+	* - A query with no data is always stale.
+	* - `staleTime: 'static'` is never stale.
+	* - An invalidated query is always stale.
+	* - Otherwise, staleness is based on elapsed time since `dataUpdatedAt`.
+	* @param staleTime - The time, in milliseconds, after which data is considered stale, or
+	* `'static'` to never treat existing data as stale. A query without data is stale either way.
+	* @returns `true` if the query's data is stale.
+	* @see {@link Query#isStale}
+	* @example
+	* ```ts
+	* const isStale = query.isStaleByTime(1000 * 60)
+	* ```
+	*/
+	isStaleByTime(staleTime = 0) {
+		if (this.state.data === void 0) return true;
+		if (staleTime === "static") return false;
+		if (this.state.isInvalidated) return true;
+		return !timeUntilStale(this.state.dataUpdatedAt, staleTime);
+	}
+	/**
+	* Refetches the query when the window regains focus, if an observer wants that, and continues a
+	* paused fetch.
+	* @internal
+	*/
+	onFocus() {
+		this.observers.find((x) => x.shouldFetchOnWindowFocus())?.refetch({ cancelRefetch: false });
+		this.#retryer?.continue();
+	}
+	/**
+	* Refetches the query when the app reconnects, if an observer wants that, and continues a paused
+	* fetch.
+	* @internal
+	*/
+	onOnline() {
+		this.observers.find((x) => x.shouldFetchOnReconnect())?.refetch({ cancelRefetch: false });
+		this.#retryer?.continue();
+	}
+	/**
+	* Subscribes an observer to the query and stops its garbage collection.
+	* @internal
+	* @param observer - The observer to add. Adding an observer that is already subscribed does
+	* nothing.
+	*/
+	addObserver(observer) {
+		if (!this.observers.includes(observer)) {
+			this.observers.push(observer);
+			this.clearGcTimeout();
+			this.#cache.notify({
+				type: "observerAdded",
+				query: this,
+				observer
+			});
+		}
+	}
+	/**
+	* Unsubscribes an observer from the query.
+	* @internal
+	* @param observer - The observer to remove. When the last observer is removed, the in-flight
+	* fetch is cancelled if its abort signal was consumed (otherwise only its retries are stopped),
+	* and garbage collection is scheduled.
+	*/
+	removeObserver(observer) {
+		const index = this.observers.indexOf(observer);
+		if (index !== -1) {
+			this.observers.splice(index, 1);
+			if (!this.observers.length) {
+				if (this.#retryer) {
+					if (this.#abortSignalConsumed || this.state.fetchStatus === "paused" && this.state.status === "pending") this.#retryer.cancel({ revert: true });
+					else this.#retryer.cancelRetry();
+				}
+				this.scheduleGc();
+			}
+			this.#cache.notify({
+				type: "observerRemoved",
+				query: this,
+				observer
+			});
+		}
+	}
+	/**
+	* Returns the number of observers currently subscribed to this query.
+	* @returns The number of observers.
+	* @example
+	* ```ts
+	* if (query.getObserversCount() === 0) {
+	*   // no component is currently watching this query
+	* }
+	* ```
+	*/
+	getObserversCount() {
+		return this.observers.length;
+	}
+	/**
+	* Marks the query as invalidated, unless it is already invalidated. This
+	* updates `state.isInvalidated` and notifies observers, but does not by
+	* itself trigger a refetch.
+	* @example
+	* ```ts
+	* query.invalidate()
+	* ```
+	*/
+	invalidate() {
+		if (!this.state.isInvalidated) this.#dispatch({ type: "invalidate" });
+	}
+	/**
+	* Fetches the query, i.e. runs its `queryFn` (through any configured
+	* retryer/behavior) and updates the query's state with the result.
+	* - If a fetch is already in flight, returns its promise instead of
+	*   starting a new one, unless `fetchOptions.cancelRefetch` is set and the
+	*   query already has data, in which case the current fetch is silently
+	*   cancelled first.
+	* - If `options` is passed, it replaces the query's current options
+	*   before fetching.
+	* @param options - Query options that replace the query's current options before fetching. They
+	* are not applied when an in-flight fetch is reused.
+	* @param fetchOptions - Set `cancelRefetch` to cancel an in-flight fetch first (only if the query
+	* already has data), and `meta` to pass extra information to the query's behavior.
+	* @returns A promise that resolves with the fetched data, or rejects with the fetch error. If the
+	* fetch is cancelled with `revert` while the query has data, it resolves with the restored data
+	* instead.
+	*/
+	async fetch(options, fetchOptions) {
+		if (this.state.fetchStatus !== "idle" && this.#retryer?.status() !== "rejected") {
+			if (this.state.data !== void 0 && fetchOptions?.cancelRefetch) this.cancel({ silent: true });
+			else if (this.#retryer) {
+				this.#retryer.continueRetry();
+				return this.#retryer.promise;
+			}
+		}
+		if (options) this.setOptions(options);
+		if (!this.options.queryFn) {
+			const observer = this.observers.find((x) => x.options.queryFn);
+			if (observer) this.setOptions(observer.options);
+		}
+		const abortController = new AbortController();
+		const addSignalProperty = (object) => {
+			Object.defineProperty(object, "signal", {
+				enumerable: true,
+				get: () => {
+					this.#abortSignalConsumed = true;
+					return abortController.signal;
+				}
+			});
+		};
+		const fetchFn = () => {
+			const queryFn = ensureQueryFn(this.options, fetchOptions);
+			const createQueryFnContext = () => {
+				const queryFnContext = {
+					client: this.#client,
+					queryKey: this.queryKey,
+					meta: this.meta
+				};
+				addSignalProperty(queryFnContext);
+				return queryFnContext;
+			};
+			const queryFnContext = createQueryFnContext();
+			this.#abortSignalConsumed = false;
+			if (this.options.persister) return this.options.persister(queryFn, queryFnContext, this);
+			return queryFn(queryFnContext);
+		};
+		const createFetchContext = () => {
+			const context = {
+				fetchOptions,
+				options: this.options,
+				queryKey: this.queryKey,
+				client: this.#client,
+				state: this.state,
+				fetchFn
+			};
+			addSignalProperty(context);
+			return context;
+		};
+		const context = createFetchContext();
+		(this.#queryType === "infinite" ? infiniteQueryBehavior(this.options.pages) : this.options.behavior)?.onFetch(context, this);
+		this.#revertState = this.state;
+		if (this.state.fetchStatus === "idle" || this.state.fetchMeta !== context.fetchOptions?.meta) this.#dispatch({
+			type: "fetch",
+			meta: context.fetchOptions?.meta
+		});
+		const retryer = this.#retryer = createRetryer({
+			initialPromise: fetchOptions?.initialPromise,
+			fn: context.fetchFn,
+			onCancel: (error) => {
+				if (error instanceof CancelledError && error.revert) this.setState({
+					...this.#revertState,
+					fetchStatus: "idle"
+				});
+				abortController.abort();
+			},
+			onFail: (failureCount, error) => {
+				this.#dispatch({
+					type: "failed",
+					failureCount,
+					error
+				});
+			},
+			onPause: () => {
+				this.#dispatch({ type: "pause" });
+			},
+			onContinue: () => {
+				this.#dispatch({ type: "continue" });
+			},
+			retry: context.options.retry,
+			retryDelay: context.options.retryDelay,
+			networkMode: context.options.networkMode,
+			canRun: () => true
+		});
+		try {
+			const data = await retryer.start();
+			if (data === void 0) throw new Error(`${this.queryHash} data is undefined`);
+			this.setData(data);
+			this.#cache.config.onSuccess?.(data, this);
+			this.#cache.config.onSettled?.(data, this.state.error, this);
+			return data;
+		} catch (error) {
+			if (error instanceof CancelledError) {
+				if (error.silent) return this.#retryer.promise;
+				else if (error.revert) {
+					if (this.state.data === void 0) throw error;
+					return this.state.data;
+				}
+			}
+			this.#dispatch({
+				type: "error",
+				error
+			});
+			this.#cache.config.onError?.(error, this);
+			this.#cache.config.onSettled?.(this.state.data, error, this);
+			throw error;
+		} finally {
+			if (this.#retryer === retryer) this.#retryer = void 0;
+			this.scheduleGc();
+		}
+	}
+	#dispatch(action) {
+		const reducer = (state) => {
+			switch (action.type) {
+				case "failed": return {
+					...state,
+					fetchFailureCount: action.failureCount,
+					fetchFailureReason: action.error
+				};
+				case "pause": return {
+					...state,
+					fetchStatus: "paused"
+				};
+				case "continue": return {
+					...state,
+					fetchStatus: "fetching"
+				};
+				case "fetch": return {
+					...state,
+					...fetchState(state.data, this.options),
+					fetchMeta: action.meta ?? null
+				};
+				case "success":
+					const newState = {
+						...state,
+						...successState(action.data, action.dataUpdatedAt),
+						dataUpdateCount: state.dataUpdateCount + 1,
+						...!action.manual && {
+							fetchStatus: "idle",
+							fetchFailureCount: 0,
+							fetchFailureReason: null
+						}
+					};
+					this.#revertState = action.manual ? newState : void 0;
+					return newState;
+				case "error":
+					const error = action.error;
+					return {
+						...state,
+						error,
+						errorUpdateCount: state.errorUpdateCount + 1,
+						errorUpdatedAt: Date.now(),
+						fetchFailureCount: state.fetchFailureCount + 1,
+						fetchFailureReason: error,
+						fetchStatus: "idle",
+						status: "error",
+						isInvalidated: true
+					};
+				case "invalidate": return {
+					...state,
+					isInvalidated: true
+				};
+				case "setState": return {
+					...state,
+					...action.state
+				};
+			}
+		};
+		this.state = reducer(this.state);
+		notifyManager.batch(() => {
+			this.observers.slice().forEach((observer) => {
+				observer.onQueryUpdate();
+			});
+			this.#cache.notify({
+				query: this,
+				type: "updated",
+				action
+			});
+		});
+	}
+};
+/**
+* Returns the state changes applied when a query starts fetching.
+* @param data - The query's current data. If it is `undefined`, the query is also reset to
+* `'pending'` with no error.
+* @param options - The query options, whose `networkMode` decides whether the query is `'fetching'`
+* or `'paused'`.
+* @returns The partial query state for a starting fetch.
+*/
+function fetchState(data, options) {
+	return {
+		fetchFailureCount: 0,
+		fetchFailureReason: null,
+		fetchStatus: canFetch(options.networkMode) ? "fetching" : "paused",
+		...data === void 0 && {
+			error: null,
+			status: "pending"
+		}
+	};
+}
+/**
+* Returns the state changes applied when a query receives data.
+* @param data - The new data.
+* @param dataUpdatedAt - The timestamp the data is recorded with. Defaults to the current time.
+* @returns The partial query state for a successful update.
+*/
+function successState(data, dataUpdatedAt) {
+	return {
+		data,
+		dataUpdatedAt: dataUpdatedAt ?? Date.now(),
+		error: null,
+		isInvalidated: false,
+		status: "success"
+	};
+}
+/**
+* Returns the initial state of a query, based on its `initialData` and `initialDataUpdatedAt`
+* options.
+* @param options - The query options.
+* @returns The initial query state: `'success'` if `initialData` is set, otherwise `'pending'`.
+*/
+function getDefaultState$1(options) {
+	const data = typeof options.initialData === "function" ? options.initialData() : options.initialData;
+	const hasData = data !== void 0;
+	const initialDataUpdatedAt = hasData ? typeof options.initialDataUpdatedAt === "function" ? options.initialDataUpdatedAt() : options.initialDataUpdatedAt : 0;
+	return {
+		data,
+		dataUpdateCount: 0,
+		dataUpdatedAt: hasData ? initialDataUpdatedAt ?? Date.now() : 0,
+		error: null,
+		errorUpdateCount: 0,
+		errorUpdatedAt: 0,
+		fetchFailureCount: 0,
+		fetchFailureReason: null,
+		fetchMeta: null,
+		isInvalidated: false,
+		status: hasData ? "success" : "pending",
+		fetchStatus: "idle"
+	};
+}
+// node_modules/@tanstack/query-core/build/modern/queryObserver.js
+/**
+* A `QueryObserver` watches a single query in the `QueryCache` and computes a
+* `QueryObserverResult` from its state, recomputing and notifying subscribers
+* whenever the underlying query (or the observer's options) changes. It is
+* the primitive that framework adapters (e.g. `useQuery`) build their hooks
+* on top of, but it can also be used directly to observe and switch between
+* queries outside of any framework.
+* @example
+* ```ts
+* const observer = new QueryObserver(queryClient, {
+*   queryKey: ['posts'],
+*   queryFn: fetchPosts,
+* })
+*
+* const unsubscribe = observer.subscribe((result) => {
+*   console.log(result.data)
+* })
+* ```
+*/
+var QueryObserver = class extends Subscribable {
+	#client;
+	#currentQuery = void 0;
+	#currentQueryInitialState = void 0;
+	#currentResult = void 0;
+	#currentResultState;
+	#currentResultOptions;
+	#selectError;
+	#selectFn;
+	#selectResult;
+	#lastQueryWithDefinedData;
+	#staleTimeoutId;
+	#refetchIntervalId;
+	#currentRefetchInterval;
+	#trackedProps = /* @__PURE__ */ new Set();
+	constructor(client, options) {
+		super();
+		this.options = options;
+		this.#client = client;
+		this.#selectError = null;
+		this.bindMethods();
+		this.setOptions(options);
+	}
+	/**
+	* Binds the methods of the result (`refetch`) to the observer, so they keep working when destructured
+	* from it. Subclasses override it to bind their own result methods as well.
+	*/
+	bindMethods() {
+		this.refetch = this.refetch.bind(this);
+	}
+	onSubscribe() {
+		if (this.listeners.size === 1) {
+			this.#currentQuery.addObserver(this);
+			if (shouldFetchOnMount(this.#currentQuery, this.options)) this.#executeFetch();
+			else this.updateResult();
+			this.#updateTimers();
+		}
+	}
+	onUnsubscribe() {
+		if (!this.hasListeners()) this.destroy();
+	}
+	/**
+	* Returns whether the observed query is currently stale and configured
+	* (via the `refetchOnReconnect` option) to refetch when the network
+	* reconnects.
+	* @returns `true` if the observer should refetch the query on reconnect.
+	*/
+	shouldFetchOnReconnect() {
+		return shouldFetchOn(this.#currentQuery, this.options, this.options.refetchOnReconnect);
+	}
+	/**
+	* Returns whether the observed query is currently stale and configured
+	* (via the `refetchOnWindowFocus` option) to refetch when the window
+	* regains focus.
+	* @returns `true` if the observer should refetch the query on window focus.
+	*/
+	shouldFetchOnWindowFocus() {
+		return shouldFetchOn(this.#currentQuery, this.options, this.options.refetchOnWindowFocus);
+	}
+	/**
+	* Stops observing the current query: clears all listeners, cancels the
+	* stale and refetch-interval timers, and removes this observer from the
+	* query it was observing.
+	*/
+	destroy() {
+		this.listeners = /* @__PURE__ */ new Set();
+		this.#clearStaleTimeout();
+		this.#clearRefetchInterval();
+		this.#currentQuery.removeObserver(this);
+	}
+	/**
+	* Updates the observer's options. This will re-resolve the query being
+	* observed (switching to a different query if the `queryKey` changed),
+	* trigger a fetch if the new options require one and the observer has
+	* subscribers, recompute the current result, and reschedule the stale and
+	* refetch-interval timers as needed.
+	* @param options - The new observer options. They are defaulted with {@link
+	* QueryClient#defaultQueryOptions} before being applied.
+	* @throws {Error} If `enabled` is neither a boolean nor a function.
+	* @example
+	* ```ts
+	* observer.setOptions({ queryKey: ['posts', 1], queryFn: () => fetchPost(1) })
+	* // later: switch to a different query, reusing the same observer
+	* observer.setOptions({ queryKey: ['posts', 2], queryFn: () => fetchPost(2) })
+	* ```
+	*/
+	setOptions(options) {
+		const prevOptions = this.options;
+		const prevQuery = this.#currentQuery;
+		this.options = this.#client.defaultQueryOptions(options);
+		if (this.options.enabled !== void 0 && typeof this.options.enabled !== "boolean" && typeof this.options.enabled !== "function" && typeof resolveQueryValue(this.options.enabled, this.#currentQuery) !== "boolean") throw new Error("Expected enabled to be a boolean or a callback that returns a boolean");
+		this.#updateQuery();
+		this.#currentQuery.setOptions(this.options);
+		if (prevOptions._defaulted && !shallowEqualObjects(this.options, prevOptions)) this.#client.getQueryCache().notify({
+			type: "observerOptionsUpdated",
+			query: this.#currentQuery,
+			observer: this
+		});
+		const mounted = this.hasListeners();
+		if (mounted && shouldFetchOptionally(this.#currentQuery, prevQuery, this.options, prevOptions)) this.#executeFetch();
+		this.updateResult();
+		if (mounted && (this.#currentQuery !== prevQuery || resolveQueryValue(this.options.enabled, this.#currentQuery) !== resolveQueryValue(prevOptions.enabled, this.#currentQuery) || resolveQueryValue(this.options.staleTime, this.#currentQuery) !== resolveQueryValue(prevOptions.staleTime, this.#currentQuery))) this.#updateStaleTimeout();
+		const nextRefetchInterval = this.#computeRefetchInterval();
+		if (mounted && (this.#currentQuery !== prevQuery || resolveQueryValue(this.options.enabled, this.#currentQuery) !== resolveQueryValue(prevOptions.enabled, this.#currentQuery) || nextRefetchInterval !== this.#currentRefetchInterval)) this.#updateRefetchInterval(nextRefetchInterval);
+	}
+	/**
+	* Computes the result the observer would produce for the given (already-defaulted) options
+	* right now, building the underlying `Query` if it doesn't exist yet, without waiting for a
+	* subscription callback. Called by framework adapters on every render (e.g. `useQuery`) so the
+	* returned value is available synchronously, ahead of `setOptions` triggering an actual fetch.
+	* @param options - The defaulted observer options to compute the result for.
+	* @returns The result for the given options.
+	*/
+	getOptimisticResult(options) {
+		const query = this.#client.getQueryCache().build(this.#client, options);
+		const result = this.createResult(query, options);
+		if (!shallowEqualObjects(this.getCurrentResult(), result)) {
+			this.#currentResult = result;
+			this.#currentResultOptions = this.options;
+			this.#currentResultState = this.#currentQuery.state;
+		}
+		return result;
+	}
+	/**
+	* Returns the most recently computed `QueryObserverResult` for the
+	* observed query. This is a point-in-time read; to be notified of updates
+	* as they happen, subscribe to the observer instead (its inherited
+	* `subscribe` method).
+	* @returns The observer's latest result.
+	* @example
+	* ```ts
+	* const result = observer.getCurrentResult()
+	* console.log(result.status, result.data)
+	* ```
+	*/
+	getCurrentResult() {
+		return this.#currentResult;
+	}
+	/**
+	* Wraps a `QueryObserverResult` in a `Proxy` that records which properties are read, via
+	* {@link QueryObserver#trackProp} (and an optional `onPropTracked` callback). Used by framework
+	* adapters when `notifyOnChangeProps` is not set, to implement its default "only re-render on
+	* properties you actually read" behavior.
+	* @param result - The result to wrap.
+	* @param onPropTracked - Called with the name of each property that is read.
+	* @returns A proxy of `result` that tracks property reads.
+	*/
+	trackResult(result, onPropTracked) {
+		return new Proxy(result, { get: (target, key) => {
+			this.trackProp(key);
+			onPropTracked?.(key);
+			return Reflect.get(target, key);
+		} });
+	}
+	/**
+	* Records that the given `QueryObserverResult` property was read, so a subsequent update only
+	* notifies this observer if a tracked property actually changed. Normally called indirectly via
+	* {@link QueryObserver#trackResult}'s proxy; exposed directly for adapters that track property
+	* access themselves (e.g. through their own reactivity system) instead of via the proxy.
+	* @param key - The name of the property that was read.
+	*/
+	trackProp(key) {
+		this.#trackedProps.add(key);
+	}
+	/**
+	* Returns the `Query` instance this observer is currently observing.
+	* @returns The observed query.
+	*/
+	getCurrentQuery() {
+		return this.#currentQuery;
+	}
+	/**
+	* Refetches the observed query and returns a promise that resolves with
+	* the resulting `QueryObserverResult`.
+	* @param options - Set `cancelRefetch` to `false` to keep a running fetch instead of cancelling
+	* it, and `throwOnError` to `true` to reject when the refetch fails.
+	* @returns A promise that resolves with the result after the refetch.
+	* @example
+	* ```ts
+	* const result = await observer.refetch({ cancelRefetch: false })
+	* console.log(result.data)
+	* ```
+	*/
+	refetch({ ...options } = {}) {
+		return this.fetch({ ...options });
+	}
+	/**
+	* Fetches a query defined by the given options without affecting this
+	* observer's own tracked query or result, and returns a promise that
+	* resolves with the `QueryObserverResult` for that fetch. This is useful
+	* for prefetching data that another observer (e.g. a query about to be
+	* navigated to) will need, ahead of time.
+	* @param options - The observer options of the query to fetch.
+	* @returns A promise that resolves with the result for the fetched query.
+	* @example
+	* ```ts
+	* const result = await observer.fetchOptimistic({
+	*   queryKey: ['posts', 2],
+	*   queryFn: () => fetchPost(2),
+	* })
+	* console.log(result.data)
+	* ```
+	*/
+	fetchOptimistic(options) {
+		const defaultedOptions = this.#client.defaultQueryOptions(options);
+		const query = this.#client.getQueryCache().build(this.#client, defaultedOptions);
+		let unsubscribe = () => {};
+		let resolveEarly;
+		const cachePromise = new Promise((resolve) => {
+			resolveEarly = resolve;
+			unsubscribe = this.#client.getQueryCache().subscribe((event) => {
+				if (event.type === "updated" && event.query.queryHash === query.queryHash && query.state.data !== void 0) {
+					unsubscribe();
+					resolve(this.createResult(query, defaultedOptions));
+				}
+			});
+		});
+		return Promise.race([query.fetch().then(() => {
+			const result = this.createResult(query, defaultedOptions);
+			resolveEarly?.(result);
+			return result;
+		}).finally(() => {
+			unsubscribe();
+		}), cachePromise]);
+	}
+	/**
+	* Fetches the observed query and updates the result once the fetch settles. Used by `refetch` and,
+	* in `InfiniteQueryObserver`, to fetch more pages.
+	* @param fetchOptions - Options for this fetch. `cancelRefetch` defaults to `true`.
+	* @returns A promise that resolves with the updated result.
+	*/
+	fetch(fetchOptions) {
+		return this.#executeFetch({
+			...fetchOptions,
+			cancelRefetch: fetchOptions.cancelRefetch ?? true
+		}).then(() => {
+			this.updateResult();
+			return this.#currentResult;
+		});
+	}
+	#executeFetch(fetchOptions) {
+		this.#updateQuery();
+		let promise = this.#currentQuery.fetch(this.options, fetchOptions);
+		if (!fetchOptions?.throwOnError) promise = promise.catch(noop);
+		return promise;
+	}
+	#shouldScheduleTimer(timeout) {
+		return !isServer() && resolveQueryValue(this.options.enabled, this.#currentQuery) !== false && isValidTimeout(timeout);
+	}
+	#updateStaleTimeout() {
+		this.#clearStaleTimeout();
+		const staleTime = resolveQueryValue(this.options.staleTime, this.#currentQuery);
+		if (this.#currentResult.isStale || !this.#shouldScheduleTimer(staleTime)) return;
+		const timeout = timeUntilStale(this.#currentResult.dataUpdatedAt, staleTime) + 1;
+		this.#staleTimeoutId = timeoutManager.setTimeout(() => {
+			if (!this.#currentResult.isStale) this.updateResult();
+		}, timeout);
+	}
+	#computeRefetchInterval() {
+		return resolveQueryValue(this.options.refetchInterval, this.#currentQuery) ?? false;
+	}
+	#updateRefetchInterval(nextInterval) {
+		this.#clearRefetchInterval();
+		this.#currentRefetchInterval = nextInterval;
+		if (this.#currentRefetchInterval === 0 || !this.#shouldScheduleTimer(this.#currentRefetchInterval)) return;
+		this.#refetchIntervalId = timeoutManager.setInterval(() => {
+			if (this.options.refetchIntervalInBackground || focusManager.isFocused()) this.#executeFetch();
+		}, this.#currentRefetchInterval);
+	}
+	#updateTimers() {
+		this.#updateStaleTimeout();
+		this.#updateRefetchInterval(this.#computeRefetchInterval());
+	}
+	#clearStaleTimeout() {
+		if (this.#staleTimeoutId !== void 0) {
+			timeoutManager.clearTimeout(this.#staleTimeoutId);
+			this.#staleTimeoutId = void 0;
+		}
+	}
+	#clearRefetchInterval() {
+		if (this.#refetchIntervalId !== void 0) {
+			timeoutManager.clearInterval(this.#refetchIntervalId);
+			this.#refetchIntervalId = void 0;
+		}
+	}
+	/**
+	* Computes the result for a query and options from the query's state, applying `select`,
+	* `placeholderData`, and the derived flags. Subclasses override it to add their own fields.
+	* @param query - The query to compute the result for.
+	* @param options - The observer options to compute the result with.
+	* @returns The computed result.
+	*/
+	createResult(query, options) {
+		const prevQuery = this.#currentQuery;
+		const prevOptions = this.options;
+		const prevResult = this.#currentResult;
+		const prevResultState = this.#currentResultState;
+		const prevResultOptions = this.#currentResultOptions;
+		const queryInitialState = query !== prevQuery ? query.state : this.#currentQueryInitialState;
+		const { state } = query;
+		let newState = { ...state };
+		let isPlaceholderData = false;
+		let data;
+		if (options._optimisticResults) {
+			const mounted = this.hasListeners();
+			const fetchOnMount = !mounted && shouldFetchOnMount(query, options);
+			const fetchOptionally = mounted && shouldFetchOptionally(query, prevQuery, options, prevOptions);
+			if (fetchOnMount || fetchOptionally) newState = {
+				...newState,
+				...fetchState(state.data, query.options)
+			};
+			if (options._optimisticResults === "isRestoring") newState.fetchStatus = "idle";
+		}
+		let { error, errorUpdatedAt, status } = newState;
+		data = newState.data;
+		let skipSelect = false;
+		if (options.placeholderData !== void 0 && data === void 0 && status === "pending") {
+			let placeholderData;
+			if (prevResult?.isPlaceholderData && options.placeholderData === prevResultOptions?.placeholderData) {
+				placeholderData = prevResult.data;
+				skipSelect = true;
+			} else placeholderData = typeof options.placeholderData === "function" ? options.placeholderData(this.#lastQueryWithDefinedData?.state.data, this.#lastQueryWithDefinedData) : options.placeholderData;
+			if (placeholderData !== void 0) {
+				status = "success";
+				data = replaceData(prevResult?.data, placeholderData, options);
+				isPlaceholderData = true;
+			}
+		}
+		if (options.select && data !== void 0 && !skipSelect) {
+			if (prevResult && data === prevResultState?.data && options.select === this.#selectFn) data = this.#selectResult;
+			else try {
+				this.#selectFn = options.select;
+				data = options.select(data);
+				data = replaceData(prevResult?.data, data, options);
+				this.#selectResult = data;
+				this.#selectError = null;
+			} catch (selectError) {
+				this.#selectError = selectError;
+			}
+		} else if (data === void 0) this.#selectError = null;
+		if (this.#selectError) {
+			error = this.#selectError;
+			data = this.#selectResult;
+			errorUpdatedAt = Date.now();
+			status = "error";
+			isPlaceholderData = false;
+		}
+		const isFetching = newState.fetchStatus === "fetching";
+		const isPending = status === "pending";
+		const isError = status === "error";
+		const isLoading = isPending && isFetching;
+		const hasData = data !== void 0;
+		return {
+			status,
+			fetchStatus: newState.fetchStatus,
+			isPending,
+			isSuccess: status === "success",
+			isError,
+			isInitialLoading: isLoading,
+			isLoading,
+			data,
+			dataUpdatedAt: newState.dataUpdatedAt,
+			error,
+			errorUpdatedAt,
+			failureCount: newState.fetchFailureCount,
+			failureReason: newState.fetchFailureReason,
+			errorUpdateCount: newState.errorUpdateCount,
+			isFetched: query.isFetched(),
+			isFetchedAfterMount: newState.dataUpdateCount > queryInitialState.dataUpdateCount || newState.errorUpdateCount > queryInitialState.errorUpdateCount,
+			isFetching,
+			isRefetching: isFetching && !isPending,
+			isLoadingError: isError && !hasData,
+			isPaused: newState.fetchStatus === "paused",
+			isPlaceholderData,
+			isRefetchError: isError && hasData,
+			isStale: isStale(query, options),
+			refetch: this.refetch,
+			isEnabled: resolveQueryValue(options.enabled, query) !== false
+		};
+	}
+	/**
+	* Recomputes and stores the current result from the current query/options, notifying listeners
+	* if it changed. Framework adapters call this right after subscribing to make sure no query
+	* update was missed in the gap between creating the observer and subscribing to it.
+	*/
+	updateResult() {
+		const prevResult = this.#currentResult;
+		const nextResult = this.createResult(this.#currentQuery, this.options);
+		this.#currentResultState = this.#currentQuery.state;
+		this.#currentResultOptions = this.options;
+		if (this.#currentResultState.data !== void 0) this.#lastQueryWithDefinedData = this.#currentQuery;
+		if (shallowEqualObjects(nextResult, prevResult)) return;
+		this.#currentResult = nextResult;
+		const shouldNotifyListeners = () => {
+			if (!prevResult) return true;
+			const { notifyOnChangeProps } = this.options;
+			const notifyOnChangePropsValue = typeof notifyOnChangeProps === "function" ? notifyOnChangeProps() : notifyOnChangeProps;
+			if (notifyOnChangePropsValue === "all" || !notifyOnChangePropsValue && !this.#trackedProps.size) return true;
+			const includedProps = new Set(notifyOnChangePropsValue ?? this.#trackedProps);
+			if (this.options.throwOnError) includedProps.add("error");
+			return Object.keys(this.#currentResult).some((key) => {
+				const typedKey = key;
+				return this.#currentResult[typedKey] !== prevResult[typedKey] && includedProps.has(typedKey);
+			});
+		};
+		const notifyListeners = shouldNotifyListeners();
+		notifyManager.batch(() => {
+			if (notifyListeners) this.listeners.forEach((listener) => {
+				listener(this.#currentResult);
+			});
+			this.#client.getQueryCache().notify({
+				query: this.#currentQuery,
+				type: "observerResultsUpdated"
+			});
+		});
+	}
+	#updateQuery() {
+		const query = this.#client.getQueryCache().build(this.#client, this.options);
+		if (query === this.#currentQuery) return;
+		const prevQuery = this.#currentQuery;
+		this.#currentQuery = query;
+		this.#currentQueryInitialState = query.state;
+		if (this.hasListeners()) {
+			prevQuery?.removeObserver(this);
+			query.addObserver(this);
+		}
+	}
+	/**
+	* Updates the observer's result when the observed query changes, and reschedules its timers if it
+	* has listeners.
+	* @internal
+	*/
+	onQueryUpdate() {
+		this.updateResult();
+		if (this.hasListeners()) this.#updateTimers();
+	}
+};
+/**
+* Checks whether a query has no data yet and should do its initial load when an observer mounts.
+* @param query - The query to check.
+* @param options - The observer options.
+* @returns `true` if the query is enabled, has no data, and isn't in an error state with
+* `retryOnMount: false`.
+*/
+function shouldLoadOnMount(query, options) {
+	return resolveQueryValue(options.enabled, query) !== false && query.state.data === void 0 && !(query.state.status === "error" && resolveQueryValue(options.retryOnMount, query) === false);
+}
+/**
+* Checks whether a query should fetch when an observer mounts: either for its initial load, or
+* because it has data and `refetchOnMount` asks for a refetch.
+* @param query - The query to check.
+* @param options - The observer options.
+* @returns `true` if the query should fetch on mount.
+*/
+function shouldFetchOnMount(query, options) {
+	return shouldLoadOnMount(query, options) || query.state.data !== void 0 && shouldFetchOn(query, options, options.refetchOnMount);
+}
+/**
+* Checks whether a query should fetch for a `refetchOnMount`, `refetchOnWindowFocus`, or
+* `refetchOnReconnect` option.
+* @param query - The query to check.
+* @param options - The observer options.
+* @param field - The value of the option to check.
+* @returns `true` if the query is enabled, not static, and the option is `'always'`, or is not
+* `false` and the query is stale.
+*/
+function shouldFetchOn(query, options, field) {
+	if (resolveQueryValue(options.enabled, query) !== false && resolveQueryValue(options.staleTime, query) !== "static") {
+		const value = resolveQueryValue(field, query);
+		return value === "always" || value !== false && isStale(query, options);
+	}
+	return false;
+}
+/**
+* Checks whether a query should fetch after the observer's options change.
+* @param query - The query observed with the new options.
+* @param prevQuery - The query observed with the previous options.
+* @param options - The new observer options.
+* @param prevOptions - The previous observer options.
+* @returns `true` if the query changed or was disabled before, it isn't a suspense query in an
+* error state, and it is stale.
+*/
+function shouldFetchOptionally(query, prevQuery, options, prevOptions) {
+	return (query !== prevQuery || resolveQueryValue(prevOptions.enabled, query) === false) && (!options.suspense || query.state.status !== "error") && isStale(query, options);
+}
+/**
+* Checks whether a query is stale for the given observer options.
+* @param query - The query to check.
+* @param options - The observer options, whose `enabled` and `staleTime` are used.
+* @returns `true` if the query is enabled and its data is stale for `staleTime`.
+*/
+function isStale(query, options) {
+	return resolveQueryValue(options.enabled, query) !== false && query.isStaleByTime(resolveQueryValue(options.staleTime, query));
+}
+// node_modules/@tanstack/query-core/build/modern/mutation.js
+/**
+* Represents a single mutation attempt. A `Mutation` holds the mutation's
+* options, state (data/error/status), and the `MutationObserver`s currently
+* subscribed to it.
+*
+* Instances are created and managed internally by `MutationCache`; application
+* code typically interacts with mutations indirectly through `QueryClient` or
+* a framework hook like `useMutation`. Direct access to a `Mutation` instance
+* is possible via `mutationCache.find()`/`getAll()` for inspecting cache state.
+* @example
+* ```ts
+* const mutationCache = queryClient.getMutationCache()
+*
+* const mutation = mutationCache.find({ mutationKey: ['addPost'] })
+* ```
+*/
+var Mutation = class extends Removable {
+	#client;
+	#observers;
+	#mutationCache;
+	#retryer;
+	constructor(config) {
+		super();
+		this.#client = config.client;
+		this.mutationId = config.mutationId;
+		this.#mutationCache = config.mutationCache;
+		this.#observers = [];
+		this.state = config.state || getDefaultState();
+		this.setOptions(config.options);
+		this.scheduleGc();
+	}
+	/**
+	* Replaces the mutation's options and applies their `gcTime`.
+	* @internal
+	* @param options - The new mutation options.
+	*/
+	setOptions(options) {
+		this.options = options;
+		this.updateGcTime(this.options.gcTime);
+	}
+	/**
+	* The `meta` object passed in the mutation's options, if any.
+	* @returns The mutation's `meta`, or `undefined` if none was set.
+	*/
+	get meta() {
+		return this.options.meta;
+	}
+	/**
+	* Subscribes an observer to the mutation and stops its garbage collection.
+	* @internal
+	* @param observer - The observer to add. Adding an observer that is already subscribed does
+	* nothing.
+	*/
+	addObserver(observer) {
+		if (!this.#observers.includes(observer)) {
+			this.#observers.push(observer);
+			this.clearGcTimeout();
+			this.#mutationCache.notify({
+				type: "observerAdded",
+				mutation: this,
+				observer
+			});
+		}
+	}
+	/**
+	* Unsubscribes an observer from the mutation.
+	* @internal
+	* @param observer - The observer to remove. Garbage collection is scheduled afterwards.
+	*/
+	removeObserver(observer) {
+		this.#observers = this.#observers.filter((x) => x !== observer);
+		this.scheduleGc();
+		this.#mutationCache.notify({
+			type: "observerRemoved",
+			mutation: this,
+			observer
+		});
+	}
+	optionalRemove() {
+		if (!this.#observers.length) {
+			if (this.state.status === "pending") this.scheduleGc();
+			else this.#mutationCache.remove(this);
+		}
+	}
+	/**
+	* Resumes a mutation that is currently paused or was restored from a
+	* dehydrated, still-`pending` state.
+	*
+	* - If this mutation has an active retryer (it paused mid-attempt, e.g. due
+	*   to the network mode or scope-based queuing), its retryer is resumed.
+	* - Otherwise, if the mutation's status is still `pending` (e.g. it was
+	*   dehydrated while an attempt was in flight and never got a retryer in
+	*   this instance), `execute` is called again with the last known variables.
+	* - Otherwise the mutation has already settled and this resolves immediately
+	*   without running anything again.
+	* @returns A promise that settles with the resumed mutation: it rejects if the mutation fails.
+	* It resolves immediately if the mutation has already settled.
+	* @see {@link Mutation#execute}
+	* @example
+	* ```ts
+	* // typically driven by reconnect handling, e.g. queryClient.resumePausedMutations()
+	* const mutation = mutationCache.find({ mutationKey: ['addPost'] })
+	* await mutation?.continue()
+	* ```
+	*/
+	continue() {
+		return this.#retryer?.continue() ?? (this.state.status === "pending" ? this.execute(this.state.variables) : Promise.resolve());
+	}
+	/**
+	* Runs the mutation function for the given variables through a retryer, and
+	* drives the mutation's state and lifecycle callbacks through to settlement.
+	*
+	* If this mutation's state is already `pending` when `execute` is called
+	* (i.e. it was restored, still in-flight, from a dehydrated state), the
+	* `onMutate` step is skipped and a `continue` action is dispatched to
+	* unpause it; otherwise a `pending` action is dispatched first, then the
+	* mutation cache's `onMutate` and the mutation's own `onMutate` option are
+	* awaited in that order, and the resulting context is stored.
+	*
+	* The mutation function is then run (subject to `retry`/`retryDelay`/
+	* `networkMode`, and to the mutation cache's scope-based serialization).
+	* On success, the cache's `onSuccess`/`onSettled` callbacks run before the
+	* mutation's own `onSuccess`/`onSettled` options, a `success` action is
+	* dispatched, and the resolved data is returned. On failure, the same
+	* cache-then-option ordering is used for `onError`/`onSettled`, but each of
+	* those four callbacks is individually caught so that a throwing callback
+	* cannot mask the original error; an `error` action is then dispatched and
+	* the original error is re-thrown.
+	* @param variables - The variables passed to the `mutationFn`.
+	* @returns A promise that resolves with the mutation's data, or rejects with its error.
+	* @see {@link Mutation#continue}
+	* @example
+	* ```ts
+	* // Called internally by `MutationObserver.mutate` and `Mutation.continue` —
+	* // applications normally trigger mutations through those, not this method.
+	* const data = await mutation.execute(variables)
+	* ```
+	*/
+	async execute(variables) {
+		const onContinue = () => {
+			this.#dispatch({ type: "continue" });
+		};
+		const mutationFnContext = {
+			client: this.#client,
+			meta: this.options.meta,
+			mutationKey: this.options.mutationKey
+		};
+		const retryer = this.#retryer = createRetryer({
+			fn: () => {
+				if (!this.options.mutationFn) return Promise.reject(/* @__PURE__ */ new Error("No mutationFn found"));
+				return this.options.mutationFn(variables, mutationFnContext);
+			},
+			onFail: (failureCount, error) => {
+				this.#dispatch({
+					type: "failed",
+					failureCount,
+					error
+				});
+			},
+			onPause: () => {
+				this.#dispatch({ type: "pause" });
+			},
+			onContinue,
+			retry: this.options.retry ?? 0,
+			retryDelay: this.options.retryDelay,
+			networkMode: this.options.networkMode,
+			canRun: () => this.#mutationCache.canRun(this)
+		});
+		const restored = this.state.status === "pending";
+		const isPaused = !retryer.canStart();
+		try {
+			if (restored) onContinue();
+			else {
+				this.#dispatch({
+					type: "pending",
+					variables,
+					isPaused
+				});
+				if (this.#mutationCache.config.onMutate) await this.#mutationCache.config.onMutate(variables, this, mutationFnContext);
+				const context = await this.options.onMutate?.(variables, mutationFnContext);
+				if (context !== this.state.context) this.#dispatch({
+					type: "pending",
+					context,
+					variables,
+					isPaused
+				});
+			}
+			const data = await retryer.start();
+			await this.#mutationCache.config.onSuccess?.(data, variables, this.state.context, this, mutationFnContext);
+			await this.options.onSuccess?.(data, variables, this.state.context, mutationFnContext);
+			await this.#mutationCache.config.onSettled?.(data, null, this.state.variables, this.state.context, this, mutationFnContext);
+			await this.options.onSettled?.(data, null, variables, this.state.context, mutationFnContext);
+			this.#dispatch({
+				type: "success",
+				data
+			});
+			return data;
+		} catch (error) {
+			try {
+				await this.#mutationCache.config.onError?.(error, variables, this.state.context, this, mutationFnContext);
+			} catch (e) {
+				Promise.reject(e);
+			}
+			try {
+				await this.options.onError?.(error, variables, this.state.context, mutationFnContext);
+			} catch (e) {
+				Promise.reject(e);
+			}
+			try {
+				await this.#mutationCache.config.onSettled?.(void 0, error, this.state.variables, this.state.context, this, mutationFnContext);
+			} catch (e) {
+				Promise.reject(e);
+			}
+			try {
+				await this.options.onSettled?.(void 0, error, variables, this.state.context, mutationFnContext);
+			} catch (e) {
+				Promise.reject(e);
+			}
+			this.#dispatch({
+				type: "error",
+				error
+			});
+			throw error;
+		} finally {
+			if (this.#retryer === retryer) this.#retryer = void 0;
+			this.#mutationCache.runNext(this);
+		}
+	}
+	#dispatch(action) {
+		const reducer = (state) => {
+			switch (action.type) {
+				case "failed": return {
+					...state,
+					failureCount: action.failureCount,
+					failureReason: action.error
+				};
+				case "pause": return {
+					...state,
+					isPaused: true
+				};
+				case "continue": return {
+					...state,
+					isPaused: false
+				};
+				case "pending": return {
+					...state,
+					context: action.context,
+					data: void 0,
+					failureCount: 0,
+					failureReason: null,
+					error: null,
+					isPaused: action.isPaused,
+					status: "pending",
+					variables: action.variables,
+					submittedAt: Date.now()
+				};
+				case "success": return {
+					...state,
+					data: action.data,
+					failureCount: 0,
+					failureReason: null,
+					error: null,
+					status: "success",
+					isPaused: false
+				};
+				case "error": return {
+					...state,
+					data: void 0,
+					error: action.error,
+					failureCount: state.failureCount + 1,
+					failureReason: action.error,
+					isPaused: false,
+					status: "error"
+				};
+			}
+		};
+		this.state = reducer(this.state);
+		notifyManager.batch(() => {
+			this.#observers.forEach((observer) => {
+				observer.onMutationUpdate(action);
+			});
+			this.#mutationCache.notify({
+				mutation: this,
+				type: "updated",
+				action
+			});
+		});
+	}
+};
+/**
+* Returns the initial state of a mutation: `'idle'`, with no data, error, or variables.
+* @returns The initial mutation state.
+*/
+function getDefaultState() {
+	return {
+		context: void 0,
+		data: void 0,
+		error: null,
+		failureCount: 0,
+		failureReason: null,
+		isPaused: false,
+		status: "idle",
+		variables: void 0,
+		submittedAt: 0
+	};
+}
+// node_modules/@tanstack/query-core/build/modern/mutationCache.js
+/**
+* The `MutationCache` is the storage for mutations.
+*
+* Normally, you will not interact with the `MutationCache` directly and instead use a
+* `QueryClient`. You can subscribe to it (inherited from `Subscribable`) to be informed of
+* safe/known updates to the cache, such as mutations being added, removed, or updated.
+* @example
+* ```ts
+* const unsubscribe = mutationCache.subscribe((event) => {
+*   console.log(event.type, event.mutation)
+* })
+* ```
+*/
+var MutationCache = class extends Subscribable {
+	#mutations;
+	#scopes;
+	#mutationId;
+	constructor(config = {}) {
+		super();
+		this.config = config;
+		this.#mutations = /* @__PURE__ */ new Set();
+		this.#scopes = /* @__PURE__ */ new Map();
+		this.#mutationId = 0;
+	}
+	/**
+	* Creates a mutation and adds it to the cache.
+	* @internal
+	* @param client - The client the mutation belongs to, used to default its options.
+	* @param options - The mutation options. They are defaulted with {@link
+	* QueryClient#defaultMutationOptions}.
+	* @param state - The initial state of the mutation, e.g. when restoring a dehydrated mutation.
+	* @returns The new mutation, already added to the cache.
+	*/
+	build(client, options, state) {
+		const mutation = new Mutation({
+			client,
+			mutationCache: this,
+			mutationId: ++this.#mutationId,
+			options: client.defaultMutationOptions(options),
+			state
+		});
+		this.add(mutation);
+		return mutation;
+	}
+	/**
+	* Adds a mutation to the cache.
+	* @internal
+	* @param mutation - The mutation to add. If it has a `scope`, it is queued in that scope.
+	*/
+	add(mutation) {
+		this.#mutations.add(mutation);
+		const scope = scopeFor(mutation);
+		if (typeof scope === "string") {
+			const scopedMutations = this.#scopes.get(scope);
+			if (scopedMutations) scopedMutations.push(mutation);
+			else this.#scopes.set(scope, [mutation]);
+		}
+		this.notify({
+			type: "added",
+			mutation
+		});
+	}
+	/**
+	* Removes a mutation from the cache.
+	* @internal
+	* @param mutation - The mutation to remove, also from its scope's queue.
+	*/
+	remove(mutation) {
+		if (this.#mutations.delete(mutation)) {
+			const scope = scopeFor(mutation);
+			if (typeof scope === "string") {
+				const scopedMutations = this.#scopes.get(scope);
+				if (scopedMutations) {
+					if (scopedMutations.length > 1) {
+						const index = scopedMutations.indexOf(mutation);
+						if (index !== -1) scopedMutations.splice(index, 1);
+					} else if (scopedMutations[0] === mutation) this.#scopes.delete(scope);
+				}
+			}
+		}
+		this.notify({
+			type: "removed",
+			mutation
+		});
+	}
+	/**
+	* Checks whether a mutation can run now, given the other mutations in its `scope`.
+	* @internal
+	* @param mutation - The mutation to check.
+	* @returns `true` if the mutation has no `scope`, or no other mutation in its scope is pending
+	* ahead of it.
+	*/
+	canRun(mutation) {
+		const scope = scopeFor(mutation);
+		if (typeof scope === "string") {
+			const firstPendingMutation = this.#scopes.get(scope)?.find((m) => m.state.status === "pending");
+			return !firstPendingMutation || firstPendingMutation === mutation;
+		} else return true;
+	}
+	/**
+	* Continues the next paused mutation in the same `scope` after a mutation finishes.
+	* @internal
+	* @param mutation - The mutation that finished.
+	* @returns A promise that resolves once the next paused mutation in the same scope has continued,
+	* or immediately if there is none.
+	*/
+	runNext(mutation) {
+		const scope = scopeFor(mutation);
+		if (typeof scope === "string") return (this.#scopes.get(scope)?.find((m) => m !== mutation && m.state.isPaused))?.continue() ?? Promise.resolve();
+		else return Promise.resolve();
+	}
+	/**
+	* Removes all mutations from the cache.
+	* @example
+	* ```ts
+	* const mutationCache = queryClient.getMutationCache()
+	*
+	* mutationCache.clear()
+	* ```
+	*/
+	clear() {
+		notifyManager.batch(() => {
+			const mutations = this.getAll();
+			this.#mutations.clear();
+			this.#scopes.clear();
+			mutations.forEach((mutation) => {
+				this.notify({
+					type: "removed",
+					mutation
+				});
+			});
+		});
+	}
+	/**
+	* Returns all mutations within the cache.
+	*
+	* This is not typically needed for most applications, but can come in handy when needing more
+	* information about a mutation in rare scenarios.
+	* @returns Every mutation in the cache.
+	* @example
+	* ```ts
+	* const mutationCache = queryClient.getMutationCache()
+	*
+	* const mutations = mutationCache.getAll()
+	* ```
+	*/
+	getAll() {
+		return Array.from(this.#mutations);
+	}
+	/**
+	* A slightly more advanced method that can be used to get an existing mutation instance from
+	* the cache. If the mutation does not exist, `undefined` is returned.
+	*
+	* This is not typically needed for most applications, but can come in handy when needing more
+	* information about a mutation in rare scenarios.
+	* @param filters - The filters to match. `exact` defaults to `true`.
+	* @returns The first matching mutation, or `undefined`.
+	* @see {@link MutationCache#findAll}
+	* @example
+	* ```ts
+	* const mutationCache = queryClient.getMutationCache()
+	*
+	* const mutation = mutationCache.find({ mutationKey: ['addPost'] })
+	* ```
+	*/
+	find(filters) {
+		const defaultedFilters = {
+			exact: true,
+			...filters
+		};
+		return this.getAll().find((mutation) => matchMutation(defaultedFilters, mutation));
+	}
+	/**
+	* An even more advanced method that can be used to get existing mutation instances from the
+	* cache that match the given filters. If no mutations match, an empty array is returned.
+	*
+	* This is not typically needed for most applications, but can come in handy when needing more
+	* information about mutations in rare scenarios.
+	* @param filters - The filters to match. Without filters, every mutation is returned.
+	* @returns The matching mutations.
+	* @see {@link MutationCache#find}
+	* @example
+	* ```ts
+	* const mutationCache = queryClient.getMutationCache()
+	*
+	* const mutations = mutationCache.findAll({ mutationKey: ['addPost'] })
+	* ```
+	*/
+	findAll(filters = {}) {
+		return this.getAll().filter((mutation) => matchMutation(filters, mutation));
+	}
+	/**
+	* Notifies every cache listener of an event, in one batch.
+	* @internal
+	* @param event - The event passed to every listener.
+	*/
+	notify(event) {
+		notifyManager.batch(() => {
+			this.listeners.forEach((listener) => {
+				listener(event);
+			});
+		});
+	}
+	/**
+	* Continues every paused mutation, e.g. when the app comes back online.
+	* @internal
+	* @returns A promise that resolves once every paused mutation has continued and settled.
+	*/
+	resumePausedMutations() {
+		const pausedMutations = this.getAll().filter((x) => x.state.isPaused);
+		return notifyManager.batch(() => Promise.all(pausedMutations.map((mutation) => mutation.continue().catch(noop))));
+	}
+};
+/**
+* Returns the scope id of a mutation, used to run mutations with the same scope one after another.
+* @param mutation - The mutation to read the scope of.
+* @returns The mutation's `scope.id`, or `undefined` if it has no scope.
+*/
+function scopeFor(mutation) {
+	return mutation.options.scope?.id;
+}
+// node_modules/@tanstack/query-core/build/modern/queryCache.js
+/**
+* The `QueryCache` is the storage mechanism for TanStack Query. It stores all the data, meta
+* information, and state of the queries it contains.
+*
+* Normally, you will not interact with the `QueryCache` directly and instead use a `QueryClient`
+* for a specific cache. You can subscribe to it (inherited from `Subscribable`) to be informed of
+* safe/known updates to the cache, such as queries being added, removed, or updated — updates made
+* outside of the cache's own tracked mechanisms (e.g. mutating a query's state object directly) do
+* not notify subscribers.
+* @example
+* ```ts
+* const unsubscribe = queryCache.subscribe((event) => {
+*   console.log(event.type, event.query)
+* })
+* ```
+*/
+var QueryCache = class extends Subscribable {
+	#queries;
+	constructor(config = {}) {
+		super();
+		this.config = config;
+		this.#queries = /* @__PURE__ */ new Map();
+	}
+	/**
+	* Returns the existing `Query` instance for the given options' `queryKey`/`queryHash`, or
+	* builds and adds a new one to the cache if none exists yet. Used by framework adapters and
+	* plugins (e.g. broadcast/persistence) that need to get-or-create a `Query` directly, bypassing
+	* the reactive `QueryObserver` machinery.
+	* @param client - The client the query belongs to, used to default its options.
+	* @param options - The query options, including the `queryKey`. A new query is created with the
+	* options defaulted by {@link QueryClient#defaultQueryOptions}.
+	* @param state - The initial state of a newly created query, e.g. when hydrating. Ignored if the
+	* query already exists.
+	* @returns The existing or newly created query.
+	* @example
+	* ```ts
+	* const queryCache = queryClient.getQueryCache()
+	*
+	* const query = queryCache.build(queryClient, {
+	*   queryKey: ['posts'],
+	*   queryFn: fetchPosts,
+	* })
+	* ```
+	*/
+	build(client, options, state) {
+		const queryKey = options.queryKey;
+		const queryHash = options.queryHash ?? hashQueryKeyByOptions(queryKey, options);
+		let query = this.get(queryHash);
+		if (!query) {
+			query = new Query({
+				client,
+				queryKey,
+				queryHash,
+				options: client.defaultQueryOptions(options),
+				state,
+				defaultOptions: client.getQueryDefaults(queryKey)
+			});
+			this.add(query);
+		}
+		return query;
+	}
+	/**
+	* Adds a query to the cache.
+	* @internal
+	* @param query - The query to add. If a query with the same hash is already cached, nothing
+	* happens.
+	*/
+	add(query) {
+		if (!this.#queries.has(query.queryHash)) {
+			this.#queries.set(query.queryHash, query);
+			this.notify({
+				type: "added",
+				query
+			});
+		}
+	}
+	/**
+	* Destroys the given `Query` and removes it from the cache, notifying subscribers with a
+	* `'removed'` event. A no-op if the query is no longer the one currently stored under its hash
+	* (e.g. it was already replaced). Used by plugins (e.g. the broadcast client) that mirror
+	* removals across `QueryCache` instances.
+	* @param query - The query to remove.
+	* @example
+	* ```ts
+	* const queryCache = queryClient.getQueryCache()
+	* const query = queryCache.find({ queryKey: ['posts'] })
+	*
+	* if (query) {
+	*   queryCache.remove(query)
+	* }
+	* ```
+	*/
+	remove(query) {
+		if (this.#queries.get(query.queryHash) === query) {
+			query.destroy();
+			this.#queries.delete(query.queryHash);
+			this.notify({
+				type: "removed",
+				query
+			});
+		}
+	}
+	/**
+	* Removes all queries from the cache.
+	* @example
+	* ```ts
+	* const queryCache = queryClient.getQueryCache()
+	*
+	* queryCache.clear()
+	* ```
+	*/
+	clear() {
+		notifyManager.batch(() => {
+			this.getAll().forEach((query) => {
+				this.remove(query);
+			});
+		});
+	}
+	/**
+	* Returns the `Query` instance stored under the given `queryHash`, or `undefined` if none
+	* exists. Unlike {@link QueryCache#find}, this looks up by the already-computed hash rather
+	* than by `QueryFilters`. Used by plugins (e.g. broadcast/hydration) that already have a hash
+	* to look up directly.
+	* @param queryHash - The hash of the query to look up.
+	* @returns The query stored under the hash, or `undefined`.
+	* @example
+	* ```ts
+	* const queryCache = queryClient.getQueryCache()
+	* const queryHash = hashKey(['posts'])
+	*
+	* const query = queryCache.get(queryHash)
+	* ```
+	*/
+	get(queryHash) {
+		return this.#queries.get(queryHash);
+	}
+	/**
+	* Returns all queries within the cache.
+	* @returns Every query in the cache.
+	* @example
+	* ```ts
+	* const queryCache = queryClient.getQueryCache()
+	*
+	* const queries = queryCache.getAll()
+	* ```
+	*/
+	getAll() {
+		return [...this.#queries.values()];
+	}
+	/**
+	* A slightly more advanced method that can be used to get an existing query instance from the
+	* cache. This instance not only contains all the state for the query, but all of the instances,
+	* and underlying guts of the query as well. If the query does not exist, `undefined` is
+	* returned.
+	*
+	* This is not typically needed for most applications, but can come in handy when needing more
+	* information about a query in rare scenarios (e.g. looking at `query.state.dataUpdatedAt` to
+	* decide whether a query is fresh enough to be used as an initial value).
+	* @param filters - The filters to match, including the required `queryKey`. `exact` defaults to
+	* `true`.
+	* @returns The first matching query, or `undefined`.
+	* @see {@link QueryCache#findAll}
+	* @example
+	* ```ts
+	* const queryCache = queryClient.getQueryCache()
+	*
+	* const query = queryCache.find({ queryKey: ['posts'] })
+	* ```
+	*/
+	find(filters) {
+		const defaultedFilters = {
+			exact: true,
+			...filters
+		};
+		return this.getAll().find((query) => matchQuery(defaultedFilters, query));
+	}
+	/**
+	* An even more advanced method that can be used to get existing query instances from the cache
+	* that partially match a query key. If no queries match, an empty array is returned.
+	*
+	* This is not typically needed for most applications, but can come in handy when needing more
+	* information about queries in rare scenarios.
+	* @param filters - The filters to match. Without filters, every query is returned.
+	* @returns The matching queries.
+	* @see {@link QueryCache#find}
+	* @example
+	* ```ts
+	* const queryCache = queryClient.getQueryCache()
+	*
+	* const queries = queryCache.findAll({ queryKey: ['posts'] })
+	* ```
+	*/
+	findAll(filters = {}) {
+		const queries = this.getAll();
+		return Object.keys(filters).length > 0 ? queries.filter((query) => matchQuery(filters, query)) : queries;
+	}
+	/**
+	* Notifies every cache listener of an event, in one batch.
+	* @internal
+	* @param event - The event passed to every listener.
+	*/
+	notify(event) {
+		notifyManager.batch(() => {
+			this.listeners.forEach((listener) => {
+				listener(event);
+			});
+		});
+	}
+	/**
+	* Calls {@link Query#onFocus} on every cached query, in one batch.
+	* @internal
+	*/
+	onFocus() {
+		notifyManager.batch(() => {
+			this.getAll().forEach((query) => {
+				query.onFocus();
+			});
+		});
+	}
+	/**
+	* Calls {@link Query#onOnline} on every cached query, in one batch.
+	* @internal
+	*/
+	onOnline() {
+		notifyManager.batch(() => {
+			this.getAll().forEach((query) => {
+				query.onOnline();
+			});
+		});
+	}
+};
+// node_modules/@tanstack/query-core/build/modern/queryClient.js
+/**
+* `QueryClient` is used to interact with a cache of queries and mutations. It owns a
+* `QueryCache` and a `MutationCache` (creating default ones if none are passed in) and holds
+* the default options that are applied to queries and mutations created through it.
+* @example
+* ```ts
+* const queryClient = new QueryClient({
+*   defaultOptions: {
+*     queries: {
+*       staleTime: Infinity,
+*     },
+*   },
+* })
+*
+* await queryClient.query({ queryKey: ['posts'], queryFn: fetchPosts })
+* ```
+*/
+var QueryClient = class {
+	#queryCache;
+	#mutationCache;
+	#defaultOptions;
+	#queryDefaults;
+	#mutationDefaults;
+	#mountCount;
+	#unsubscribeFocus;
+	#unsubscribeOnline;
+	constructor(config = {}) {
+		this.#queryCache = config.queryCache || new QueryCache();
+		this.#mutationCache = config.mutationCache || new MutationCache();
+		this.#defaultOptions = config.defaultOptions || {};
+		this.#queryDefaults = /* @__PURE__ */ new Map();
+		this.#mutationDefaults = /* @__PURE__ */ new Map();
+		this.#mountCount = 0;
+	}
+	/**
+	* Called by a framework adapter's `QueryClientProvider`-equivalent when it mounts, to start
+	* listening for focus/online events and resume paused mutations. Ref-counted via an internal
+	* mount count, so nested or multiple providers sharing the same `QueryClient` don't tear down
+	* the shared listeners until the last one unmounts.
+	*/
+	mount() {
+		this.#mountCount++;
+		if (this.#mountCount !== 1) return;
+		this.#unsubscribeFocus = focusManager.subscribe(async (focused) => {
+			if (focused) {
+				await this.resumePausedMutations();
+				this.#queryCache.onFocus();
+			}
+		});
+		this.#unsubscribeOnline = onlineManager.subscribe(async (online) => {
+			if (online) {
+				await this.resumePausedMutations();
+				this.#queryCache.onOnline();
+			}
+		});
+	}
+	/**
+	* The inverse of {@link QueryClient#mount} — called by a framework adapter's
+	* `QueryClientProvider`-equivalent when it unmounts. Only tears down the focus/online
+	* listeners once the mount count returns to `0`.
+	*/
+	unmount() {
+		this.#mountCount--;
+		if (this.#mountCount !== 0) return;
+		this.#unsubscribeFocus?.();
+		this.#unsubscribeFocus = void 0;
+		this.#unsubscribeOnline?.();
+		this.#unsubscribeOnline = void 0;
+	}
+	/**
+	* Returns the number of queries in the cache that are currently fetching, optionally
+	* matching a set of filters. This includes background-fetching, loading new pages, and
+	* loading more infinite query results.
+	* @param filters - Narrows down which fetching queries are counted. Without filters, every
+	* fetching query is counted.
+	* @returns The number of matching queries whose `fetchStatus` is `'fetching'`.
+	* @example
+	* ```ts
+	* if (queryClient.isFetching()) {
+	*   console.log('At least one query is fetching!')
+	* }
+	* ```
+	*/
+	isFetching(filters) {
+		return this.#queryCache.findAll({
+			...filters,
+			fetchStatus: "fetching"
+		}).length;
+	}
+	/**
+	* Returns the number of mutations in the cache that are currently pending, optionally
+	* matching a set of filters.
+	* @param filters - Narrows down which pending mutations are counted. Without filters, every
+	* pending mutation is counted.
+	* @returns The number of matching mutations whose `status` is `'pending'`.
+	* @example
+	* ```ts
+	* if (queryClient.isMutating()) {
+	*   console.log('At least one mutation is pending!')
+	* }
+	* ```
+	*/
+	isMutating(filters) {
+		return this.#mutationCache.findAll({
+			...filters,
+			status: "pending"
+		}).length;
+	}
+	/**
+	* Imperative (non-reactive) way to retrieve data for a QueryKey.
+	* Should only be used in callbacks or functions where reading the latest data is necessary, e.g. for optimistic updates.
+	*
+	* Hint: Do not use this function inside a component, because it won't receive updates.
+	* Use `useQuery` to create a `QueryObserver` that subscribes to changes.
+	* @param queryKey - The query key of the query to read.
+	* @returns The cached data for the query, or `undefined` if no query with this key has been observed yet.
+	* @see {@link QueryClient#getQueriesData}
+	*/
+	getQueryData(queryKey) {
+		const options = this.defaultQueryOptions({ queryKey });
+		return this.#queryCache.get(options.queryHash)?.state.data;
+	}
+	/**
+	* Returns the cached data of a query, or fetches it if there is none. With `revalidateIfStale`,
+	* stale cached data is also refetched in the background.
+	* @param options - The query options. If the query has no cached data yet, it is fetched with
+	* these options.
+	* @returns A promise that resolves to the cached data, or to the fetched data if nothing was
+	* cached yet.
+	* @deprecated Use queryClient.query({ ...options, staleTime: 'static' }) instead. This method will be removed in the next major version.
+	*/
+	ensureQueryData(options) {
+		const defaultedOptions = this.defaultQueryOptions(options);
+		const query = this.#queryCache.build(this, defaultedOptions);
+		const cachedData = query.state.data;
+		if (cachedData === void 0) return this.fetchQuery(options);
+		if (options.revalidateIfStale && query.isStaleByTime(resolveQueryValue(defaultedOptions.staleTime, query))) this.prefetchQuery(defaultedOptions);
+		return Promise.resolve(cachedData);
+	}
+	/**
+	* Imperative (non-reactive) way to retrieve the cached data of multiple queries at once.
+	* Only queries matching the given filters are returned; if none match, an empty array is
+	* returned.
+	*
+	* Because the matched queries can hold data of different shapes (e.g. a broad filter can match
+	* queries with unrelated data types), the `TQueryFnData` generic defaults to `unknown` rather
+	* than being inferred. Passing a more specific type is a convenience for call sites that know
+	* every matched query holds the same shape — it is not checked against the actual cache
+	* contents.
+	* @param filters - The filters that select which queries to read.
+	* @returns An array of query key and data pairs. The data is `undefined` for a query with no cached data.
+	* @see {@link QueryClient#getQueryData}
+	* @example
+	* ```ts
+	* const data = queryClient.getQueriesData({ queryKey: ['posts'] })
+	* ```
+	*/
+	getQueriesData(filters) {
+		return this.#queryCache.findAll(filters).map(({ queryKey, state }) => {
+			return [queryKey, state.data];
+		});
+	}
+	/**
+	* Synchronous way to immediately update a query's cached data. If the updater (or the value
+	* passed) resolves to `undefined`, the cache is left untouched and no query is created;
+	* otherwise, if the query does not exist yet, it will be created. To update multiple queries
+	* at once by partially matching query keys, use {@link QueryClient#setQueriesData} instead.
+	*
+	* Updates must be performed immutably: do not mutate `oldData`, or data previously retrieved
+	* via {@link QueryClient#getQueryData}, in place.
+	* @param queryKey - The query key to set data for.
+	* @param updater - Either the new data, or a function that receives the current data (which
+	* may be `undefined`) and returns the new data.
+	* @param options - Set `updatedAt` to override the timestamp the written data is recorded with.
+	* @returns The data that was written, or `undefined` if the updater returned `undefined` — in that case
+	* the write is skipped and the cache is left unchanged.
+	* @example
+	* ```ts
+	* queryClient.setQueryData(['posts'], newPosts)
+	*
+	* // Or, using an updater function that receives the current data:
+	* queryClient.setQueryData(['posts'], (oldPosts) => [...oldPosts, newPost])
+	* ```
+	*/
+	setQueryData(queryKey, updater, options) {
+		const defaultedOptions = this.defaultQueryOptions({ queryKey });
+		const prevData = this.#queryCache.get(defaultedOptions.queryHash)?.state.data;
+		const data = functionalUpdate(updater, prevData);
+		if (data === void 0) return;
+		return this.#queryCache.build(this, defaultedOptions).setData(data, {
+			...options,
+			manual: true
+		});
+	}
+	/**
+	* Synchronous way to immediately update the cached data of multiple queries at once, using
+	* filters or partial query key matching. Only queries that already exist and match the given
+	* filters are updated; no new cache entries are created. Internally this calls
+	* {@link QueryClient#setQueryData} for each matching query.
+	* @param filters - The filters that select which existing queries to update.
+	* @param updater - Either the new data, or a function that receives each matched query's current
+	* data (which may be `undefined`) and returns the new data.
+	* @param options - Set `updatedAt` to override the timestamp the written data is recorded with.
+	* @returns One `[queryKey, data]` tuple per matched query, in the same shape and with the same
+	* `undefined` case as {@link QueryClient#setQueryData}.
+	* @example
+	* ```ts
+	* queryClient.setQueriesData({ queryKey: ['posts'] }, (oldPosts) =>
+	*   oldPosts ? oldPosts.filter((post) => post.id !== deletedId) : oldPosts,
+	* )
+	* ```
+	*/
+	setQueriesData(filters, updater, options) {
+		return notifyManager.batch(() => this.#queryCache.findAll(filters).map(({ queryKey }) => [queryKey, this.setQueryData(queryKey, updater, options)]));
+	}
+	/**
+	* Imperative (non-reactive) way to retrieve an existing query's state. If the query does not
+	* exist, `undefined` is returned.
+	* @param queryKey - The query key of the query to read.
+	* @returns The query's state, or `undefined` if no query with this key exists.
+	* @example
+	* ```ts
+	* const state = queryClient.getQueryState(['posts'])
+	* console.log(state?.dataUpdatedAt)
+	* ```
+	*/
+	getQueryState(queryKey) {
+		const options = this.defaultQueryOptions({ queryKey });
+		return this.#queryCache.get(options.queryHash)?.state;
+	}
+	/**
+	* Removes queries from the cache that match the given filters. Unlike
+	* {@link QueryClient#invalidateQueries} or {@link QueryClient#refetchQueries}, this removes
+	* matching queries from the cache instead of refetching them. Without filters, every query in
+	* the cache is removed.
+	* @param filters - The filters that select which queries to remove. Without filters, every query
+	* is removed.
+	* @example
+	* ```ts
+	* queryClient.removeQueries({ queryKey: ['posts'], exact: true })
+	* ```
+	*/
+	removeQueries(filters) {
+		const queryCache = this.#queryCache;
+		notifyManager.batch(() => {
+			queryCache.findAll(filters).forEach((query) => {
+				queryCache.remove(query);
+			});
+		});
+	}
+	/**
+	* Resets queries matching the given filters back to their initial state (e.g. any
+	* `initialData`), notifying subscribers rather than removing them. Active queries among the
+	* matched set are then refetched, and the returned promise resolves once that refetch settles.
+	* @param filters - The filters that select which queries to reset. Without filters, every query
+	* is reset.
+	* @param options - Passed to the refetch of the active matched queries, e.g. `cancelRefetch` and
+	* `throwOnError`.
+	* @returns A promise that resolves once the refetch of the active matched queries settles.
+	* @example
+	* ```ts
+	* await queryClient.resetQueries({ queryKey: ['posts'], exact: true })
+	* ```
+	*/
+	resetQueries(filters, options) {
+		const queryCache = this.#queryCache;
+		return notifyManager.batch(() => {
+			const matched = queryCache.findAll(filters);
+			const queriesToRefetch = new Set(matched);
+			matched.forEach((query) => {
+				query.reset();
+			});
+			return this.refetchQueries({
+				type: "active",
+				predicate: (query) => queriesToRefetch.has(query)
+			}, options);
+		});
+	}
+	/**
+	* Cancels outgoing fetches for queries matching the given filters. Most useful when performing
+	* optimistic updates, since any outgoing refetch that resolves afterwards would otherwise
+	* overwrite the optimistic update. By default (`revert: true`), a cancelled query's data is
+	* reverted to its state before the outgoing fetch started.
+	*
+	* The returned promise never rejects, even if individual cancellations fail.
+	* @param filters - The filters that select which queries to cancel. Without filters, every query
+	* is cancelled.
+	* @param cancelOptions - Passed to each matched query's cancellation. `revert` defaults to
+	* `true`.
+	* @returns A promise that resolves once every cancellation has settled.
+	* @example
+	* ```ts
+	* await queryClient.cancelQueries({ queryKey: ['posts'], exact: true })
+	* ```
+	*/
+	cancelQueries(filters, cancelOptions = {}) {
+		const defaultedCancelOptions = {
+			revert: true,
+			...cancelOptions
+		};
+		const promises = notifyManager.batch(() => this.#queryCache.findAll(filters).map((query) => query.cancel(defaultedCancelOptions)));
+		return Promise.all(promises).then(noop).catch(noop);
+	}
+	/**
+	* Marks queries matching the given filters as invalidated. Unlike
+	* {@link QueryClient#removeQueries}, invalidated queries stay in the cache.
+	*
+	* Unless `filters.refetchType` is `'none'`, matching queries are then refetched via
+	* {@link QueryClient#refetchQueries}, using `filters.refetchType` if set, otherwise
+	* `filters.type`, otherwise `'active'`.
+	* @param filters - The filters that select which queries to invalidate, plus `refetchType` to
+	* control which of them to refetch afterwards. Without filters, every query is invalidated.
+	* @param options - Passed to {@link QueryClient#refetchQueries}, e.g. `cancelRefetch` and
+	* `throwOnError`.
+	* @returns A promise that resolves once the refetch settles, or immediately if `refetchType` is
+	* `'none'`.
+	* @example
+	* ```ts
+	* await queryClient.invalidateQueries({ queryKey: ['posts'], refetchType: 'active' })
+	* ```
+	*/
+	invalidateQueries(filters, options = {}) {
+		return notifyManager.batch(() => {
+			this.#queryCache.findAll(filters).forEach((query) => {
+				query.invalidate();
+			});
+			if (filters?.refetchType === "none") return Promise.resolve();
+			return this.refetchQueries({
+				...filters,
+				type: filters?.refetchType ?? filters?.type ?? "active"
+			}, options);
+		});
+	}
+	/**
+	* Refetches queries matching the given filters, regardless of whether they are stale. Without
+	* filters, every query in the cache is refetched. Queries that are disabled, or static (only
+	* have observers with a static `staleTime`), are never refetched.
+	*
+	* By default (`cancelRefetch: true`), a currently running fetch is cancelled before the new
+	* one starts. The returned promise resolves once all matching queries have settled; it does
+	* not reject on individual query failures unless `throwOnError` is set.
+	* @param filters - The filters that select which queries to refetch. Without filters, every query
+	* in the cache is included.
+	* @param options - Set `cancelRefetch` to `false` to keep a running fetch instead of cancelling
+	* it, and `throwOnError` to `true` to reject when a refetch fails.
+	* @returns A promise that resolves once every matched query has settled.
+	* @example
+	* ```ts
+	* // refetch all active queries partially matching a query key:
+	* await queryClient.refetchQueries({ queryKey: ['posts'], type: 'active' })
+	* ```
+	*/
+	refetchQueries(filters, options = {}) {
+		const fetchOptions = {
+			...options,
+			cancelRefetch: options.cancelRefetch ?? true
+		};
+		const promises = notifyManager.batch(() => this.#queryCache.findAll(filters).filter((query) => !query.isDisabled() && !query.isStatic()).map((query) => {
+			let promise = query.fetch(void 0, fetchOptions);
+			if (!fetchOptions.throwOnError) promise = promise.catch(noop);
+			return query.state.fetchStatus === "paused" ? Promise.resolve() : promise;
+		}));
+		return Promise.all(promises).then(noop);
+	}
+	/**
+	* Asynchronous method to fetch and cache a query, resolving with the data or throwing with
+	* the error.
+	*
+	* If the query already exists in the cache and its data is not stale (per the given
+	* `staleTime`), the cached data is returned without fetching. Otherwise, the query is fetched
+	* and the promise resolves once the fetch settles. If a `select` function is provided, it is
+	* applied to the data in both cases (cached or freshly fetched) before it is returned.
+	*
+	* Unlike a reactive observer, retries are disabled by default here (`retry: false`) unless
+	* explicitly configured, since there is no component to catch a thrown error and retry through
+	* re-render.
+	*
+	* The accepted options are `QueryObserverOptions` minus the fields that only make sense for a
+	* reactive observer — `enabled`, `refetchInterval`, `refetchIntervalInBackground`,
+	* `refetchOnWindowFocus`, `refetchOnReconnect`, `refetchOnMount`, `retryOnMount`,
+	* `notifyOnChangeProps`, `throwOnError`, `suspense`, and `placeholderData` are not part of this
+	* method's options.
+	*
+	* This method replaces the deprecated `fetchQuery`, and — combined with
+	* `{ staleTime: 'static' }` — the deprecated `ensureQueryData`.
+	* @param options - The query options, including the `queryKey` and the `queryFn` used if the
+	* query needs to fetch.
+	* @returns A promise that resolves to the data, or to the result of `select` if provided. It
+	* rejects with the error from the fetch or from `select`.
+	* @example
+	* ```ts
+	* try {
+	*   const data = await queryClient.query({ queryKey, queryFn, staleTime: 10000 })
+	* } catch (error) {
+	*   console.log(error)
+	* }
+	* ```
+	*/
+	async query(options) {
+		const defaultedOptions = this.defaultQueryOptions(options);
+		if (defaultedOptions.retry === void 0) defaultedOptions.retry = false;
+		const query = this.#queryCache.build(this, defaultedOptions);
+		const queryData = query.isStaleByTime(resolveQueryValue(defaultedOptions.staleTime, query)) ? await query.fetch(defaultedOptions) : query.state.data;
+		const select = defaultedOptions.select;
+		if (select) return select(queryData);
+		return queryData;
+	}
+	/**
+	* Fetches and caches a query, or returns its cached data if it isn't stale. Unlike in observers,
+	* the fetch isn't retried unless `retry` is set.
+	* @param options - The query options, including the `queryKey` and the `queryFn` used if the
+	* query needs to fetch.
+	* @returns A promise that resolves to the cached or fetched data, or rejects with the fetch
+	* error.
+	* @deprecated Use queryClient.query(options) instead. This method will be removed in the next major version.
+	*/
+	fetchQuery(options) {
+		const defaultedOptions = this.defaultQueryOptions(options);
+		if (defaultedOptions.retry === void 0) defaultedOptions.retry = false;
+		const query = this.#queryCache.build(this, defaultedOptions);
+		return query.isStaleByTime(resolveQueryValue(defaultedOptions.staleTime, query)) ? query.fetch(defaultedOptions) : Promise.resolve(query.state.data);
+	}
+	/**
+	* Fetches and caches a query like {@link QueryClient#fetchQuery}, but ignores the result and any
+	* error.
+	* @param options - The query options, including the `queryKey` and the `queryFn` used if the
+	* query needs to fetch.
+	* @returns A promise that resolves once the fetch settles. It never rejects.
+	* @deprecated Use queryClient.query(options) instead. You can swallow errors with `.catch(noop)`. This method will be removed in the next major version.
+	*/
+	prefetchQuery(options) {
+		return this.fetchQuery(options).then(noop).catch(noop);
+	}
+	/**
+	* Asynchronous method to fetch and cache an infinite query, resolving with an
+	* {@link InfiniteData} object or throwing with the error.
+	*
+	* Behaves like {@link QueryClient#query}, accepting the same options (minus
+	* `initialPageParam`), plus the required `initialPageParam`, and an optional `pages` /
+	* `getNextPageParam` pair used to refetch a fixed number of pages from the start.
+	*
+	* This method replaces the deprecated `fetchInfiniteQuery`, and — combined with
+	* `{ staleTime: 'static' }` — the deprecated `ensureInfiniteQueryData`.
+	* @param options - The infinite query options, including the `queryKey`, the `queryFn`, and the
+	* `initialPageParam`.
+	* @returns A promise that resolves to the {@link InfiniteData}, or to the result of `select` if
+	* provided. It rejects with the error from the fetch or from `select`.
+	* @example
+	* ```ts
+	* try {
+	*   const data = await queryClient.infiniteQuery({ queryKey, queryFn, initialPageParam: 0 })
+	*   console.log(data.pages)
+	* } catch (error) {
+	*   console.log(error)
+	* }
+	* ```
+	*/
+	infiniteQuery(options) {
+		options._type = "infinite";
+		return this.query(options);
+	}
+	/**
+	* Fetches and caches an infinite query, or returns its cached data if it isn't stale.
+	* @param options - The infinite query options, including the `queryKey`, the `queryFn`, and the
+	* `initialPageParam`.
+	* @returns A promise that resolves to the cached or fetched {@link InfiniteData}, or rejects with
+	* the fetch error.
+	* @deprecated Use queryClient.infiniteQuery(options) instead. This method will be removed in the next major version.
+	*/
+	fetchInfiniteQuery(options) {
+		options._type = "infinite";
+		return this.fetchQuery(options);
+	}
+	/**
+	* Fetches and caches an infinite query like {@link QueryClient#fetchInfiniteQuery}, but ignores
+	* the result and any error.
+	* @param options - The infinite query options, including the `queryKey`, the `queryFn`, and the
+	* `initialPageParam`.
+	* @returns A promise that resolves once the fetch settles. It never rejects.
+	* @deprecated Use queryClient.infiniteQuery(options) instead. You can swallow errors with `.catch(noop)`. This method will be removed in the next major version.
+	*/
+	prefetchInfiniteQuery(options) {
+		return this.fetchInfiniteQuery(options).then(noop).catch(noop);
+	}
+	/**
+	* Returns the cached data of an infinite query, or fetches it if there is none. With
+	* `revalidateIfStale`, stale cached data is also refetched in the background.
+	* @param options - The infinite query options. If the query has no cached data yet, it is fetched
+	* with these options.
+	* @returns A promise that resolves to the cached {@link InfiniteData}, or to the fetched data if
+	* nothing was cached yet.
+	* @deprecated Use queryClient.infiniteQuery({ ...options, staleTime: 'static' }) instead. This method will be removed in the next major version.
+	*/
+	ensureInfiniteQueryData(options) {
+		options._type = "infinite";
+		return this.ensureQueryData(options);
+	}
+	/**
+	* Resumes mutations that were paused because there was no network connection. Does nothing
+	* (resolving immediately) if the client is currently offline.
+	* @returns A promise that resolves once the resumed mutations have settled.
+	* @example
+	* ```ts
+	* import { QueryClient } from '@tanstack/query-core'
+	*
+	* const queryClient = new QueryClient()
+	* await queryClient.resumePausedMutations()
+	* ```
+	*/
+	resumePausedMutations() {
+		if (onlineManager.isOnline()) return this.#mutationCache.resumePausedMutations();
+		return Promise.resolve();
+	}
+	/**
+	* Returns the query cache this client is connected to.
+	* @returns The {@link QueryCache} instance.
+	* @example
+	* ```ts
+	* import { QueryClient } from '@tanstack/query-core'
+	*
+	* const queryClient = new QueryClient()
+	* const queryCache = queryClient.getQueryCache()
+	* const queries = queryCache.findAll({ queryKey: ['posts'] })
+	* ```
+	*/
+	getQueryCache() {
+		return this.#queryCache;
+	}
+	/**
+	* Returns the mutation cache this client is connected to.
+	* @returns The {@link MutationCache} instance.
+	* @example
+	* ```ts
+	* import { QueryClient } from '@tanstack/query-core'
+	*
+	* const queryClient = new QueryClient()
+	* const mutationCache = queryClient.getMutationCache()
+	* const mutations = mutationCache.findAll({ status: 'pending' })
+	* ```
+	*/
+	getMutationCache() {
+		return this.#mutationCache;
+	}
+	/**
+	* Returns the default options that were set when creating the client, or via
+	* {@link QueryClient#setDefaultOptions}.
+	* @returns The client's current default options.
+	* @example
+	* ```ts
+	* import { QueryClient } from '@tanstack/query-core'
+	*
+	* const queryClient = new QueryClient()
+	* const defaultOptions = queryClient.getDefaultOptions()
+	* ```
+	*/
+	getDefaultOptions() {
+		return this.#defaultOptions;
+	}
+	/**
+	* Dynamically sets the default options for this client, overwriting any previously defined
+	* default options.
+	* @param options - The new default options for queries and mutations.
+	* @see {@link QueryClient#getDefaultOptions}
+	* @example
+	* ```ts
+	* import { QueryClient } from '@tanstack/query-core'
+	*
+	* const queryClient = new QueryClient()
+	* queryClient.setDefaultOptions({
+	*   queries: {
+	*     staleTime: Infinity,
+	*   },
+	* })
+	* ```
+	*/
+	setDefaultOptions(options) {
+		this.#defaultOptions = options;
+	}
+	/**
+	* Sets default options for queries whose query key partially matches the given `queryKey`.
+	*
+	* If several registered query defaults match a given query key, they are merged together in
+	* registration order by {@link QueryClient#getQueryDefaults}, so register defaults from the
+	* most generic key to the least generic one — more specific defaults should be registered
+	* after more generic ones so they take precedence.
+	* @param queryKey - The query key that query keys are partially matched against.
+	* @param options - The default options applied to matching queries.
+	* @example
+	* ```ts
+	* queryClient.setQueryDefaults(['posts'], { queryFn: fetchPosts })
+	*
+	* await queryClient.query({ queryKey: ['posts'] })
+	* ```
+	*/
+	setQueryDefaults(queryKey, options) {
+		this.#queryDefaults.set(hashKey(queryKey), {
+			queryKey,
+			defaultOptions: options
+		});
+	}
+	/**
+	* Returns the default options registered for queries whose query key partially matches the
+	* given `queryKey`, via {@link QueryClient#setQueryDefaults}. If multiple registered defaults
+	* match, they are merged together in registration order.
+	* @param queryKey - The query key to look up registered defaults for.
+	* @returns The merged default options of every registration that matches, or an empty object if
+	* none match.
+	* @example
+	* ```ts
+	* const defaultOptions = queryClient.getQueryDefaults(['posts'])
+	* ```
+	*/
+	getQueryDefaults(queryKey) {
+		const defaults = [...this.#queryDefaults.values()];
+		const result = {};
+		defaults.forEach((queryDefault) => {
+			if (partialMatchKey(queryKey, queryDefault.queryKey)) Object.assign(result, queryDefault.defaultOptions);
+		});
+		return result;
+	}
+	/**
+	* Sets default options for mutations whose mutation key partially matches the given
+	* `mutationKey`. As with {@link QueryClient#setQueryDefaults}, the order of registration
+	* matters when several registered defaults match the same mutation key.
+	* @param mutationKey - The mutation key that mutation keys are partially matched against.
+	* @param options - The default options applied to matching mutations.
+	* @see {@link QueryClient#getMutationDefaults}
+	* @example
+	* ```ts
+	* queryClient.setMutationDefaults(['addPost'], { mutationFn: addPost })
+	* ```
+	*/
+	setMutationDefaults(mutationKey, options) {
+		this.#mutationDefaults.set(hashKey(mutationKey), {
+			mutationKey,
+			defaultOptions: options
+		});
+	}
+	/**
+	* Returns the default options registered for mutations whose mutation key partially matches
+	* the given `mutationKey`, via {@link QueryClient#setMutationDefaults}. If multiple registered
+	* defaults match, they are merged together in registration order.
+	* @param mutationKey - The mutation key to look up registered defaults for.
+	* @returns The merged default options of every registration that matches, or an empty object if
+	* none match.
+	* @example
+	* ```ts
+	* const defaultOptions = queryClient.getMutationDefaults(['addPost'])
+	* ```
+	*/
+	getMutationDefaults(mutationKey) {
+		const defaults = [...this.#mutationDefaults.values()];
+		const result = {};
+		defaults.forEach((queryDefault) => {
+			if (partialMatchKey(mutationKey, queryDefault.mutationKey)) Object.assign(result, queryDefault.defaultOptions);
+		});
+		return result;
+	}
+	/**
+	* Called by framework adapters (e.g. inside `useQuery`) to resolve the options passed by the
+	* caller into their final, defaulted form: merging the client's own `defaultOptions.queries`,
+	* then `queryClient.setQueryDefaults` for the given `queryKey`, then the caller's options on
+	* top. A no-op if the options are already defaulted (`_defaulted: true`).
+	* @param options - The query options passed by the caller.
+	* @returns The defaulted options, with `queryHash` and dependent defaults (e.g.
+	* `refetchOnReconnect`) filled in.
+	*/
+	defaultQueryOptions(options) {
+		if (options._defaulted) return options;
+		const defaultedOptions = {
+			...this.#defaultOptions.queries,
+			...this.getQueryDefaults(options.queryKey),
+			...options,
+			_defaulted: true
+		};
+		if (!defaultedOptions.queryHash) defaultedOptions.queryHash = hashQueryKeyByOptions(defaultedOptions.queryKey, defaultedOptions);
+		if (defaultedOptions.refetchOnReconnect === void 0) defaultedOptions.refetchOnReconnect = defaultedOptions.networkMode !== "always";
+		if (defaultedOptions.throwOnError === void 0) defaultedOptions.throwOnError = !!defaultedOptions.suspense;
+		if (!defaultedOptions.networkMode && defaultedOptions.persister) defaultedOptions.networkMode = "offlineFirst";
+		if (defaultedOptions.queryFn === skipToken) defaultedOptions.enabled = false;
+		return defaultedOptions;
+	}
+	/**
+	* The mutation counterpart of {@link QueryClient#defaultQueryOptions}. Called by framework
+	* adapters (e.g. inside `useMutation`) to merge the client's `defaultOptions.mutations`, then
+	* `queryClient.setMutationDefaults` for the given `mutationKey`, then the caller's options on
+	* top. A no-op if the options are already defaulted (`_defaulted: true`).
+	* @param options - The mutation options passed by the caller.
+	* @returns The defaulted options.
+	*/
+	defaultMutationOptions(options) {
+		if (options?._defaulted) return options;
+		return {
+			...this.#defaultOptions.mutations,
+			...options?.mutationKey && this.getMutationDefaults(options.mutationKey),
+			...options,
+			_defaulted: true
+		};
+	}
+	/**
+	* Clears both the query cache and the mutation cache this client is connected to.
+	* @example
+	* ```ts
+	* import { QueryClient } from '@tanstack/query-core'
+	*
+	* const queryClient = new QueryClient()
+	* queryClient.clear()
+	* ```
+	*/
+	clear() {
+		this.#queryCache.clear();
+		this.#mutationCache.clear();
+	}
+};
+// node_modules/@tanstack/react-query/build/modern/IsRestoringProvider.js
+var IsRestoringContext = import_react.createContext(false);
+/**
+* If you are using `PersistQueryClientProvider`, you can also use the `useIsRestoring` hook alongside it to
+* check if a restore is currently in progress. `useQuery` and friends also check this internally to avoid
+* race conditions between the restore and mounting queries.
+* @returns `true` while a persisted client is being restored, `false` otherwise.
+*/
+var useIsRestoring = () => import_react.useContext(IsRestoringContext);
+IsRestoringContext.Provider;
+// node_modules/@tanstack/react-query/build/modern/QueryErrorResetBoundary.js
+/**
+* Creates the value shared through the boundary's context, which tracks whether a reset was
+* requested.
+* @returns The `clearReset`, `isReset`, and `reset` functions of the boundary.
+*/
+function createValue() {
+	let isReset = false;
+	return {
+		/**
+		* Clears the reset state, so queries know not to try again until the boundary is reset again.
+		*/
+		clearReset: () => {
+			isReset = false;
+		},
+		/**
+		* Resets any query errors within the boundary, so queries know they can try again.
+		*/
+		reset: () => {
+			isReset = true;
+		},
+		/**
+		* Returns whether the boundary has been reset and not yet cleared.
+		* @returns `true` if the boundary has been reset and not yet cleared.
+		*/
+		isReset: () => {
+			return isReset;
+		}
+	};
+}
+var QueryErrorResetBoundaryContext = import_react.createContext(createValue());
+/**
+* This hook will reset any query errors within the closest `QueryErrorResetBoundary`. If there is no boundary
+* defined it will reset them globally.
+* @returns The boundary's {@link QueryErrorResetBoundaryValue}.
+* @example
+* ```tsx
+* import { ErrorBoundary } from 'react-error-boundary'
+* import { useQueryErrorResetBoundary } from '@tanstack/react-query'
+*
+* function App({ children }: { children: React.ReactNode }) {
+*   const { reset } = useQueryErrorResetBoundary()
+*
+*   return (
+*     <ErrorBoundary
+*       onReset={reset}
+*       fallbackRender={({ resetErrorBoundary }) => (
+*         <div>
+*           There was an error!
+*           <button onClick={() => resetErrorBoundary()}>Try again</button>
+*         </div>
+*       )}
+*     >
+*       {children}
+*     </ErrorBoundary>
+*   )
+* }
+* ```
+*/
+var useQueryErrorResetBoundary = () => import_react.useContext(QueryErrorResetBoundaryContext);
+// node_modules/@tanstack/react-query/build/modern/errorBoundaryUtils.js
+/**
+* Turns off `retryOnMount` for a query that throws its errors (with `suspense` or `throwOnError`),
+* unless the error boundary has been reset, so a remount doesn't retry the failed query before the
+* user resets the boundary. Mutates the options.
+* @param options - The defaulted query options to adjust.
+* @param errorResetBoundary - The value of the nearest `QueryErrorResetBoundary`.
+* @param query - The query, used to evaluate a `throwOnError` function against its error.
+*/
+var ensurePreventErrorBoundaryRetry = (options, errorResetBoundary, query) => {
+	const throwOnError = query?.state.status === "error" && typeof options.throwOnError === "function" ? shouldThrowError(options.throwOnError, [query.state.error, query]) : options.throwOnError;
+	if (options.suspense || throwOnError) {
+		if (!errorResetBoundary.isReset()) options.retryOnMount = false;
+	}
+};
+/**
+* Clears the reset state of the error boundary after the component mounts, so later errors are
+* thrown to the boundary again.
+* @param errorResetBoundary - The value of the nearest `QueryErrorResetBoundary`.
+*/
+var useClearResetErrorBoundary = (errorResetBoundary) => {
+	import_react.useEffect(() => {
+		errorResetBoundary.clearReset();
+	}, [errorResetBoundary]);
+};
+/**
+* Checks whether the query error should be thrown to the nearest error boundary: the query errored
+* and isn't fetching, the boundary hasn't been reset, and either `suspense` is enabled with no data
+* or `throwOnError` says so.
+* @param params - The observer `result`, the `errorResetBoundary`, the `throwOnError` option, the
+* `query`, and the `suspense` option.
+* @returns `true` if the error should be thrown.
+*/
+var getHasError = ({ result, errorResetBoundary, throwOnError, query, suspense }) => {
+	return result.isError && !errorResetBoundary.isReset() && !result.isFetching && query && (suspense && result.data === void 0 || shouldThrowError(throwOnError, [result.error, query]));
+};
+// node_modules/@tanstack/react-query/build/modern/suspense.js
+/**
+* Raises `staleTime` and a numeric `gcTime` to at least 1000ms when `suspense` is enabled, so a
+* component that remounts after suspending doesn't refetch right away or find the query garbage
+* collected. A `'static'` `staleTime` is kept as is. Mutates the options.
+* @param defaultedOptions - The defaulted query options to adjust.
+*/
+var ensureSuspenseTimers = (defaultedOptions) => {
+	if (defaultedOptions.suspense) {
+		const MIN_SUSPENSE_TIME_MS = 1e3;
+		const clamp = (value) => value === "static" ? value : Math.max(value ?? MIN_SUSPENSE_TIME_MS, MIN_SUSPENSE_TIME_MS);
+		const originalStaleTime = defaultedOptions.staleTime;
+		defaultedOptions.staleTime = typeof originalStaleTime === "function" ? (...args) => clamp(originalStaleTime(...args)) : clamp(originalStaleTime);
+		if (typeof defaultedOptions.gcTime === "number") defaultedOptions.gcTime = Math.max(defaultedOptions.gcTime, MIN_SUSPENSE_TIME_MS);
+	}
+};
+/**
+* Checks whether a query should suspend: `suspense` is enabled and the result is still `pending`.
+* @param defaultedOptions - The defaulted query options, if any.
+* @param result - The current result of the observer.
+* @returns `true` if the component should suspend.
+*/
+var shouldSuspend = (defaultedOptions, result) => defaultedOptions?.suspense && result.isPending;
+/**
+* Fetches the query for a suspending component, without affecting the observer's own result. If
+* the fetch fails, the reset state of the error boundary is cleared, so the error is thrown to it.
+* @param defaultedOptions - The defaulted query options to fetch with.
+* @param observer - The observer of the query.
+* @param errorResetBoundary - The value of the nearest `QueryErrorResetBoundary`.
+* @returns A promise that resolves once the fetch settles. It never rejects.
+*/
+var fetchOptimistic = (defaultedOptions, observer, errorResetBoundary) => observer.fetchOptimistic(defaultedOptions).catch(() => {
+	errorResetBoundary.clearReset();
+});
+// node_modules/@tanstack/react-query/build/modern/useBaseQuery.js
+/**
+* Base implementation shared by `useQuery`, `useInfiniteQuery`, `useSuspenseQuery`, and
+* `useSuspenseInfiniteQuery`.
+* @param options - The options passed to the calling hook.
+* @param Observer - The observer class from query-core (`QueryObserver` or
+* `InfiniteQueryObserver`).
+* @param queryClient - Use this to use a custom `QueryClient`. Otherwise, the one from the nearest
+* context will be used.
+* @returns The query result, tracking which properties are read unless `notifyOnChangeProps` is
+* set.
+* @throws {Error} If `options` is not an object (outside production), or the query error when it should be
+* thrown to the nearest error boundary (see `throwOnError`). While suspending, it throws a promise instead.
+*/
+function useBaseQuery(options, Observer, queryClient) {
+	const isRestoring = useIsRestoring();
+	const errorResetBoundary = useQueryErrorResetBoundary();
+	const client = useQueryClient(queryClient);
+	const defaultedOptions = client.defaultQueryOptions(options);
+	const query = client.getQueryCache().get(defaultedOptions.queryHash);
+	const subscribed = options.subscribed !== false;
+	defaultedOptions._optimisticResults = isRestoring ? "isRestoring" : subscribed ? "optimistic" : void 0;
+	ensureSuspenseTimers(defaultedOptions);
+	ensurePreventErrorBoundaryRetry(defaultedOptions, errorResetBoundary, query);
+	useClearResetErrorBoundary(errorResetBoundary);
+	const [observer] = import_react.useState(() => new Observer(client, defaultedOptions));
+	const result = observer.getOptimisticResult(defaultedOptions);
+	const shouldSubscribe = !isRestoring && subscribed;
+	import_react.useSyncExternalStore(import_react.useCallback((onStoreChange) => {
+		const unsubscribe = shouldSubscribe ? observer.subscribe(notifyManager.batchCalls(onStoreChange)) : noop;
+		observer.updateResult();
+		return unsubscribe;
+	}, [observer, shouldSubscribe]), () => observer.getCurrentResult(), () => observer.getCurrentResult());
+	import_react.useEffect(() => {
+		observer.setOptions(defaultedOptions);
+	}, [defaultedOptions, observer]);
+	if (shouldSuspend(defaultedOptions, result)) throw fetchOptimistic(defaultedOptions, observer, errorResetBoundary);
+	if (getHasError({
+		result,
+		errorResetBoundary,
+		throwOnError: defaultedOptions.throwOnError,
+		query,
+		suspense: defaultedOptions.suspense
+	})) throw result.error;
+	return !defaultedOptions.notifyOnChangeProps ? observer.trackResult(result) : result;
+}
+// node_modules/@tanstack/react-query/build/modern/useQuery.js
+function useQuery(options, queryClient) {
+	return useBaseQuery(options, QueryObserver, queryClient);
+}
+// src/shared/Spinner.css
+var import_react_dom = /* @__PURE__ */ __toESM(require_react_dom(), 1);
+// src/shared/Spinner.jsx
+var Spinner = ({ show, message = "Please wait..." }) => {
+	if (!show) return null;
+	return (0, import_react_dom.createPortal)(/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "spinner-overlay",
+		role: "alertdialog",
+		"aria-busy": "true",
+		"aria-live": "assertive",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "spinner-modal",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "spinner-ring" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "spinner-message",
+				children: message
+			})]
+		})
+	}), document.body);
+};
+// src/shared/TopBanner.jsx
 var TopBanner = () => {
 	const navi = useNavigate();
 	const { updateUserContext, userContext } = (0, import_react.useContext)(AppContext);
+	const queryClient = useQueryClient();
+	const [loggingOut, setLoggingOut] = (0, import_react.useState)(false);
+	const bannerRef = (0, import_react.useRef)(null);
+	(0, import_react.useEffect)(() => {
+		const banner = bannerRef.current;
+		const observer = new ResizeObserver(() => {
+			document.documentElement.style.setProperty("--banner-height", `${banner.offsetHeight}px`);
+		});
+		observer.observe(banner);
+		return () => observer.disconnect();
+	}, []);
 	const signout = async () => {
-		if ((await logout({ ...userContext })).success == true) {
+		setLoggingOut(true);
+		let response;
+		try {
+			response = await logout({ ...userContext });
+		} finally {
+			setLoggingOut(false);
+		}
+		if (response?.success == true) {
 			updateUserContext({
 				username: "",
 				password: "",
 				loggedIn: false
 			});
+			localStorage.removeItem("userContext");
+			queryClient.removeQueries({ queryKey: ["me"] });
 			navi("/login");
 		}
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "top-banner",
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-			id: "title",
-			className: "banner-title",
-			onClick: () => {
-				navi("/");
-			},
-			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", { children: "casahero" })
-		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			id: "auth-links",
-			className: "auth-links",
-			children: [
-				userContext && userContext.loggedIn ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: ["Welcome, ", userContext?.username] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Welcome, Guest ! " }),
-				userContext?.loggedIn != true && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-					id: "register-button",
-					onClick: () => {
-						navi("/signup");
-					},
-					children: "Register"
-				}),
-				userContext?.loggedIn != true && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-					id: "login-button",
-					onClick: () => {
-						navi("/login");
-					},
-					children: "Login"
-				}),
-				userContext?.loggedIn && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-					id: "logout-button",
-					onClick: signout,
-					children: "Log out"
-				})
-			]
-		})]
+		ref: bannerRef,
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Spinner, {
+				show: loggingOut,
+				message: "Logging out.."
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				id: "title",
+				className: "banner-title",
+				onClick: () => {
+					navi("/");
+				},
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", { children: "casahero" })
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				id: "auth-links",
+				className: "auth-links",
+				children: [
+					userContext && userContext.loggedIn ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: ["Welcome, ", userContext?.full_name] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Welcome, Guest ! " }),
+					userContext?.loggedIn != true && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						id: "register-button",
+						onClick: () => {
+							navi("/signup");
+						},
+						children: "Register"
+					}),
+					userContext?.loggedIn != true && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						id: "login-button",
+						onClick: () => {
+							navi("/login");
+						},
+						children: "Login"
+					}),
+					userContext?.loggedIn && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						id: "logout-button",
+						onClick: signout,
+						disabled: loggingOut,
+						children: "Log out"
+					})
+				]
+			})
+		]
 	});
 };
-//#endregion
-//#region src/authentication/Login.jsx
+// src/shared/SocialButtons.jsx
+var GoogleIcon = () => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
+	width: "18",
+	height: "18",
+	viewBox: "0 0 48 48",
+	"aria-hidden": "true",
+	children: [
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+			fill: "#FFC107",
+			d: "M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.6-.4-3.5z"
+		}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+			fill: "#FF3D00",
+			d: "M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"
+		}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+			fill: "#4CAF50",
+			d: "M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"
+		}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+			fill: "#1976D2",
+			d: "M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.6-.4-3.5z"
+		})
+	]
+});
+var FacebookIcon = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+	width: "18",
+	height: "18",
+	viewBox: "0 0 24 24",
+	"aria-hidden": "true",
+	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+		fill: "#1877F2",
+		d: "M24 12c0-6.6-5.4-12-12-12S0 5.4 0 12c0 6 4.4 11 10.1 11.9v-8.4H7.1V12h3V9.4c0-3 1.8-4.7 4.5-4.7 1.3 0 2.7.2 2.7.2v2.9h-1.5c-1.5 0-2 .9-2 1.9V12h3.4l-.5 3.5h-2.9v8.4C19.6 23 24 18 24 12z"
+	})
+});
+var providers = [{
+	id: "google",
+	label: "Continue with Google",
+	Icon: GoogleIcon
+}, {
+	id: "facebook",
+	label: "Continue with Facebook",
+	Icon: FacebookIcon
+}];
+var SocialButtons = ({ onSelect, disabled = false }) => {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "social-buttons",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			className: "social-divider",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "or" })
+		}), providers.map(({ id, label, Icon }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+			type: "button",
+			className: "social-button",
+			disabled,
+			onClick: () => onSelect?.(id),
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon, {}), label]
+		}, id))]
+	});
+};
+// src/features/authentication/Login.jsx
 var Login = () => {
 	const { updateUserContext, userContext } = (0, import_react.useContext)(AppContext);
+	const [show, setShow] = (0, import_react.useState)(false);
+	const [error, setError] = (0, import_react.useState)("");
+	const queryClient = useQueryClient();
 	const { authenticate } = (0, import_react.useContext)(AuthContext);
 	const [loginDetails, setLoginDetails] = (0, import_react.useState)({
 		username: "",
@@ -17497,29 +21502,21 @@ var Login = () => {
 	const navi = useNavigate();
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		updateUserContext({
-			role: "tenant",
-			loggedIn: false,
-			username: "",
-			password: ""
-		});
-		let isLoggedIn = await authenticate({
-			username: userContext.username,
-			password: userContext.password
-		});
-		if (isLoggedIn) {
-			updateUserContext({
-				...userContext,
-				loggedIn: isLoggedIn,
-				...loginDetails
-			});
-			navi("/dashboard");
+		setError("");
+		setShow(true);
+		try {
+			if (await authenticate(loginDetails)) navi("/listings");
+			else setError("Invalid username or password.");
+		} catch {
+			setError("Could not reach the server. Please try again.");
+		} finally {
+			setShow(false);
 		}
 	};
-	const updateUserName = (data) => {
+	const updateEmail = (data) => {
 		setLoginDetails({
 			...loginDetails,
-			username: data
+			email: data
 		});
 	};
 	const updatePassword = (data) => {
@@ -17529,30 +21526,35 @@ var Login = () => {
 		});
 	};
 	(0, import_react.useEffect)(() => {
-		updateUserContext({
-			role: "tenant",
+		localStorage.removeItem("userContext");
+		queryClient.clear();
+		updateUserContext((prev) => ({
+			default_role: prev?.default_role ?? "tenant",
 			loggedIn: false,
-			username: "",
-			password: ""
-		});
-	}, userContext);
+			username: ""
+		}));
+	}, [updateUserContext]);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "login-wrapper",
 		children: [
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TopBanner, { userContext }),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Spinner, {
+				show,
+				message: "Logging in.."
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TopBanner, {}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 				className: "login-header",
-				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", { children: ["casahero - ", userContext?.role] })
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", { children: "casahero" })
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
 				onSubmit: handleSubmit,
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
 						type: "text",
-						placeholder: "Username",
+						placeholder: "Email",
 						className: "login-input",
 						onChange: (e) => {
-							updateUserName(e.target.value);
+							updateEmail(e.target.value);
 						}
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
@@ -17565,108 +21567,221 @@ var Login = () => {
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 						type: "submit",
-						className: userContext?.role == "landlord" ? "login-button-landlord" : "login-button",
+						className: userContext?.default_role == "landlord" ? "login-button-landlord" : "login-button",
 						children: "Log In"
+					}),
+					error && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "login-error",
+						role: "alert",
+						children: error
 					})
 				]
 			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SocialButtons, { disabled: show }),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 				className: "login-footer",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RolePick, {}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
 					href: "#",
 					children: "Forgot Password?"
-				})]
+				})
 			})
 		]
 	});
 };
-//#endregion
-//#region src/dashboard/searchbar/SearchBar.jsx
-var SearchBar = () => {
-	const [propertyType, setPropertyType] = (0, import_react.useState)("");
-	const [query, setQuery] = (0, import_react.useState)("");
+// src/hooks/listingKeys.js
+var listingKeys = {
+	all: ["listings"],
+	lists: () => [...listingKeys.all, "list"],
+	list: (filters) => [...listingKeys.lists(), filters],
+	listByType: () => [...listingKeys.all, "by-type"],
+	listByRegion: () => [...listingKeys.all, "by-region"],
+	listByCity: () => [...listingKeys.all, "by-city"],
+	listByLandlord: () => [...listingKeys.all, "by-landlord"],
+	listByTenant: () => [...listingKeys.all, "by-tenant"],
+	listRegions: () => [...listingKeys.all, "list-regions"],
+	listCities: (region) => [
+		...listingKeys.all,
+		"list-cities",
+		region
+	],
+	listTypes: () => [...listingKeys.all, "list-types"]
+};
+// src/api/listings.js
+var getListings = async ({ type, region, city, bed, bath } = {}) => {
+	let data = {
+		type,
+		region,
+		city,
+		bed,
+		bath
+	};
+	return (await api.post("/listings", data)).data;
+};
+var getRegions = async () => {
+	return (await api.post("/regions")).data;
+};
+var getCitiesByRegion = async ({ region }) => {
+	return (await api.get(`/cities?region=${region}`)).data;
+};
+var getTypes = async () => {
+	return (await api.get("/types")).data;
+};
+// src/hooks/useListings.js
+var useListings = (filters) => {
+	return useQuery({
+		queryKey: listingKeys.list(filters),
+		queryFn: () => getListings(filters),
+		enabled: !!filters,
+		placeholderData: keepPreviousData
+	});
+};
+var useTypes = () => {
+	return useQuery({
+		queryKey: listingKeys.listTypes(),
+		queryFn: getTypes
+	});
+};
+var useRegions = () => {
+	return useQuery({
+		queryKey: listingKeys.listRegions(),
+		queryFn: getRegions
+	});
+};
+var useCities = (region) => {
+	return useQuery({
+		queryKey: listingKeys.listCities(region),
+		queryFn: () => getCitiesByRegion({ region }),
+		enabled: !!region
+	});
+};
+// src/shared/NumberPicker.jsx
+var NumberPicker = ({ id, label, value, onChange, min = 1, max = 10, allowAny = false }) => {
+	const isAny = value === null || value === void 0;
+	const atBottom = allowAny ? isAny : value <= min;
+	const atTop = !isAny && value >= max;
+	const decrease = () => onChange(allowAny && value <= min ? null : Math.max(min, value - 1));
+	const increase = () => onChange(isAny ? min : Math.min(max, value + 1));
+	const display = isAny ? "Any" : allowAny ? `${value}+` : value;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "search-input number-picker",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				className: "number-picker-label",
+				children: label
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+				type: "button",
+				"aria-label": `Decrease ${label}`,
+				onClick: decrease,
+				disabled: atBottom,
+				children: "−"
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				id,
+				className: "number-picker-value",
+				"aria-live": "polite",
+				children: display
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+				type: "button",
+				"aria-label": `Increase ${label}`,
+				onClick: increase,
+				disabled: atTop,
+				children: "+"
+			})
+		]
+	});
+};
+// src/features/search/SearchBar.jsx
+var EMPTY_FILTERS = {
+	type: "HDB",
+	region: "",
+	city: "",
+	bed: null,
+	bath: null
+};
+var SearchBar = ({ onSearch, initialFilters = {} }) => {
+	const [filters, setFilters] = (0, import_react.useState)({
+		...EMPTY_FILTERS,
+		...initialFilters
+	});
+	const types = useTypes();
+	const regions = useRegions();
+	const cities = useCities(filters.region);
+	const update = (changes) => setFilters((prev) => ({
+		...prev,
+		...changes
+	}));
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		onSearch(query);
+		onSearch?.(filters);
 	};
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Spinner, { show: types.isFetching || regions.isFetching || cities.isFetching }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "search-container",
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 			className: "property-type",
-			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-						id: "propertyType",
-						type: "radio",
-						name: "propertyType",
-						value: "Residential",
-						checked: propertyType === "Residential",
-						onChange: (e) => setPropertyType(e.target.value)
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "icon",
-						children: "🏠"
-					}),
-					" Residential"
-				] }),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-						id: "propertyType-commercial",
-						type: "radio",
-						name: "propertyType",
-						value: "Commercial",
-						checked: propertyType === "Commercial",
-						onChange: (e) => setPropertyType(e.target.value)
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "icon",
-						children: "🏢"
-					}),
-					" Commercial"
-				] }),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-						id: "propertyType-staycation",
-						type: "radio",
-						name: "propertyType",
-						value: "Staycation",
-						checked: propertyType === "Staycation",
-						onChange: (e) => setPropertyType(e.target.value)
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "icon",
-						children: "🌴"
-					}),
-					" Staycation"
-				] })
-			]
-		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
+			children: types.data?.map(({ type }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+				className: filters.type === type ? "active" : "",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+					id: `propertyType-${type}`,
+					type: "radio",
+					name: "propertyType",
+					value: type,
+					checked: filters.type === type,
+					onChange: (e) => update({ type: e.target.value })
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "icon",
+					children: type
+				})]
+			}, type))
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
 			className: "search-form",
 			onSubmit: handleSubmit,
 			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-					type: "text",
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", {
 					id: "region",
-					placeholder: "Select Region...",
-					value: query,
-					onChange: (e) => setQuery(e.target.value),
-					className: "search-input"
+					value: filters.region,
+					onChange: (e) => update({
+						region: e.target.value,
+						city: ""
+					}),
+					disabled: regions.isPending,
+					className: "search-input",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+						value: "",
+						children: "Select Region..."
+					}), regions.data?.map(({ region }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+						value: region,
+						children: region
+					}, region))]
 				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-					type: "text",
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", {
 					id: "city",
-					placeholder: "Select City...",
-					value: query,
-					onChange: (e) => setQuery(e.target.value),
-					className: "search-input"
+					value: filters.city,
+					onChange: (e) => update({ city: e.target.value }),
+					disabled: !filters.region || cities.isFetching,
+					className: "search-input",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+						value: "",
+						children: "Select City..."
+					}), cities.data?.map(({ city }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+						value: city,
+						children: city
+					}, city))]
 				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-					type: "text",
-					id: "search",
-					placeholder: "Search listings...",
-					value: query,
-					onChange: (e) => setQuery(e.target.value),
-					className: "search-input"
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(NumberPicker, {
+					id: "bed",
+					label: "Beds",
+					allowAny: true,
+					value: filters.bed,
+					onChange: (bed) => update({ bed })
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(NumberPicker, {
+					id: "bath",
+					label: "Bath",
+					allowAny: true,
+					value: filters.bath,
+					onChange: (bath) => update({ bath })
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 					type: "submit",
@@ -17675,30 +21790,227 @@ var SearchBar = () => {
 					children: "Search"
 				})
 			]
-		}) })]
-	}) });
+		})]
+	})] });
 };
-//#endregion
-//#region src/dashboard/Dashboard.jsx
-var Dashboard = () => {
-	const { userContext } = (0, import_react.useContext)(AppContext);
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: "dashboard-container",
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TopBanner, { userContext }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SearchBar, {})]
+// src/features/search/searchParams.js
+var KEYS = [
+	"type",
+	"region",
+	"city",
+	"bed",
+	"bath"
+];
+var NUMERIC = ["bed", "bath"];
+var toSearchUrl = (filters) => {
+	const params = new URLSearchParams();
+	KEYS.forEach((key) => {
+		const value = filters[key];
+		if (value !== null && value !== void 0 && value !== "") params.set(key, value);
+	});
+	return `/search?${params}`;
+};
+var fromSearchParams = (params) => {
+	const filters = {};
+	KEYS.forEach((key) => {
+		const value = params.get(key);
+		if (!value) return;
+		if (!NUMERIC.includes(key)) filters[key] = value;
+		else if (Number.isFinite(Number(value))) filters[key] = Number(value);
+	});
+	return Object.keys(filters).length ? filters : null;
+};
+var describeFilters = ({ type, region, city, bed, bath }) => [
+	type,
+	city ? `${region} › ${city}` : region,
+	bed && `${bed}+ bed`,
+	bath && `${bath}+ bath`
+].filter(Boolean).join(" · ");
+// src/shared/sidebar/menus.js
+var menus = {
+	landlord: [
+		{
+			key: "home",
+			label: "home",
+			icon: "home"
+		},
+		{
+			key: "Search",
+			label: "Search",
+			icon: "search"
+		},
+		{
+			key: "leases",
+			label: "Leases",
+			icon: "leases"
+		},
+		{
+			key: "rent",
+			label: "Rent",
+			icon: "rent"
+		},
+		{
+			key: "maintenance",
+			label: "Maintenance Requests",
+			icon: "maintenance"
+		},
+		{
+			key: "messages",
+			label: "Messages",
+			icon: "messages"
+		}
+	],
+	tenant: [
+		{
+			key: "home",
+			label: "Home",
+			icon: "home"
+		},
+		{
+			key: "Search",
+			label: "Search",
+			icon: "search"
+		},
+		{
+			key: "rent",
+			label: "Rent",
+			icon: "rent"
+		},
+		{
+			key: "maintenance",
+			label: "Maintenance",
+			icon: "maintenance"
+		},
+		{
+			key: "messages",
+			label: "Messages",
+			icon: "messages"
+		},
+		{
+			key: "documents",
+			label: "Documents",
+			icon: "documents"
+		}
+	]
+};
+var getMenu = (role) => menus[role] ?? menus.tenant;
+// src/shared/sidebar/SidebarIcon.jsx
+var shapes = {
+	listings: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("rect", {
+			x: "3.5",
+			y: "3.5",
+			width: "7",
+			height: "9",
+			rx: "1.5"
+		}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("rect", {
+			x: "13.5",
+			y: "3.5",
+			width: "7",
+			height: "5",
+			rx: "1.5"
+		}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("rect", {
+			x: "13.5",
+			y: "11.5",
+			width: "7",
+			height: "9",
+			rx: "1.5"
+		}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("rect", {
+			x: "3.5",
+			y: "15.5",
+			width: "7",
+			height: "5",
+			rx: "1.5"
+		})
+	] }),
+	properties: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M4 20.5V6.5L11 3.5V20.5" }),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M11 9.5L20 12V20.5" }),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M2.5 20.5H21.5" }),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M7 8.5V8.51M7 12V12.01M7 15.5V15.51" }),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M15 14.5V14.51M15 17.5V17.51" })
+	] }),
+	leases: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M14 3.5H7A1.5 1.5 0 0 0 5.5 5V19A1.5 1.5 0 0 0 7 20.5H17A1.5 1.5 0 0 0 18.5 19V8L14 3.5Z" }),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M14 3.5V8H18.5" }),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M8.5 12.5H15.5M8.5 16H12" })
+	] }),
+	rent: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M18.5 7.5V5.5A1.5 1.5 0 0 0 17 4H5A1.5 1.5 0 0 0 3.5 5.5V18.5A1.5 1.5 0 0 0 5 20H19A1.5 1.5 0 0 0 20.5 18.5V9A1.5 1.5 0 0 0 19 7.5H5" }),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M20.5 11H17A2 2 0 0 0 17 15H20.5" }),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M17 13H17.01" })
+	] }),
+	maintenance: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M14.7 6.3A1 1 0 0 0 14.7 7.7L16.3 9.3A1 1 0 0 0 17.7 9.3L21.2 5.8A6 6 0 0 1 13.3 13.7L6.6 20.4A2.1 2.1 0 0 1 3.6 17.4L10.3 10.7A6 6 0 0 1 18.2 2.8L14.7 6.3Z" }),
+	messages: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M20.5 12A8 8 0 0 1 9.2 19.3L3.5 20.5L4.7 15.6A8 8 0 1 1 20.5 12Z" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M8.5 12H8.51M12 12H12.01M15.5 12H15.51" })] }),
+	home: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M3.5 10.5L12 3.5L20.5 10.5" }),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M5.5 9V19A1.5 1.5 0 0 0 7 20.5H17A1.5 1.5 0 0 0 18.5 19V9" }),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M10 20.5V14.5H14V20.5" })
+	] }),
+	search: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("circle", {
+		cx: "10.5",
+		cy: "10.5",
+		r: "6.5"
+	}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M15.5 15.5L20.5 20.5" })] }),
+	documents: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M3.5 7A1.5 1.5 0 0 1 5 5.5H9.5L11.5 7.5H19A1.5 1.5 0 0 1 20.5 9V18A1.5 1.5 0 0 1 19 19.5H5A1.5 1.5 0 0 1 3.5 18V7Z" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M3.5 10.5H20.5" })] })
+};
+var SidebarIcon = ({ name, size = 20 }) => {
+	const shape = shapes[name];
+	if (!shape) return null;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+		width: size,
+		height: size,
+		viewBox: "0 0 24 24",
+		fill: "none",
+		stroke: "currentColor",
+		strokeWidth: "1.75",
+		strokeLinecap: "round",
+		strokeLinejoin: "round",
+		"aria-hidden": "true",
+		focusable: "false",
+		children: shape
 	});
 };
-//#endregion
-//#region src/authentication/AuthProvider.jsx
+// src/shared/sidebar/Sidebar.jsx
+var Sidebar = ({ role, activeKey, onSelect }) => {
+	const menu = getMenu(role);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("nav", {
+		className: "sidebar",
+		"aria-label": `${role ?? "tenant"} menu`,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+			className: "sidebar-menu",
+			children: menu.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+				type: "button",
+				className: `sidebar-item${activeKey === item.key ? " active" : ""}`,
+				"aria-current": activeKey === item.key ? "page" : void 0,
+				onClick: () => onSelect(item.key),
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "sidebar-icon",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarIcon, { name: item.icon })
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "sidebar-label",
+					children: item.label
+				})]
+			}) }, item.key))
+		})
+	});
+};
+// src/features/authentication/AuthProvider.jsx
 var AuthProvider = ({ children }) => {
 	const { updateUserContext, userContext } = (0, import_react.useContext)(AppContext);
 	const authenticate = async (payload) => {
 		let response = await login(payload);
 		if (!response || !response.success) return false;
-		updateUserContext({
+		let cachedData = {
 			...userContext,
-			loggedIn: true,
-			username: payload.username
-		});
+			...response.user,
+			loggedIn: true
+		};
+		updateUserContext(cachedData);
+		localStorage.setItem("userContext", JSON.stringify(cachedData));
 		return true;
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AuthContext.Provider, {
@@ -17706,85 +22018,246 @@ var AuthProvider = ({ children }) => {
 		children
 	});
 };
-//#endregion
-//#region src/landing/Landing.jsx
+// src/features/landing/Landing.jsx
 var Landing = () => {
-	const { user, updateUserContext } = (0, import_react.useContext)(AppContext);
-	const { updateLoginDetails } = (0, import_react.useContext)(AuthContext);
-	const navi = useNavigate();
-	const roleSelect = (role) => {
-		updateUserContext({
-			...user,
-			role
-		});
-		navi("/login");
-	};
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TopBanner, {}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		className: "landing-container",
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-			className: "flex flex-col md:flex-row justify-center gap-8",
-			children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "bg-gradient-to-r from-emerald-700 to-teal-500 text-white py-20 px-6 text-center",
-				children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
-						className: "text-4xl font-bold mb-4",
-						children: "Welcome to Casahero"
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-						className: "text-lg mb-12",
-						children: "Smarter Rentals for Landlords & Tenants"
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex flex-col md:flex-row justify-center items-stretch gap-8",
-						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-								onClick: () => roleSelect("landlord"),
-								children: [
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-										className: "text-5xl mb-4",
-										children: "🏠"
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-										className: "text-2xl font-semibold mb-2",
-										children: "I’m a Landlord"
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-										className: "mb-2",
-										children: "Manage properties, tenants, and rent collection with ease."
-									})
-								]
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "hidden md:flex items-center",
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-px h-full bg-gray-300" })
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "block md:hidden w-64 h-px bg-gray-300 mx-auto" }),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-								onClick: () => roleSelect("tenant"),
-								children: [
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-										className: "text-5xl mb-4",
-										children: "👤"
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-										className: "text-2xl font-semibold mb-2",
-										children: "I’m a Tenant"
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-										className: "mb-2",
-										children: "Find rentals, pay rent online, and submit maintenance requests."
-									})
-								]
-							})
-						]
-					})
-				]
-			})
+	const navigate = useNavigate();
+	const { userContext } = (0, import_react.useContext)(AppContext);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TopBanner, {}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SearchBar, { onSearch: (filters) => navigate(toSearchUrl(filters)) }),
+		!userContext?.loggedIn && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("aside", {
+			className: "landlord-cta",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { children: "Own a property?" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "List it on casahero and find tenants faster." })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+				className: "landlord-cta-link",
+				to: "/signup?role=landlord",
+				children: "Sign up as a landlord"
+			})]
 		})
+	] });
+};
+// src/features/authentication/useMe.js
+var useMe = () => {
+	return useQuery({
+		queryKey: ["me"],
+		queryFn: () => getMe(),
+		retry: false,
+		staleTime: 3e5
+	});
+};
+// src/roles.js
+var ROLES = ["landlord", "tenant"];
+var homeFor = (role) => role === "landlord" ? "/landlord" : "/tenant";
+// src/features/search/ListingCard.jsx
+var PLACEHOLDER_ICON = {
+	HDB: "🏢",
+	Condo: "🏙️",
+	Landed: "🏡"
+};
+var ListingCard = ({ listing, loggedIn }) => {
+	const navigate = useNavigate();
+	const [photoFailed, setPhotoFailed] = (0, import_react.useState)(false);
+	const photo = listing.photo_paths?.[0];
+	const rent = listing.asking_rent_cents / 100;
+	const perSqft = listing.area_sqft ? (rent / listing.area_sqft).toFixed(2) : null;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("article", {
+		className: "listing-card",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "listing-card-photo",
+			children: [photo && !photoFailed ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+				src: `/${photo}`,
+				alt: [listing.name, listing.unit_number].filter(Boolean).join(" "),
+				onError: () => setPhotoFailed(true)
+			}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				className: "listing-card-placeholder",
+				"aria-hidden": "true",
+				children: PLACEHOLDER_ICON[listing.property_type] ?? "🏠"
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				className: "listing-card-badge",
+				children: listing.property_type
+			})]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "listing-card-body",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+					className: "listing-card-rent",
+					children: [
+						"S$",
+						rent.toLocaleString(),
+						" ",
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "/mo" })
+					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+					className: "listing-card-name",
+					children: listing.name
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+					className: "listing-card-meta",
+					children: [
+						listing.unit_number && `${listing.unit_number} · `,
+						listing.city,
+						", ",
+						listing.region
+					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+					className: "listing-card-specs",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: ["🛏 ", listing.bedrooms] }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: ["🛁 ", listing.bathrooms] }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+							"📐 ",
+							listing.area_sqft.toLocaleString(),
+							" sqft"
+						] })
+					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+					className: "listing-card-meta",
+					children: [perSqft && `S$${perSqft}/sqft · `, listing.status === "vacant" ? "Available" : listing.status]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "listing-card-actions",
+					children: loggedIn ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						type: "button",
+						disabled: true,
+						title: "Coming soon",
+						children: "♡ Save"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						type: "button",
+						disabled: true,
+						title: "Coming soon",
+						children: "Enquire"
+					})] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						type: "button",
+						onClick: () => navigate("/login"),
+						children: "Sign in to enquire"
+					})
+				})
+			]
+		})]
+	});
+};
+// src/features/search/SearchResults.jsx
+var SearchResults = ({ filters, onEditSearch }) => {
+	const listings = useListings(filters);
+	const { userContext } = (0, import_react.useContext)(AppContext);
+	const loggedIn = !!userContext?.loggedIn;
+	if (listings.isPending) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "results-grid",
+		"aria-busy": "true",
+		children: Array.from({ length: 6 }, (_, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "listing-card listing-card-skeleton" }, i))
+	});
+	if (listings.isError && !listings.data) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "search-message",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Could not load results." }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+			type: "button",
+			onClick: () => listings.refetch(),
+			children: "Retry"
+		})]
+	});
+	const results = listings.data;
+	if (results.length === 0) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "search-message",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "No units match this search." }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+			type: "button",
+			onClick: onEditSearch,
+			children: "Edit search"
+		})]
+	});
+	const place = [filters.city, filters.region].filter(Boolean).join(", ");
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+		className: "results-bar",
+		children: [
+			results.length,
+			" ",
+			results.length === 1 ? "unit" : "units",
+			place && ` in ${place}`
+		]
+	}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: `results-grid${listings.isPlaceholderData ? " results-grid-updating" : ""}`,
+		children: results.map((listing) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ListingCard, {
+			listing,
+			loggedIn
+		}, listing.id))
 	})] });
 };
-//#endregion
-//#region src/underconstruction/underconstruction.jsx
+// src/features/search/SearchResultsPage.jsx
+var SearchResultsPage = () => {
+	const [params] = useSearchParams();
+	const location = useLocation();
+	const navigate = useNavigate();
+	const filters = fromSearchParams(params);
+	const [expanded, setExpanded] = (0, import_react.useState)(false);
+	const [barMounted, setBarMounted] = (0, import_react.useState)(false);
+	const { updateUserContext, userContext } = (0, import_react.useContext)(AppContext);
+	const { data: me } = useMe();
+	(0, import_react.useEffect)(() => {
+		if (me) updateUserContext(me);
+	}, [me, updateUserContext]);
+	const loggedIn = !!userContext?.loggedIn;
+	const role = userContext?.default_role;
+	const togglePanel = (open) => {
+		setExpanded(open);
+		if (open) setBarMounted(true);
+	};
+	const handleSearch = (next) => {
+		navigate(toSearchUrl(next));
+		setExpanded(false);
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "search-page",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TopBanner, {}),
+			loggedIn && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sidebar, {
+				role,
+				activeKey: getMenu(role)[0].key,
+				onSelect: (key) => navigate(homeFor(role), { state: { activeKey: key } })
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: `search-page-content${loggedIn ? " with-sidebar" : ""}`,
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+					className: "search-panel",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "search-panel-summary",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: filters ? describeFilters(filters) : "Start a search" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							type: "button",
+							"aria-expanded": expanded,
+							"aria-controls": "search-panel-body",
+							onClick: () => togglePanel(!expanded),
+							children: expanded ? "Hide search ▴" : "Edit search ▾"
+						})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						id: "search-panel-body",
+						className: `search-panel-body${expanded ? " expanded" : ""}`,
+						inert: !expanded,
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "search-panel-inner",
+							children: barMounted && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SearchBar, {
+								initialFilters: filters ?? {},
+								onSearch: handleSearch
+							}, location.search)
+						})
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("main", {
+					className: "search-page-main",
+					children: filters ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SearchResults, {
+						filters,
+						onEditSearch: () => togglePanel(true)
+					}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "search-message",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Pick a property type and area to see units." }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							type: "button",
+							onClick: () => togglePanel(true),
+							children: "Start a search"
+						})]
+					})
+				})]
+			})
+		]
+	});
+};
+// src/underconstruction/UnderConstruction.jsx
 var UnderConstruction = () => {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TopBanner, {}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: "landing-container",
@@ -17807,8 +22280,26 @@ var UnderConstruction = () => {
 		})
 	})] });
 };
-//#endregion
-//#region src/signup/SuccessModal.jsx
+// src/SafeRoute.jsx
+var SafeRoute = ({ role, children }) => {
+	const { updateUserContext } = (0, import_react.useContext)(AppContext);
+	const { data, isLoading } = useMe();
+	const user = data?.loggedIn && data?.default_role ? data : null;
+	(0, import_react.useEffect)(() => {
+		if (user) updateUserContext(user);
+	}, [user, updateUserContext]);
+	if (isLoading) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Spinner, {});
+	if (!user) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigate, {
+		to: "/login",
+		replace: true
+	});
+	if (role && user.default_role !== role) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigate, {
+		to: homeFor(user.default_role),
+		replace: true
+	});
+	return children ?? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {});
+};
+// src/features/signup/SuccessModal.jsx
 var SuccessModal = ({ seconds = 5 }) => {
 	const navi = useNavigate();
 	const [count, setCount] = (0, import_react.useState)(seconds);
@@ -17838,125 +22329,854 @@ var SuccessModal = ({ seconds = 5 }) => {
 		})
 	});
 };
-//#endregion
-//#region src/signup/Signup.jsx
+// src/features/authentication/RolePick.jsx
+var RolePick = ({ value, onChange } = {}) => {
+	const { updateUserContext, userContext } = (0, import_react.useContext)(AppContext);
+	const role = value ?? userContext?.default_role;
+	const pick = onChange ?? ((next) => updateUserContext({
+		...userContext,
+		default_role: next
+	}));
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		style: {
+			display: "flex",
+			marginBottom: "20px"
+		},
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+			style: {
+				flex: 1,
+				padding: "12px",
+				textAlign: "center",
+				cursor: "pointer",
+				background: role === "tenant" ? "var(--theme)" : "#f0f0f0",
+				color: role === "tenant" ? "#fff" : "#333",
+				borderRadius: "6px 0 0 6px"
+			},
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+				type: "radio",
+				name: "role",
+				value: "tenant",
+				checked: role === "tenant",
+				onChange: () => pick("tenant"),
+				style: { display: "none" }
+			}), "Tenant"]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+			style: {
+				flex: 1,
+				padding: "12px",
+				textAlign: "center",
+				cursor: "pointer",
+				background: role === "landlord" ? "var(--theme)" : "#f0f0f0",
+				color: role === "landlord" ? "#fff" : "#333",
+				borderRadius: "0 6px 6px 0"
+			},
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+				type: "radio",
+				className: "login-button-landlord",
+				name: "role",
+				value: "landlord",
+				checked: role === "landlord",
+				onChange: () => pick("landlord"),
+				style: role === "tenant" ? {
+					display: "none",
+					backgroundColor: "#006d5b"
+				} : {
+					display: "none",
+					backgroundColor: "#f86bad"
+				}
+			}), "Landlord"]
+		})]
+	}) });
+};
+// src/shared/validators.js
+var EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+var validateName = (value) => {
+	if (!value?.trim()) return "Name is required.";
+	return "";
+};
+var validateEmail = (value) => {
+	const email = value?.trim() ?? "";
+	if (!email) return "Email is required.";
+	if (!EMAIL_PATTERN.test(email)) return "Enter a valid email address.";
+	return "";
+};
+var validatePassword = (value) => {
+	if (!value) return "Password is required.";
+	if (value.length < 8) return `Password must be at least 8 characters.`;
+	return "";
+};
+var validateConfirm = (password, confirm) => {
+	if (!confirm) return "Please confirm your password.";
+	if (password !== confirm) return "Passwords do not match.";
+	return "";
+};
+var validateForm = (values, rules) => {
+	const errors = {};
+	for (const [field, rule] of Object.entries(rules)) {
+		const message = rule(values[field], values);
+		if (message) errors[field] = message;
+	}
+	return errors;
+};
+// src/features/signup/Signup.jsx
 var Signup = () => {
+	const { userContext } = (0, import_react.useContext)(AppContext);
+	const [searchParams] = useSearchParams();
+	const roleParam = searchParams.get("role");
 	const [registered, setRegistered] = (0, import_react.useState)(false);
+	const [loading, setLoading] = (0, import_react.useState)(false);
+	const [errors, setErrors] = (0, import_react.useState)({});
 	const [formData, setFormData] = (0, import_react.useState)({
 		name: "",
 		email: "",
 		password: "",
-		confirmPassword: ""
+		confirmPassword: "",
+		role: ROLES.includes(roleParam) ? roleParam : userContext?.default_role ?? "tenant"
 	});
+	(0, import_react.useEffect)(() => {
+		const root = document.documentElement;
+		const previous = root.dataset.role;
+		root.dataset.role = formData.role;
+		return () => {
+			if (previous) root.dataset.role = previous;
+			else delete root.dataset.role;
+		};
+	}, [formData.role]);
 	const handleSubmit = (e) => {
 		e.preventDefault();
+		const found = validateForm(formData, rules);
+		setErrors(found);
+		if (Object.keys(found).length > 0) return;
 		register();
 	};
 	const register = async () => {
-		if ((await signup(formData)).success) setRegistered(true);
+		let result = await signup(formData);
+		setLoading(false);
+		if (result.success) {
+			setRegistered(true);
+			setLoading(true);
+		}
 	};
+	const rules = {
+		name: validateName,
+		email: validateEmail,
+		password: validatePassword,
+		confirmPassword: (value, values) => validateConfirm(values.password, value)
+	};
+	const validateField = (field) => {
+		const message = rules[field](formData[field], formData);
+		setErrors((prev) => ({
+			...prev,
+			[field]: message
+		}));
+	};
+	const messages = Object.keys(rules).map((field) => errors[field]).filter(Boolean);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Spinner, {
+			show: loading,
+			message: "Creating your account..."
+		}),
 		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TopBanner, {}),
 		/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 			className: "signup-wrapper",
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { children: "Sign Up" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
-				onSubmit: handleSubmit,
-				children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "signup-row",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Name" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-							type: "text",
-							placeholder: "Name",
-							required: true,
-							onChange: (e) => setFormData({
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { children: "Sign Up" }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
+					onSubmit: handleSubmit,
+					noValidate: true,
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RolePick, {
+							value: formData.role,
+							onChange: (role) => setFormData({
 								...formData,
-								name: e.target.value
+								role
 							})
-						})]
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "signup-row",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Email" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-							type: "text",
-							placeholder: "Email",
-							required: true,
-							onChange: (e) => setFormData({
-								...formData,
-								email: e.target.value
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "signup-row",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Name" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+								type: "text",
+								placeholder: "Name",
+								onChange: (e) => setFormData({
+									...formData,
+									name: e.target.value
+								}),
+								onBlur: () => validateField("name"),
+								"aria-invalid": !!errors.name
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "signup-row",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Email" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+								type: "text",
+								placeholder: "Email",
+								onChange: (e) => setFormData({
+									...formData,
+									email: e.target.value
+								}),
+								onBlur: () => validateField("email"),
+								"aria-invalid": !!errors.email
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "signup-row",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Password" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+								type: "password",
+								placeholder: "Password",
+								onChange: (e) => setFormData({
+									...formData,
+									password: e.target.value
+								}),
+								onBlur: () => validateField("password"),
+								"aria-invalid": !!errors.password
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "signup-row",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Confirm" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+								type: "password",
+								placeholder: "Confirm Password",
+								onChange: (e) => setFormData({
+									...formData,
+									confirmPassword: e.target.value
+								}),
+								onBlur: () => validateField("confirmPassword"),
+								"aria-invalid": !!errors.confirmPassword
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "signup-row",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								className: "signup-button",
+								type: "submit",
+								children: ["Sign Up", " "]
 							})
-						})]
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "signup-row",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Password" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-							type: "password",
-							placeholder: "Password",
-							required: true,
-							onChange: (e) => setFormData({
-								...formData,
-								password: e.target.value
-							})
-						})]
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "signup-row",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Confirm" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-							type: "password",
-							placeholder: "Confirm Password",
-							required: true,
-							onChange: (e) => setFormData({
-								...formData,
-								confirmPassword: e.target.value
-							})
-						})]
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "signup-row",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-							className: "signup-button",
-							type: "submit",
-							children: ["Sign Up", " "]
+						}),
+						messages.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+							className: "signup-errors",
+							role: "alert",
+							children: messages.map((message) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: message }, message))
 						})
-					})
-				]
-			})]
+					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SocialButtons, { disabled: loading })
+			]
 		}),
 		registered && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SuccessModal, {})
 	] });
 };
-//#endregion
-//#region src/App.jsx
-var App = () => {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Routes, { children: [
-		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-			path: "/login",
-			element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AuthProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Login, {}) })
-		}),
-		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-			path: "/dashboard",
-			element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AuthProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Dashboard, {}) })
-		}),
-		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-			path: "/",
-			element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AuthProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Landing, {}) })
-		}),
-		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-			path: "/signup",
-			element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Signup, {})
-		}),
-		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-			path: "*",
-			element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(UnderConstruction, {})
-		})
-	] }) });
+// src/features/dashboard/Home.jsx
+var Home = () => {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "search-container",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { children: "Home" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Home Coming soon." })]
+	}) });
 };
-//#endregion
-//#region src/context/AppProvider.jsx
+// src/features/dashboard/Dashboard.jsx
+var Dashboard = () => {
+	const { userContext } = (0, import_react.useContext)(AppContext);
+	const role = userContext?.default_role;
+	const menu = getMenu(role);
+	const location = useLocation();
+	const [activeKey, setActiveKey] = (0, import_react.useState)(location.state?.activeKey ?? menu[0].key);
+	const navigate = useNavigate();
+	const activeItem = menu.find((item) => item.key === activeKey) ?? menu[0];
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TopBanner, {}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sidebar, {
+			role,
+			activeKey: activeItem.key,
+			onSelect: setActiveKey
+		}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("main", {
+			className: "listings-main",
+			children: [activeItem.key === "home" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Home, {}), (activeItem.key === "Search" || activeItem.key == "Search") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SearchBar, { onSearch: (filters) => navigate(toSearchUrl(filters)) })]
+		})
+	] });
+};
+// src/features/dashboard/components/LandLordHomeCards.jsx
+var LandlordHomeCards = ({ cards }) => {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "landlord-home-row",
+		children: cards.map((card, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "header-card",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "header-card-title",
+				children: card
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "header-card-data",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { children: "0" })
+			})]
+		}, index))
+	});
+};
+// src/features/dashboard/components/LandLordHomeFilters.jsx
+var LandLordHomeFilters = ({ filters, filter, setFilter }) => {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "header-card-tab",
+		role: "radiogroup",
+		"aria-label": "Filter listings by status",
+		children: filters.map((option) => {
+			const checked = filter === option.value;
+			return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+				className: `header-card-tab-button${checked ? " is-active" : ""}`,
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+					type: "radio",
+					className: "header-card-tab-input",
+					name: "landlord-listing-filter",
+					value: option.value,
+					checked,
+					onChange: () => setFilter(option.value)
+				}), option.label]
+			}, option.value);
+		})
+	});
+};
+// src/features/dashboard/components/PropertyForm.jsx
+var MAX_PHOTOS = 10;
+var MAX_PHOTO_BYTES = 5242880;
+var STATUSES = [
+	{
+		value: "vacant",
+		label: "Available"
+	},
+	{
+		value: "occupied",
+		label: "Occupied"
+	},
+	{
+		value: "unavailable",
+		label: "Unavailable"
+	}
+];
+var PropertyForm = ({ show, onClose, onSubmit }) => {
+	const regions = useRegions();
+	const types = useTypes();
+	const [formSelect, setFormSelect] = (0, import_react.useState)({
+		region: "",
+		cities: ""
+	});
+	const cityList = useCities(formSelect.region);
+	const [formData, setFormData] = (0, import_react.useState)({
+		name: "",
+		unit_number: "",
+		address: "",
+		postal_code: "",
+		property_type: "",
+		region: "",
+		city: "",
+		bedrooms: "",
+		bathrooms: "",
+		area_sqft: "",
+		asking_rent: "",
+		status: "vacant"
+	});
+	const setField = (key) => (e) => setFormData({
+		...formData,
+		[key]: e.target.value
+	});
+	const [photos, setPhotos] = (0, import_react.useState)([]);
+	const [photoError, setPhotoError] = (0, import_react.useState)("");
+	(0, import_react.useEffect)(() => () => photos.forEach((p) => URL.revokeObjectURL(p.url)), []);
+	const addPhotos = (e) => {
+		const picked = Array.from(e.target.files);
+		e.target.value = "";
+		setPhotoError("");
+		const valid = picked.filter((file) => file.type.startsWith("image/") && file.size <= MAX_PHOTO_BYTES);
+		if (valid.length < picked.length) setPhotoError("Only images up to 5 MB are allowed.");
+		const room = MAX_PHOTOS - photos.length;
+		if (valid.length > room) setPhotoError(`You can add up to ${MAX_PHOTOS} photos.`);
+		const added = valid.slice(0, Math.max(room, 0)).map((file) => ({
+			id: crypto.randomUUID(),
+			file,
+			url: URL.createObjectURL(file)
+		}));
+		setPhotos((prev) => [...prev, ...added]);
+	};
+	const removePhoto = (id) => {
+		setPhotos((prev) => {
+			const target = prev.find((p) => p.id === id);
+			if (target) URL.revokeObjectURL(target.url);
+			return prev.filter((p) => p.id !== id);
+		});
+		setPhotoError("");
+	};
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		const { asking_rent, ...fields } = formData;
+		onSubmit?.({
+			...fields,
+			unit_number: fields.unit_number.trim() || null,
+			bedrooms: Number(fields.bedrooms),
+			bathrooms: Number(fields.bathrooms),
+			area_sqft: Number(fields.area_sqft),
+			asking_rent_cents: Math.round(Number(asking_rent) * 100),
+			photos: photos.map((p) => p.file)
+		});
+	};
+	const selectRegion = (regionValue) => {
+		setFormSelect({
+			...formSelect,
+			region: regionValue
+		});
+		setFormData({
+			...formData,
+			region: regionValue,
+			city: ""
+		});
+	};
+	return show ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "modal-overlay",
+		onClick: onClose,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			className: "modal-content",
+			onClick: (e) => e.stopPropagation(),
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
+				onSubmit: handleSubmit,
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						type: "button",
+						className: "modal-close",
+						onClick: onClose,
+						children: "X"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Fill in the details of your property" }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("hr", {}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "modal-header",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { children: [formData.name, formData.unit_number].filter(Boolean).join(" ") })
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "modal-body",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "form-row",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+									htmlFor: "name",
+									children: "Property Name : "
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+									required: true,
+									id: "name",
+									type: "text",
+									placeholder: "e.g. Parc @ Bishan",
+									value: formData.name,
+									onChange: setField("name")
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "form-row",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+									htmlFor: "unit_number",
+									children: "Unit No. : "
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+									id: "unit_number",
+									type: "text",
+									placeholder: "e.g. #08-112 (optional)",
+									value: formData.unit_number,
+									onChange: setField("unit_number")
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "form-row",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+									htmlFor: "address",
+									children: "Address : "
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+									required: true,
+									id: "address",
+									type: "text",
+									placeholder: "e.g. Blk 821 Tampines Street 81",
+									value: formData.address,
+									onChange: setField("address")
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "form-row",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+									htmlFor: "postal_code",
+									children: "Postal Code : "
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+									required: true,
+									id: "postal_code",
+									type: "text",
+									inputMode: "numeric",
+									pattern: "[0-9]{6}",
+									title: "6 digits",
+									placeholder: "520821",
+									value: formData.postal_code,
+									onChange: setField("postal_code")
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "form-row",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+									htmlFor: "type",
+									children: "Property Type : "
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", {
+									required: true,
+									id: "type",
+									value: formData.property_type,
+									onChange: setField("property_type"),
+									disabled: types.isPending,
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+										value: "",
+										children: "Select Type"
+									}), types.data?.map(({ type }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+										value: type,
+										children: type
+									}, type))]
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "form-row",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+									htmlFor: "region",
+									children: "Region: "
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", {
+									required: true,
+									id: "region",
+									value: formData.region,
+									onChange: (e) => selectRegion(e.target.value),
+									disabled: regions.isPending,
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+										value: "",
+										children: "Select Region..."
+									}), regions.data?.map(({ region }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+										value: region,
+										children: region
+									}, region))]
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "form-row",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+									htmlFor: "city",
+									children: "City: "
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", {
+									required: true,
+									id: "city",
+									value: formData.city,
+									onChange: setField("city"),
+									disabled: !formData.region || cityList.isPending,
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+										value: "",
+										children: "Select City..."
+									}), cityList?.data?.map(({ city }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+										value: city,
+										children: city
+									}, city))]
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "form-row",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+										htmlFor: "beds",
+										children: "Beds : "
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+										required: true,
+										type: "number",
+										id: "beds",
+										min: "0",
+										step: "1",
+										placeholder: "Beds",
+										value: formData.bedrooms,
+										onChange: setField("bedrooms")
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+										htmlFor: "baths",
+										children: "Baths : "
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+										required: true,
+										type: "number",
+										id: "baths",
+										min: "0",
+										step: "1",
+										placeholder: "Baths",
+										value: formData.bathrooms,
+										onChange: setField("bathrooms")
+									})
+								]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "form-row",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+									htmlFor: "area",
+									children: "Size (sqft) : "
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+									required: true,
+									type: "number",
+									id: "area",
+									min: "1",
+									step: "1",
+									placeholder: "e.g. 1001",
+									value: formData.area_sqft,
+									onChange: setField("area_sqft")
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "form-row",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+									htmlFor: "rent",
+									children: "Asking Rent (S$/mo) : "
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+									required: true,
+									type: "number",
+									id: "rent",
+									min: "0",
+									step: "50",
+									placeholder: "e.g. 3200",
+									value: formData.asking_rent,
+									onChange: setField("asking_rent")
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "form-row",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+									htmlFor: "status",
+									children: "Status : "
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("select", {
+									id: "status",
+									value: formData.status,
+									onChange: setField("status"),
+									children: STATUSES.map(({ value, label }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+										value,
+										children: label
+									}, value))
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "form-row form-row--top",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+									htmlFor: "photos",
+									children: "Photos : "
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "photo-upload",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+											htmlFor: "photos",
+											className: "photo-upload__drop",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "+ Add photos" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("small", { children: [
+												photos.length,
+												"/",
+												MAX_PHOTOS,
+												" · JPG, PNG, WebP up to 5 MB"
+											] })]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+											id: "photos",
+											type: "file",
+											accept: "image/*",
+											multiple: true,
+											onChange: addPhotos,
+											disabled: photos.length >= MAX_PHOTOS,
+											className: "photo-upload__input"
+										}),
+										photoError && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "photo-upload__error",
+											role: "alert",
+											children: photoError
+										}),
+										photos.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+											className: "photo-upload__grid",
+											children: photos.map((p, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
+												className: "photo-upload__item",
+												children: [
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+														src: p.url,
+														alt: `Property photo ${i + 1}`
+													}),
+													i === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "photo-upload__cover",
+														children: "Cover"
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+														type: "button",
+														className: "photo-upload__remove",
+														onClick: () => removePhoto(p.id),
+														"aria-label": `Remove photo ${i + 1}`,
+														children: "✕"
+													})
+												]
+											}, p.id))
+										})
+									]
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								type: "submit",
+								children: "Submit"
+							})
+						]
+					})
+				]
+			})
+		})
+	}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, {});
+};
+// src/features/dashboard/LandlordHome.jsx
+var LISTING_FILTERS = [
+	{
+		value: "all",
+		label: "All"
+	},
+	{
+		value: "listed",
+		label: "Listed"
+	},
+	{
+		value: "delisted",
+		label: "De-Listed"
+	},
+	{
+		value: "drafts",
+		label: "Drafts"
+	}
+];
+var LandlordHome = () => {
+	const [filter, setFilter] = (0, import_react.useState)("all");
+	const cards = [
+		"Live Listing",
+		"Drafts",
+		"De-listed",
+		"Enquiries this week"
+	];
+	const [showForm, setShowForm] = (0, import_react.useState)(false);
+	const onClose = () => setShowForm(false);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+		className: "landlord-home",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "landlord-home-row-title",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+					className: "landlord-home-title",
+					children: "My Properties"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+					type: "button",
+					className: "landlord-home-add-btn",
+					onClick: () => setShowForm(!showForm),
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						"aria-hidden": "true",
+						children: "+"
+					}), " Add Property"]
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PropertyForm, {
+				show: showForm,
+				onClose
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "landlord-home-row",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Add update or take your listing off the market" })
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(LandlordHomeCards, { cards }),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(LandLordHomeFilters, {
+				filters: LISTING_FILTERS,
+				filter,
+				setFilter
+			})
+		]
+	});
+};
+// src/features/dashboard/Landlord.jsx
+var Landlord = () => {
+	const { userContext } = (0, import_react.useContext)(AppContext);
+	const role = userContext?.default_role;
+	const menu = getMenu(role);
+	const location = useLocation();
+	const [activeKey, setActiveKey] = (0, import_react.useState)(location.state?.activeKey ?? menu[0].key);
+	const navigate = useNavigate();
+	const activeItem = menu.find((item) => item.key === activeKey) ?? menu[0];
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "landlord-page",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TopBanner, {}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sidebar, {
+				role,
+				activeKey: activeItem.key,
+				onSelect: setActiveKey
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("main", {
+				className: "landlord-main",
+				children: [activeItem.key === "home" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LandlordHome, {}), activeItem.key === "Search" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SearchBar, { onSearch: (filters) => navigate(toSearchUrl(filters)) })]
+			})
+		]
+	});
+};
+// src/App.jsx
+var queryClient = new QueryClient({ defaultOptions: { queries: {
+	staleTime: 3e4,
+	retry: 1
+} } });
+var RoleHome = () => {
+	const { data } = useMe();
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigate, {
+		to: homeFor(data?.default_role),
+		replace: true
+	});
+};
+var App = () => {
+	const { userContext } = (0, import_react.useContext)(AppContext);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(QueryClientProvider, {
+		client: queryClient,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Routes, { children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+				path: "/login",
+				element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AuthProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Login, {}) })
+			}),
+			ROLES.map((role) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Route, {
+				path: `/${role}`,
+				element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SafeRoute, { role }),
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+					index: true,
+					element: role == "landlord" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Landlord, {}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Dashboard, {})
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+					path: "*",
+					element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(UnderConstruction, {})
+				})]
+			}, role)),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+				path: "/landlord/addproperty",
+				element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SafeRoute, {
+					role: "landlord",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PropertyForm, {})
+				})
+			}, "landlord-addproperty"),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+				path: "/listings",
+				element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SafeRoute, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RoleHome, {}) })
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+				path: "/",
+				element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AuthProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Landing, {}) })
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+				path: "/search",
+				element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AuthProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SearchResultsPage, {}) })
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+				path: "/signup",
+				element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Signup, {})
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+				path: "*",
+				element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(UnderConstruction, {})
+			})
+		] }) })
+	});
+};
+// src/context/AppProvider.jsx
 var AppProvider = ({ children }) => {
 	const [userContext, setUserContext] = (0, import_react.useState)(null);
-	const updateUserContext = (data) => {
+	const updateUserContext = (0, import_react.useCallback)((data) => {
 		setUserContext(data);
-	};
+	}, []);
+	const isLandlord = userContext?.loggedIn && userContext?.default_role === "landlord";
+	(0, import_react.useEffect)(() => {
+		document.documentElement.dataset.role = isLandlord ? "landlord" : "tenant";
+	}, [isLandlord]);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppContext.Provider, {
 		value: {
 			updateUserContext,
@@ -17965,7 +23185,8 @@ var AppProvider = ({ children }) => {
 		children
 	});
 };
-//#endregion
-//#region src/main.jsx
-(0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(App, {}) }) }));
-//#endregion
+// src/main.jsx
+async function enableMocking() {}
+enableMocking().catch((err) => console.error("[MSW] failed to start, API calls will hit the real server", err)).then(() => {
+	(0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(App, {}) }) }));
+});
